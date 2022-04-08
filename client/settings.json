@@ -1,5 +1,5 @@
 {
-    "BaseUrl":"https://localhost:5050",
+    "BaseUrl":"https://localhost:5050/api/",
     "ApiKey":"example-key",
     "UserName" : "guest",
     "Password" : "guest"
