@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,8 +9,19 @@ namespace ShopwareIntegration.Models.Filters
     ///</summary>
     public class FilterObject
     {
-        // todo
         public static FilterObject Empty => new FilterObject();
+        public IEnumerable<object> Filters { get; set; } = Array.Empty<object>();
+        
+        // serialization / deserialization
+        public FilterObject()
+        { }
+
+        public FilterObject(FilterBuilder builder)
+            => Filters = builder.BuildFilter();
+
+        public override string ToString()
+            => string.Join(Environment.NewLine, Filters?.Select(x => $"{x}"));
+
         /*
         example from the api documentation
         https://developers.shopware.com/developers-guide/rest-api/

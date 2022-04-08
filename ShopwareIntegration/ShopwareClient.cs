@@ -6,7 +6,7 @@ using ShopwareIntegration.Models;
 using ShopwareIntegration.Models.Exceptions;
 using ShopwareIntegration.Requests;
 
-namespace ShopwareIntegration.Client
+namespace ShopwareIntegration
 {
     ///<summary>
     /// HttpClient Abstraction for the Shopware REST API Integration

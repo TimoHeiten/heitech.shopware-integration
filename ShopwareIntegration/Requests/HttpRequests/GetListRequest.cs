@@ -10,9 +10,10 @@ namespace ShopwareIntegration.Requests.HttpRequests
     {
         protected override HttpMethod Method => HttpMethod.Get;
         protected override HttpContent Content { get; }
-        internal GetListRequest(FilterObject? filter = null)
+        internal GetListRequest(FilterBuilder? filter = null)
         {
-            Content = JsonContent.Create(filter ?? FilterObject.Empty);
+            var builder = filter ?? FilterBuilder.Empty;
+            Content = JsonContent.Create(builder.BuildFilter());
         }
     }
 }

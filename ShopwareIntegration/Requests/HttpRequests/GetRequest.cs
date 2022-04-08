@@ -14,10 +14,11 @@ namespace ShopwareIntegration.Requests.HttpRequests
 
         protected override string? PathParameter { get; }
 
-        internal GetRequest(TId id, FilterObject? filter = null)
+        internal GetRequest(TId id, FilterBuilder? filter = null)
         {
             PathParameter = $"{id}";
-            Content = JsonContent.Create(filter ?? FilterObject.Empty);
+            var builder = filter ?? FilterBuilder.Empty;
+            Content = JsonContent.Create(builder.BuildFilter());
         }
     }
 }

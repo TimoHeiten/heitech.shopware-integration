@@ -1,9 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ShopwareIntegration.Client;
+using Newtonsoft.Json;
+using ShopwareIntegration;
 using ShopwareIntegration.Models;
-using ShopwareIntegration.Requests;
+using ShopwareIntegration.Models.Filters;
 
 namespace client
 {
@@ -19,34 +20,29 @@ namespace client
         static async Task Main(string[] args)
         {
             var client = await ShopwareClient.CreateAsync();
-
-            ShopwareRequest<Address> addressRequest = null!;
-            var key = args.FirstOrDefault();
-            if (key is not null && key == "get")
-                addressRequest = GetRequest(client);
-            else
-                addressRequest = PutRequest();
-
-            /* System.Console.WriteLine(
-                addressRequest.GetRequest(new System.Uri("https://localhost/api/"))
-                              .Content
-                              .ReadAsStringAsync()
-                              .Result
-                );
-            */
-
+            var addressRequest = client.CreateGetRequest<Address, int>(42);
             var result = await client.SendRequestAsync<Address>(addressRequest, CancellationToken.None);
 
             if (result.IsSuccess)
                 System.Console.WriteLine($"Success!! - {result.Model}");
             else
                 System.Console.WriteLine($"FAILED!! - {result.Exception}");
+
+            System.Console.WriteLine();
+            var filterExamples = BuildAllExampleFilters();
+            System.Console.WriteLine(JsonConvert.SerializeObject(filterExamples, Formatting.Indented));
         }
 
-        static ShopwareRequest<Address> PutRequest()
-            => new Address(42, 1, "salutation", "firstName", "lastName", "street", "zipCode", "city", 1).CreatePutRequest();
-
-        static ShopwareRequest<Address> GetRequest(ShopwareClient client)
-            => client.CreateGetRequest<Address, int>(42);
+        static IEnumerable<object> BuildAllExampleFilters()
+        {
+            var builder = new FilterBuilder();
+            return builder.AddFilter("pseudoSales", value: "1", expression: ">=")
+                          .AddFilter("active", value: "1")
+                          .AddFilter("name", value: "%beach%", @operator: "1")
+                          .AddSort(property: "name")
+                          .AddSort(property: "invoiceAmount", direction: "DESC")
+                          .AddLimit(limit:50, start: 20)
+                          .BuildFilter();
+        }
     }
 }
