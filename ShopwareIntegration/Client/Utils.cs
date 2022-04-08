@@ -1,9 +1,12 @@
 using System;
 
-namespace client
+namespace ShopwareIntegration.Client
 {
-    public static class ApiUtils
+    public static class Utils
     {
+        ///<summary>
+        /// Use for all Date formatting in ShopwareClient
+        ///</summary>
         public static string ToISO8601Format(this DateTime dateTime)
             => dateTime.ToString("o"); // yyy-MM-ddTHH\\:mm\\:ss.fffffffzzz
     }

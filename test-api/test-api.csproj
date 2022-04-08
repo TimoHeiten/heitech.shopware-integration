@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\models\models.csproj" />
+    <ProjectReference Include="..\ShopwareIntegration\ShopwareIntegration.csproj" />
   </ItemGroup>
 
 </Project>

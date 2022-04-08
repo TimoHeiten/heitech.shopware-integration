@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace client
+namespace ShopwareIntegration.Configuration
 {
     public class HttpClientConfiguration
     {
@@ -26,11 +26,7 @@ namespace client
                 Encode the string with Base64.
                 Prepend the authorization method and a space to the encoded string.
             */
-            // todo provide from config too
-            string userName = "";
-            string password = "";
-
-            string combined = $"{userName}:{password}";
+            string combined = $"{UserName}:{Password}";
             byte[] asOctet = Encoding.UTF8.GetBytes(combined);
             string asBase64 = Convert.ToBase64String(asOctet);
 
@@ -40,10 +36,10 @@ namespace client
         }
 
         // todo override with preferred mechanism (db, file based, user data etc.)
-        public static async Task<HttpClientConfiguration> LoadAsync()
+        public static async Task<HttpClientConfiguration?> LoadAsync()
         {
             string filePath = Path.Combine(Environment.CurrentDirectory, "settings.json");
-            var text = await File.ReadAllTextAsync(filePath, Encoding.UTF8);
+            var text = await File.ReadAllTextAsync(filePath, Encoding.UTF8).ConfigureAwait(false);
             
             return System.Text.Json.JsonSerializer.Deserialize<HttpClientConfiguration>(text);
         }
