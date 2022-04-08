@@ -1,4 +1,3 @@
-using System;
 using ShopwareIntegration.Models;
 using ShopwareIntegration.Models.Filters;
 using ShopwareIntegration.Requests;
@@ -22,8 +21,16 @@ namespace ShopwareIntegration.Client
             where TModel : BaseModel, new()
             => new GetListRequest<TModel>(filter);
 
-        public static ShopwareRequest<TModel> CreatePutRequest<TModel>() 
+        public static ShopwareRequest<TModel> CreateDeleteRequest<TModel, TId>(this ShopwareClient client, TId id)
             where TModel : BaseModel
-        => throw new NotImplementedException();
+            => new DeleteRequest<TModel, TId>(id);
+
+        public static ShopwareRequest<TModel> CreatePutRequest<TModel>(this TModel model)
+            where TModel : BaseModel
+            => new PutRequest<TModel>(model);
+
+        public static ShopwareRequest<TModel> CreatePostRequest<TModel>(this TModel model)
+            where TModel : BaseModel
+            => new PostRequest<TModel>(model);
     }
 }

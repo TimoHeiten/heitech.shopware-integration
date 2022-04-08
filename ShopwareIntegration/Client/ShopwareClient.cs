@@ -38,16 +38,15 @@ namespace ShopwareIntegration.Client
         public async Task<RequestResult<TModel>> SendRequestAsync<TModel>(ShopwareRequest<TModel> request, CancellationToken cancellationToken)
             where TModel : BaseModel
         {
-            HttpRequestMessage httpRequest = request.GetRequest(_client.BaseAddress!);
-            System.Console.WriteLine(httpRequest.RequestUri);
-            HttpResponseMessage response = await _client.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
+            var httpRequest = request.GetRequest(_client.BaseAddress!);
+            var response = await _client.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
 
+            var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             if (response.IsSuccessStatusCode is false)
-                return RequestResult<TModel>.Failed(new ShopIntegrationRequestException((int)response.StatusCode, httpRequest));
+                return RequestResult<TModel>.Failed(new ShopIntegrationRequestException((int)response.StatusCode, httpRequest, content));
 
             try
             {
-                var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 TModel? model = System.Text.Json.JsonSerializer.Deserialize<TModel>(content);
                 return model is not null
                        ? RequestResult<TModel>.Success(model!)

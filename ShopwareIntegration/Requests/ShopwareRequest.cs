@@ -4,6 +4,9 @@ using ShopwareIntegration.Models;
 
 namespace ShopwareIntegration.Requests
 {
+    ///<summary>
+    /// Abstract version of the Generic Shopware Web Request. Use the RequestFactory to create instances of a ShopwareRequest<T>
+    ///</summary>
     public abstract class ShopwareRequest<TModel>
         where TModel : BaseModel
     {
@@ -26,8 +29,6 @@ namespace ShopwareIntegration.Requests
         }
 
         public override string ToString()
-        {
-            return $"{Method} - {BuildPath("$baseAddress/")}";
-        }
+            =>  $"{Method} - {BuildPath("$baseAddress/")}";
     }
 }

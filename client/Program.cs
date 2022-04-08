@@ -1,7 +1,9 @@
-﻿using System.Net.Http;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ShopwareIntegration.Client;
+using ShopwareIntegration.Models;
+using ShopwareIntegration.Requests;
 
 namespace client
 {
@@ -10,22 +12,41 @@ namespace client
     //      returns API Key which si requried for authentication
     // --> " If the edited user is currently logged in, you might need to clear the backend cache, and then log out and log in for your changes to take effect."
     // ----------------------------------------------------------------------
-    // alle Entitäten als library
     // Test Auth 
-    // sende an meine eigene API
-    // 
+    // alle Entitäten als library
     class Program
     {
         static async Task Main(string[] args)
         {
             var client = await ShopwareClient.CreateAsync();
-            var request = client.CreateGetRequest<ShopwareIntegration.Models.Address, int>(1);
-            var result = await client.SendRequestAsync<ShopwareIntegration.Models.Address>(request, CancellationToken.None);
+
+            ShopwareRequest<Address> addressRequest = null!;
+            var key = args.FirstOrDefault();
+            if (key is not null && key == "get")
+                addressRequest = GetRequest(client);
+            else
+                addressRequest = PutRequest();
+
+            /* System.Console.WriteLine(
+                addressRequest.GetRequest(new System.Uri("https://localhost/api/"))
+                              .Content
+                              .ReadAsStringAsync()
+                              .Result
+                );
+            */
+
+            var result = await client.SendRequestAsync<Address>(addressRequest, CancellationToken.None);
 
             if (result.IsSuccess)
                 System.Console.WriteLine($"Success!! - {result.Model}");
             else
                 System.Console.WriteLine($"FAILED!! - {result.Exception}");
         }
+
+        static ShopwareRequest<Address> PutRequest()
+            => new Address(42, 1, "salutation", "firstName", "lastName", "street", "zipCode", "city", 1).CreatePutRequest();
+
+        static ShopwareRequest<Address> GetRequest(ShopwareClient client)
+            => client.CreateGetRequest<Address, int>(42);
     }
 }

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ShopwareIntegration.Configuration
 {
+    ///<summary>
+    /// Configuration Object for the underlying Shopware HttpClient
+    ///</summary>
     public class HttpClientConfiguration
     {
         public string BaseUrl { get; }

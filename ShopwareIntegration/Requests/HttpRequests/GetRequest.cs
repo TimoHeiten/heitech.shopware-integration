@@ -6,7 +6,7 @@ using ShopwareIntegration.Models.Filters;
 
 namespace ShopwareIntegration.Requests.HttpRequests
 {
-    public class GetRequest<TModel, TId> : ShopwareRequest<TModel>
+    internal class GetRequest<TModel, TId> : ShopwareRequest<TModel>
         where TModel : BaseModel, new()
     {
         protected override HttpMethod Method => HttpMethod.Get;
@@ -14,7 +14,7 @@ namespace ShopwareIntegration.Requests.HttpRequests
 
         protected override string? PathParameter { get; }
 
-        public GetRequest(TId id, FilterObject? filter = null)
+        internal GetRequest(TId id, FilterObject? filter = null)
         {
             PathParameter = $"{id}";
             Content = JsonContent.Create(filter ?? FilterObject.Empty);

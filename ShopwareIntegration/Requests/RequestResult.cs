@@ -2,6 +2,9 @@ using System;
 
 namespace ShopwareIntegration.Requests
 {
+    ///<summary>
+    /// Signals if the ShopwareClient Operation returned a successful Result
+    ///</summary>
     public class RequestResult<T>
     {
         public T Model { get; }
@@ -18,8 +21,8 @@ namespace ShopwareIntegration.Requests
             Exception = ex;
         }
 
-        public static RequestResult<T> Success(T model) => new(model);
-        public static RequestResult<T> Failed(Exception ex) => new(ex);
+        internal static RequestResult<T> Success(T model) => new(model);
+        internal static RequestResult<T> Failed(Exception ex) => new(ex);
 
         public bool IsSuccess => Exception is null;
     }

@@ -3,13 +3,13 @@ using System.Net.Http;
 
 namespace ShopwareIntegration.Models.Exceptions
 {
-    public class ShopIntegrationRequestException : Exception
+    internal class ShopIntegrationRequestException : Exception
     {
-        public ShopIntegrationRequestException(int statusCode, HttpRequestMessage requestMessage)
-            : base($"Http Request '{requestMessage.Method}-{requestMessage.RequestUri}' returned non success Statuscode: {statusCode}")
+        internal ShopIntegrationRequestException(int statusCode, HttpRequestMessage requestMessage, string reason)
+            : base($"Http Request '{requestMessage.Method}-{requestMessage.RequestUri}' returned non success Statuscode: {statusCode}{Environment.NewLine}'{reason}'")
         { }
 
-        public ShopIntegrationRequestException(Type type)
+        internal ShopIntegrationRequestException(Type type)
             : base($"Http Response Content was requested to be deserialized for type '{type}' but it resulted in a NULL reference")
         { }
     }

@@ -1,23 +1,23 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace ShopwareIntegration.Models
 {
     public abstract class BaseModel
     {
+        [JsonIgnore]
         public abstract string TableName { get; }
-        public HttpContent ToHttpContent()
+        ///<summary>
+        /// Check if all Required attribtes are set
+        ///</summary>
+        internal void Validate()
         {
             bool allSet = AreAllRequiredValuesSet();
             if (allSet is false)
-            {
                 throw new InvalidOperationException($"not all [Required] properties are set for {this.GetType()}");
-            }
-            return JsonContent.Create(this);
         }
 
         protected virtual bool AreAllRequiredValuesSet()
