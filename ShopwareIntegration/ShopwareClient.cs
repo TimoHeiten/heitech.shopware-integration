@@ -45,6 +45,8 @@ namespace ShopwareIntegration
             if (response.IsSuccessStatusCode is false)
                 return RequestResult<TModel>.Failed(new ShopIntegrationRequestException((int)response.StatusCode, httpRequest, content));
 
+            System.Console.WriteLine(content);
+
             try
             {
                 TModel? model = System.Text.Json.JsonSerializer.Deserialize<TModel>(content);

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using ShopwareIntegration;
 using ShopwareIntegration.Models;
 using ShopwareIntegration.Models.Filters;
+using ShopwareIntegration.Requests.HttpRequests;
 
 namespace client
 {
@@ -20,8 +21,9 @@ namespace client
         static async Task Main(string[] args)
         {
             var client = await ShopwareClient.CreateAsync();
-            var addressRequest = client.CreateGetRequest<Address, int>(42, BuildAllExampleFilters());
-            var result = await client.SendRequestAsync<Address>(addressRequest, CancellationToken.None);
+            var infoRequest = new InfoRequest();
+            // var addressRequest = client.CreateGetRequest<Address, int>(42, BuildAllExampleFilters());
+            var result = await client.SendRequestAsync<InfoModel>(infoRequest, CancellationToken.None);
 
             if (result.IsSuccess)
                 System.Console.WriteLine($"Success!! - {result.Model}");
