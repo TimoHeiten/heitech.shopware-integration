@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "client", "client\client.csproj", "{1BBE6D67-1DB0-40D2-8B44-5ECF17BE02E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-api", "test-api\test-api.csproj", "{27968424-84FF-4DF3-B7ED-E650E2DC49E6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopwareIntegration", "shopwareintegration\ShopwareIntegration.csproj", "{73FC3E06-2A06-4205-B5A5-8E0681DDA9B9}"
 EndProject
 Global

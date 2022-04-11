@@ -1,6 +1,6 @@
 {
-    "BaseUrl":"https://127.0.0.1:5050/api/",
-    "ApiKey":"example-key",
-    "UserName" : "guest",
-    "Password" : "guest"
+    "BaseUrl": "<url goes here>",
+    "ClientSecret": "<client-secret-goes-here>",
+    "UserName": "<username goes here>",
+    "ClientId": "<clientId goes here>"
 }
