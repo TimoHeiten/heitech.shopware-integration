@@ -20,7 +20,7 @@ namespace client
         static async Task Main(string[] args)
         {
             var client = await ShopwareClient.CreateAsync();
-            var addressRequest = client.CreateGetRequest<Address, int>(42);
+            var addressRequest = client.CreateGetRequest<Address, int>(42, BuildAllExampleFilters());
             var result = await client.SendRequestAsync<Address>(addressRequest, CancellationToken.None);
 
             if (result.IsSuccess)
@@ -33,7 +33,7 @@ namespace client
             System.Console.WriteLine(JsonConvert.SerializeObject(filterExamples, Formatting.Indented));
         }
 
-        static IEnumerable<object> BuildAllExampleFilters()
+        static FilterBuilder BuildAllExampleFilters()
         {
             var builder = new FilterBuilder();
             return builder.AddFilter("pseudoSales", value: "1", expression: ">=")
@@ -41,8 +41,7 @@ namespace client
                           .AddFilter("name", value: "%beach%", @operator: "1")
                           .AddSort(property: "name")
                           .AddSort(property: "invoiceAmount", direction: "DESC")
-                          .AddLimit(limit:50, start: 20)
-                          .BuildFilter();
+                          .AddLimit(limit:50, start: 20);
         }
     }
 }

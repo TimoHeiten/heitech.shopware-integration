@@ -10,8 +10,5 @@ namespace ShopwareIntegration
         ///</summary>
         public static string ToISO8601Format(this DateTime dateTime)
             => dateTime.ToString("o"); // yyy-MM-ddTHH\\:mm\\:ss.fffffffzzz
-
-        public static FilterObject CreateFilterObject(this FilterBuilder builder)
-            => new() { Filters = builder.BuildFilter() };
     }
 }
