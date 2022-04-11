@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopwareIntegration.Models;
-using ShopwareIntegration.Models.Filters;
 
 namespace test_api.Controllers
 {
@@ -12,7 +11,7 @@ namespace test_api.Controllers
     public class AddressesController : ControllerBase
     {
         [HttpGet("{id}")]
-        public IActionResult Get(int id, [FromBody] FilterObject? filter)
+        public IActionResult Get(int id, [FromBody] IEnumerable<object>? filter)
             => Ok(new Address { Id = id, Company = "42" });
 
         [HttpPut]

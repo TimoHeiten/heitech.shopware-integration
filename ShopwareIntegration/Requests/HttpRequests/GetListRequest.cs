@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using ShopwareIntegration.Models;
@@ -10,7 +11,7 @@ namespace ShopwareIntegration.Requests.HttpRequests
     {
         protected override HttpMethod Method => HttpMethod.Get;
         protected override HttpContent Content { get; }
-        internal GetListRequest(FilterBuilder? filter = null)
+        internal GetListRequest(FilterBuilder filter = null!)
         {
             var builder = filter ?? FilterBuilder.Empty;
             Content = JsonContent.Create(builder.BuildFilter());
