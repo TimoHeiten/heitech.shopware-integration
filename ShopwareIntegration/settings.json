@@ -1,0 +1,6 @@
+{
+    "BaseUrl":"https://127.0.0.1:5050/api/",
+    "ApiKey":"example-key",
+    "UserName" : "guest",
+    "Password" : "guest"
+}
