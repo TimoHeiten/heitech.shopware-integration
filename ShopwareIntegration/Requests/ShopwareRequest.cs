@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using ShopwareIntegration.Configuration;
 using ShopwareIntegration.Models;
 
 namespace ShopwareIntegration.Requests
@@ -19,7 +20,7 @@ namespace ShopwareIntegration.Requests
 
         private string BuildPath(string baseAddress)
         {
-            var entityPath = ModelToPathMap.GetUrlFromType<TModel>();
+            var entityPath = ModelUri.GetUrlFromType<TModel>();
             var requestUri = $"{baseAddress}{entityPath}";
 
             if (!string.IsNullOrWhiteSpace(PathParameter))

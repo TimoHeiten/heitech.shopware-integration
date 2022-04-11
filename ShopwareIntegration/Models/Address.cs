@@ -1,12 +1,14 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using ShopwareIntegration.Configuration;
 
 namespace ShopwareIntegration.Models
 {
     ///<summary>
     /// Address Model for Shopware Integration
     ///</summary>
+    [ModelUri("Addresses")]
     public class Address : BaseModel
     {
         #region mandatory Properties
