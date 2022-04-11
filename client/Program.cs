@@ -1,56 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using ShopwareIntegration;
-using ShopwareIntegration.Configuration;
-using ShopwareIntegration.Models;
-using ShopwareIntegration.Models.Filters;
-using ShopwareIntegration.Requests.HttpRequests;
 
 namespace client
 {
-    // todo
-    // shopware backend -> User Administration/Settings --> Edit User && mark enabled checkbox at API Access
-    //      returns API Key which si requried for authentication
-    // --> " If the edited user is currently logged in, you might need to clear the backend cache, and then log out and log in for your changes to take effect."
-    // ----------------------------------------------------------------------
-    // Test Auth 
-    // alle Entitäten als library
     class Program
     {
         static async Task Main(string[] args)
         {
-            await InfoVersionRequest.RunAsync();
-            System.Console.WriteLine("info version completed");
-            System.Console.ReadLine();
-            return;
-
             var client = await ShopwareClient.CreateAsync();
-            var infoRequest = new InfoRequest();
-            // var addressRequest = client.CreateGetRequest<Address, int>(42, BuildAllExampleFilters());
-            var result = await client.SendRequestAsync<InfoModel>(infoRequest, CancellationToken.None);
+            await ExecuteRequestDemo(client, client.CreateHttpRequest("user"));
+            System.Console.WriteLine("for product request press enter");
+            System.Console.ReadLine();
+            await ExecuteRequestDemo(client, client.CreateHttpRequest("product?limit=2"));
+        }
+
+        static async Task ExecuteRequestDemo(ShopwareClient client, HttpRequestMessage httpRequest)
+        {
+            var result = await client.SendAsync(httpRequest);
+
 
             if (result.IsSuccess)
-                System.Console.WriteLine($"Success!! - {result.Model}");
+            {
+                DataContainer container = new(result.Model);
+                System.Console.WriteLine($"Success!! - {container}");
+            }
             else
                 System.Console.WriteLine($"FAILED!! - {result.Exception}");
-
-            System.Console.WriteLine();
-            var filterExamples = BuildAllExampleFilters();
-            System.Console.WriteLine(JsonConvert.SerializeObject(filterExamples, Formatting.Indented));
         }
 
-        static FilterBuilder BuildAllExampleFilters()
+        public class DataContainer
         {
-            var builder = new FilterBuilder();
-            return builder.AddFilter("pseudoSales", value: "1", expression: ">=")
-                          .AddFilter("active", value: "1")
-                          .AddFilter("name", value: "%beach%", @operator: "1")
-                          .AddSort(property: "name")
-                          .AddSort(property: "invoiceAmount", direction: "DESC")
-                          .AddLimit(limit:50, start: 20);
+            private readonly Dictionary<string, object> _data;
+            public DataContainer(Dictionary<string, object> data)
+                => _data = data;
+
+            public override string ToString()
+                => string.Join(Environment.NewLine, _data.Select(x => $"{x.Key} - {x.Value}"));
         }
+
+        // public class ProductsResult
+        // {
+        //     [JsonPropertyName("data")]
+        //     public IEnumerable<Product> Data { get; set; }
+
+        //     public override string ToString()
+        //     {
+        //         return string.Join(", ", Data);
+        //     }
+        // }
+
+        // public class Product
+        // {
+        //     [JsonPropertyName("id")]
+        //     public string Id { get; set; }
+
+        //     [JsonPropertyName("type")]
+        //     public string Type { get; set; }
+
+        //     [JsonPropertyName("attributes")]
+        //     public object Attributes { get; set; }
+
+        //     [JsonPropertyName("links")]
+        //     public object Links { get; set; }
+           
+        //     [JsonPropertyName("relationships")]
+        //     public object RelationShips { get; set; }
+
+        //     [JsonPropertyName("meta")]
+        //     public object Meta { get; set; }
+
+        //     public override string ToString()
+        //         => $"Id:'{Id}' - Type:'{Type}'";
+        // }
     }
 }
