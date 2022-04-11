@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ShopwareIntegration;
+using ShopwareIntegration.Configuration;
 using ShopwareIntegration.Models;
 using ShopwareIntegration.Models.Filters;
 using ShopwareIntegration.Requests.HttpRequests;
@@ -20,6 +22,11 @@ namespace client
     {
         static async Task Main(string[] args)
         {
+            await InfoVersionRequest.RunAsync();
+            System.Console.WriteLine("info version completed");
+            System.Console.ReadLine();
+            return;
+
             var client = await ShopwareClient.CreateAsync();
             var infoRequest = new InfoRequest();
             // var addressRequest = client.CreateGetRequest<Address, int>(42, BuildAllExampleFilters());
