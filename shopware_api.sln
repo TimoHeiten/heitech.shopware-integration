@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "client", "client\client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-api", "test-api\test-api.csproj", "{27968424-84FF-4DF3-B7ED-E650E2DC49E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "models", "models\models.csproj", "{24822101-A664-4A53-96F5-919216D4E82D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopwareIntegration", "shopwareintegration\ShopwareIntegration.csproj", "{73FC3E06-2A06-4205-B5A5-8E0681DDA9B9}"
 EndProject
 Global

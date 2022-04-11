@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,12 +24,21 @@ namespace ShopwareIntegration
             if (configuration is null)
                 throw new NullReferenceException($"The HttpConfiguration could not be loaded at: {typeof(ShopwareClient)} {nameof(CreateAsync)}");
 
-            // todo: remove the trustingHandler, only for dev mode
-            HttpClientHandler trustingHandler = new();
-            trustingHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-            // !
+            var credentialsCache = new CredentialCache {
+                {
+                    new Uri(configuration.BaseUrl.Replace("api", "")),
+                    "Digest",
+                    new NetworkCredential(configuration.UserName, configuration.Password)
+                }
+            };
+            HttpClientHandler digestHandler = new()
+            {
+                Credentials = credentialsCache,
+                UseDefaultCredentials = false,
+                PreAuthenticate = true
+            };
 
-            HttpClient client = new(trustingHandler) { BaseAddress = new Uri(configuration.BaseUrl) };
+            HttpClient client = new(digestHandler) { BaseAddress = new Uri(configuration.BaseUrl) };
             client.DefaultRequestHeaders.Add("Authorization", configuration.CreateBasicAuthHeader());
             client.DefaultRequestHeaders.Add("ApiKey", configuration.ApiKey);
 
