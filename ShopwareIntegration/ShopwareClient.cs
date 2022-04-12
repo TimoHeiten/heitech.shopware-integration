@@ -33,10 +33,19 @@ namespace ShopwareIntegration
             HttpClient client = new() { BaseAddress = new Uri(configuration.BaseUrl) };
 
             ShopwareClient shopwareClient = new(client) { _configuration = configuration };
-            await shopwareClient.AuthenticateAsync();
+            await shopwareClient.AuthenticateAsync().ConfigureAwait(false);
 
             return shopwareClient;
         }
+
+        public Task<RequestResult<Dictionary<string, object>>> GetAsync(string uri)
+            => SendAsync(CreateHttpRequest(uri));
+
+        public Task<RequestResult<Dictionary<string, object>>> PostAsync<T>(string uri, T model)
+            => SendAsync(CreateHttpRequest<T>(uri, model));
+
+        public Task<RequestResult<Dictionary<string, object>>> PutAsync<T>(string uri, T model)
+            => SendAsync(CreateHttpRequest<T>(uri, model, HttpMethod.Put));
 
         public HttpRequestMessage CreateHttpRequest<TModel>(string uri, TModel model, HttpMethod? method = null)
         {
@@ -65,13 +74,12 @@ namespace ShopwareIntegration
         public async Task AuthenticateAsync()
         {
             var authenticateBody = Authenticate.From(_configuration);
-            var response = await _client.PostAsync(Authenticate.Url, JsonContent.Create(authenticateBody));
-            var content = await response.Content.ReadAsStringAsync();
+            var response = await _client.PostAsync(Authenticate.Url, JsonContent.Create(authenticateBody)).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
                 var authenticated = System.Text.Json.JsonSerializer.Deserialize<Authenticated>(content);
-                System.Console.WriteLine(authenticated!.AccessToken);
                 _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {authenticated!.AccessToken}");
             }
             else
@@ -80,22 +88,23 @@ namespace ShopwareIntegration
 
         public async Task<string> GetResponseContentAsync(HttpRequestMessage message, CancellationToken cancellationToken = default)
         {
-            var response = await _client.SendAsync(message, cancellationToken);
+            var response = await _client.SendAsync(message, cancellationToken).ConfigureAwait(false);
             return await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<RequestResult<Dictionary<string, object>>> SendAsync(HttpRequestMessage message, bool? guardRecursion = false, CancellationToken cancellationToken = default)
         {
-            var response = await _client.SendAsync(message, cancellationToken);
+            var response = await _client.SendAsync(message, cancellationToken).ConfigureAwait(false);
             var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode is false)
             {
-                if (response.StatusCode.ToString().StartsWith("4")) // forbidden or not authorized, then try to authenticate again and retry request
+                var code = response.StatusCode;
+                if (code == System.Net.HttpStatusCode.Forbidden || code == System.Net.HttpStatusCode.Unauthorized)
                 {
                     try
                     {
-                        await AuthenticateAsync();
+                        await AuthenticateAsync().ConfigureAwait(false);
 
                         if (guardRecursion.HasValue && guardRecursion.Value)
                             return RequestResult<Dictionary<string, object>>.Failed(new ShopIntegrationRequestException(typeof(Dictionary<string, object>)));
