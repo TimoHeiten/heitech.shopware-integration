@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using ShopwareIntegration;
+using ShopwareIntegration.Configuration;
+using ShopwareIntegration.Filter;
+using ShopwareIntegration.Requests;
 
 namespace client
 {
@@ -10,34 +12,30 @@ namespace client
     {
         static async Task Main(string[] args)
         {
-            var client = await ShopwareClient.CreateAsync().ConfigureAwait(false);
-            await ExecuteRequestDemo(client, "user");
-            System.Console.WriteLine("for product request press enter");
+            // demo shop credentials for test scenario
+            string baseUri = "";
+            string clientId = "";
+            string clientSecrect = "";
+
+            HttpClientConfiguration clientConfiguration = new(baseUri, clientId, clientSecrect);
+            using var client = ShopwareClient.Create(clientConfiguration);
+
+            Dictionary<string, object> filter = new() { ["limit"] = 1 };
+            ShopwareRequest<Dictionary<string, object>> request = client.BuilderFromClient<Dictionary<string, object>>()
+                                                                        .WithUri("search/product")
+                                                                        .WithMethod(HttpMethod.Post)
+                                                                        .WithParameter(new SimpleFilter(filter))
+                                                                        .WithExplicitAuthentication()
+                                                                        .Build();
+
+            await request.ExecuteAsync(
+                onSuccess: map => System.Console.WriteLine("success!! - " + Newtonsoft.Json.JsonConvert.SerializeObject(map).Substring(0, 50) + "..."),
+                onFailure: f => System.Console.WriteLine(f.Exception)
+            );
+
+            System.Console.WriteLine();
+            System.Console.WriteLine("done!");
             System.Console.ReadLine();
-            await ExecuteRequestDemo(client, "product?limit=2");
-        }
-
-        static async Task ExecuteRequestDemo(ShopwareClient client, string uri)
-        {
-            var result = await client.GetAsync(uri).ConfigureAwait(false);
-
-            if (result.IsSuccess)
-            {
-                DataContainer container = new(result.Model);
-                System.Console.WriteLine($"Success!! - {container}");
-            }
-            else
-                System.Console.WriteLine($"FAILED!! - {result.Exception}");
-        }
-
-        public class DataContainer
-        {
-            private readonly Dictionary<string, object> _data;
-            public DataContainer(Dictionary<string, object> data)
-                => _data = data;
-
-            public override string ToString()
-                => string.Join(Environment.NewLine, _data.Select(x => $"{x.Key} - {x.Value}"));
         }
     }
 }

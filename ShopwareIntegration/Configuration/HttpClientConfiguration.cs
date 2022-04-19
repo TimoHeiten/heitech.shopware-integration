@@ -1,8 +1,5 @@
 using System;
-using System.IO;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace ShopwareIntegration.Configuration
 {
@@ -13,21 +10,19 @@ namespace ShopwareIntegration.Configuration
     {
         public string BaseUrl { get; }
         public string ClientId { get; }
-        public string UserName { get; }
         public string ClientSecret { get; }
+        public int? Retries { get; set; } = null!;
 
         [JsonConstructor]
-        public HttpClientConfiguration(string baseUrl, string clientId, string userName, string clientSecret)
-            => (BaseUrl, ClientId, UserName, ClientSecret) = (baseUrl, clientId, userName, clientSecret);
+        public HttpClientConfiguration(string baseUrl, string clientId, string clientSecret)
+            => (BaseUrl, ClientId, ClientSecret) = (baseUrl, clientId, clientSecret);
 
-
-        // todo override with preferred mechanism (db, file based, user data etc.)
-        public static async Task<HttpClientConfiguration?> LoadAsync()
+        ///<summary>
+        /// Implies that retries are NOT NULL And GT 0
+        ///</summary>
+        internal bool CanRetry()
         {
-            string filePath = Path.Combine(Environment.CurrentDirectory, "settings.json");
-            var text = await File.ReadAllTextAsync(filePath, Encoding.UTF8).ConfigureAwait(false);
-            
-            return System.Text.Json.JsonSerializer.Deserialize<HttpClientConfiguration>(text);
+            return Retries.HasValue && Retries.Value > 0;
         }
     }
 }
