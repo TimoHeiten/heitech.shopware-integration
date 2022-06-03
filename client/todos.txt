@@ -1,0 +1,31 @@
+
+Reading Entities
+	4 Endpoints 4 Read
+		list
+		get by
+		post search 
+		post search ids
+
+
+Writing Entities
+	
+
+
+Read
+2 Wege
+	iterieren für eine Property
+	Models anlegen
+
+
+how to handle Aggregations / 
+
+All Entities anlegen?
+
+
+
+todos
+--> namespace (admin api and store api)
+--> Writing Request
+--> all Models
+--> Filter Builder
+--> 

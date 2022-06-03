@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ShopwareIntegration.Configuration;
@@ -24,9 +25,9 @@ namespace ShopwareIntegration
         private ShopwareClient(HttpClient client)
             => _client = client;
 
-        public static async Task<ShopwareClient> CreateAsync()
+        public static async Task<ShopwareClient> CreateAsync(Configuration.HttpClientConfiguration clientConfiguration)
         {
-            var configuration = await Configuration.HttpClientConfiguration.LoadAsync().ConfigureAwait(false);
+            var configuration = clientConfiguration;
             if (configuration is null)
                 throw new NullReferenceException($"The HttpConfiguration could not be loaded at: {typeof(ShopwareClient)} {nameof(CreateAsync)}");
 
@@ -38,14 +39,14 @@ namespace ShopwareIntegration
             return shopwareClient;
         }
 
-        public Task<RequestResult<Dictionary<string, object>>> GetAsync(string uri)
-            => SendAsync(CreateHttpRequest(uri));
+        public Task<RequestResult<T>> GetAsync<T>(string uri)
+            => SendAsync<T>(CreateHttpRequest(uri));
 
-        public Task<RequestResult<Dictionary<string, object>>> PostAsync<T>(string uri, T model)
-            => SendAsync(CreateHttpRequest<T>(uri, model));
+        public Task<RequestResult<T>> PostAsync<T>(string uri, T model)
+            => SendAsync<T>(CreateHttpRequest<T>(uri, model));
 
-        public Task<RequestResult<Dictionary<string, object>>> PutAsync<T>(string uri, T model)
-            => SendAsync(CreateHttpRequest<T>(uri, model, HttpMethod.Put));
+        public Task<RequestResult<T>> PutAsync<T>(string uri, T model)
+            => SendAsync<T>(CreateHttpRequest<T>(uri, model, HttpMethod.Put));
 
         public HttpRequestMessage CreateHttpRequest<TModel>(string uri, TModel model, HttpMethod? method = null)
         {
@@ -86,17 +87,16 @@ namespace ShopwareIntegration
                 throw new ShopIntegrationRequestException((int)response.StatusCode, null, content);
         }
 
-        public async Task<string> GetResponseContentAsync(HttpRequestMessage message, CancellationToken cancellationToken = default)
+        public async Task<string> GetResponseContentAsync<T>(HttpRequestMessage message, CancellationToken cancellationToken = default)
         {
             var response = await _client.SendAsync(message, cancellationToken).ConfigureAwait(false);
             return await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<RequestResult<Dictionary<string, object>>> SendAsync(HttpRequestMessage message, bool? guardRecursion = false, CancellationToken cancellationToken = default)
+        public async Task<RequestResult<T>> SendAsync<T>(HttpRequestMessage message, bool? guardRecursion = false, CancellationToken cancellationToken = default)
         {
             var response = await _client.SendAsync(message, cancellationToken).ConfigureAwait(false);
             var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-
             if (response.IsSuccessStatusCode is false)
             {
                 var code = response.StatusCode;
@@ -107,28 +107,30 @@ namespace ShopwareIntegration
                         await AuthenticateAsync().ConfigureAwait(false);
 
                         if (guardRecursion.HasValue && guardRecursion.Value)
-                            return RequestResult<Dictionary<string, object>>.Failed(new ShopIntegrationRequestException(typeof(Dictionary<string, object>)));
+                            return RequestResult<T>.Failed(new ShopIntegrationRequestException(typeof(T)));
 
-                        await SendAsync(message, true, cancellationToken);
+                        await SendAsync<T>(message, guardRecursion: true, cancellationToken: cancellationToken);
                     }
                     catch (System.Exception ex)
                     {
-                        return RequestResult<Dictionary<string, object>>.Failed(ex);
+                        return RequestResult<T>.Failed(ex);
                     }
                 }
                 else
-                    return RequestResult<Dictionary<string, object>>.Failed(new ShopIntegrationRequestException((int)response.StatusCode, message, content));
+                    return RequestResult<T>.Failed(new ShopIntegrationRequestException((int)response.StatusCode, message, content));
             }
+
             try
             {
-                Dictionary<string, object>? model = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(content);
+                var model = System.Text.Json.JsonSerializer.Deserialize<T>(content);
                 return model is not null
-                       ? RequestResult<Dictionary<string, object>>.Success(model!)
-                       : RequestResult<Dictionary<string, object>>.Failed(new ShopIntegrationRequestException(typeof(Dictionary<string, object>)));
+                       ? RequestResult<T>.Success(model!)
+                       : RequestResult<T>.Failed(new ShopIntegrationRequestException(typeof(T)));
             }
             catch (System.Exception ex)
             {
-                return RequestResult<Dictionary<string, object>>.Failed(ex);
+                System.Console.WriteLine(ex);
+                return RequestResult<T>.Failed(ex);
             }
         }
 
