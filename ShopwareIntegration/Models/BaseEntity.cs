@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -5,10 +6,16 @@ using System.Text.Json.Serialization;
 
 namespace ShopwareIntegration.Models
 {
-    public class BaseEntity
+    public abstract class BaseEntity
     {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
         [JsonExtensionData]
         public Dictionary<string, JsonElement> AdditionalProperties { get; set; } = new();
+
+        protected BaseEntity()
+            => Id = CreateId;
 
         public bool TryGetEntityFromAdditional<T>(out T t, string? name = null)
         {
@@ -31,5 +38,7 @@ namespace ShopwareIntegration.Models
             var chars = new char[] { char.ToLower(value[0]) }.Concat(value.Skip(1)).ToArray();
             return new string(chars);
         }
+
+        internal string CreateId => Guid.NewGuid().ToString("N");
     }
 }

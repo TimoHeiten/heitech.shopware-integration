@@ -1,7 +1,8 @@
 namespace ShopwareIntegration.Models
 {
-    public class Customer : BaseEntity
+    public sealed class Customer : BaseEntity
     {
-
+        public Customer() : base()
+        { }
     }
 }

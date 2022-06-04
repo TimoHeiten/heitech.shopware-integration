@@ -6,6 +6,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using heitech.ShopwareIntegration.Requests;
 using ShopwareIntegration.Configuration;
 using ShopwareIntegration.Models;
 using ShopwareIntegration.Models.Exceptions;
@@ -120,6 +121,10 @@ namespace ShopwareIntegration
                     return RequestResult<T>.Failed(new ShopIntegrationRequestException((int)response.StatusCode, message, content));
             }
 
+            // crud returns 201 No Content and cannot be Deserialized,
+            // so we return early here
+            if (IsCrud(message)) return RequestResult<T>.Success((T)(object)new DataEmpty());
+
             try
             {
                 var model = System.Text.Json.JsonSerializer.Deserialize<T>(content);
@@ -132,6 +137,15 @@ namespace ShopwareIntegration
                 System.Console.WriteLine(ex);
                 return RequestResult<T>.Failed(ex);
             }
+        }
+
+        private bool IsCrud(HttpRequestMessage msg)
+        {
+            bool isPatch = msg.Method == HttpMethod.Patch;
+            // post is also used for the search endpoint
+            bool isCreate = msg.Method == HttpMethod.Post && !msg.RequestUri!.AbsoluteUri.Contains("search");
+            bool isDelete = msg.Method == HttpMethod.Delete;
+            return isPatch || isCreate || isDelete;
         }
 
 

@@ -1,7 +1,8 @@
 namespace ShopwareIntegration.Models
 {
-    public class Product : BaseEntity
-    {
-        public string id { get; set; }
+    public sealed class Product : BaseEntity
+    { 
+        public Product() : base()
+        { }
     }
 }

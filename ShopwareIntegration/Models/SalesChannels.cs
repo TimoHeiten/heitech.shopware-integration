@@ -1,7 +1,8 @@
 namespace ShopwareIntegration.Models
 {
-    public class SalesChannels : BaseEntity
+    public sealed class SalesChannels : BaseEntity
     {
-        
+        public SalesChannels() : base()
+        { }
     }
 }

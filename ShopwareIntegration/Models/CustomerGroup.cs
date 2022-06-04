@@ -6,7 +6,7 @@ using ShopwareIntegration.Configuration;
 namespace ShopwareIntegration.Models
 {
     [ModelUri("customer-group")]
-    public class CustomerGroup : BaseEntity
+    public sealed class CustomerGroup : BaseEntity
     {
         [JsonPropertyName("createdAt")]
         public DateTime CreatedAt { get; set; }
@@ -17,14 +17,14 @@ namespace ShopwareIntegration.Models
         [JsonPropertyName("displayGross")]
         public bool DisplayGross { get; set; }
 
-        [JsonPropertyName("id")]
-        public string Id { get; set; } = default!;
-
         [JsonPropertyName("name")]
         public string Name { get; set; } = default!;
 
         [JsonPropertyName("registrationActive")]
         public bool RegistrationActive { get; set; }
+
+        public CustomerGroup() : base()
+        { }
 
         public override string ToString()
         {
