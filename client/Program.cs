@@ -13,24 +13,18 @@ namespace client
         {
             // test store creds
             var configuration = new ShopwareIntegration.Configuration.HttpClientConfiguration(
-                baseUrl: "http://sw6.wbv24.com/api/",
-                clientId: "SWIATKTYADFGUWC2CM53VFKWBG",
+                baseUrl: "your shopware api",
+                clientId: "your client id",
                 userName: string.Empty,
-                clientSecret: "Nk9XQWQzSkRwVnQ2T01LTzJydnM5M3RQTFVJNW1SY3NJM3NTckY"
+                clientSecret: "your client secret"
             );
             var client = await ShopwareClient.CreateAsync(configuration).ConfigureAwait(false);
 
             await CreateUnit(client);
             return;
 
+            // examples. Remove the return statement to check
             var liste = new ReadRequest<CustomerGroup>(client);
-            // var dic = await liste.ExecuteListAsync();
-            // System.Console.WriteLine("next");
-            // System.Console.WriteLine();
-            // System.Console.ReadLine();
-            // dynamic d = dic.Data;
-            // var item = d[0];
-            // System.Console.WriteLine(item);
             await ExecuteUpdate(client);
             return;
             _ = await liste.ExecuteGetAsync("713d0f385267496e9629564d314c1ec4");

@@ -5,6 +5,10 @@ using ShopwareIntegration.Models;
 
 namespace heitech.ShopwareIntegration.Requests
 {
+    // todo...for now use the 
+    ///<summary>
+    /// Not working yet. For now use anonymous objects.
+    ///</summary>
     public class FilterBuilder<T> : IFilterBuilder<T>, IFilter
         where T : BaseEntity
     {

@@ -42,24 +42,32 @@ namespace ShopwareIntegration.Requests
 
         ///<summary>
         /// Find the specified Enity for this Request by Id
+        ///<para/>
+        /// On Success the RequestResult contains a DataObject Container of the requested Type
         ///</summary>
         public Task<RequestResult<DataObject<T>>> ExecuteGetAsync(string id)
             => RunAsync<DataObject<T>>($"{_url}/{id}");
 
         ///<summary>
         /// Get All Instance of the specified Entity as a Collection
+        ///<para/>
+        /// On Success the RequestResult contains a DataArray Container of the requested Type
         ///</summary>
         public Task<RequestResult<DataArray<T>>> ExecuteListAsync()
             => RunAsync<DataArray<T>>(_url);
 
         ///<summary>
         /// Use the search object to filter, expand, page the specified entity etc.
+        ///<para/>
+        /// On Success the RequestResult contains a DataObject Container of the requested Type
         ///</summary>
         public Task<RequestResult<DataArray<T>>> SearchAsync(object search)
             => RunAsync<DataArray<T>>($"search/{_url}", HttpMethod.Post, JsonContent.Create(search));
 
         ///<summary>
         /// Get a List of all Ids for this Ressource. Like with Search you can use Filter, Expand etc.
+        ///<para/>
+        /// On Success the RequestResult contains a DataObject Container of the requested Type
         ///</summary>
         public Task<RequestResult<DataArray<string>>> SearchIdsAsync(object search)
             => RunAsync<DataArray<string>>($"search-ids/{_url}", HttpMethod.Post, JsonContent.Create(search));
