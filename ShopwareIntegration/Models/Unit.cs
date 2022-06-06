@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using ShopwareIntegration.Configuration;
-using ShopwareIntegration.Models;
 
-namespace heitech.ShopwareIntegration.Requests
+namespace heitech.ShopwareIntegration.Models
 {
     [ModelUri("unit")]
     public sealed class Unit : BaseEntity

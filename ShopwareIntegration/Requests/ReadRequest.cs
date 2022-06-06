@@ -1,8 +1,9 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using heitech.ShopwareIntegration.Filtering;
 using ShopwareIntegration.Configuration;
-using ShopwareIntegration.Models;
+using heitech.ShopwareIntegration.Models;
 using ShopwareIntegration.Models.Data;
 
 namespace ShopwareIntegration.Requests
@@ -61,15 +62,15 @@ namespace ShopwareIntegration.Requests
         ///<para/>
         /// On Success the RequestResult contains a DataObject Container of the requested Type
         ///</summary>
-        public Task<RequestResult<DataArray<T>>> SearchAsync(object search)
-            => RunAsync<DataArray<T>>($"search/{_url}", HttpMethod.Post, JsonContent.Create(search));
+        public Task<RequestResult<DataArray<T>>> SearchAsync(IFilter search)
+            => RunAsync<DataArray<T>>($"search/{_url}", HttpMethod.Post, JsonContent.Create(search.AsSearchInstance()));
 
         ///<summary>
         /// Get a List of all Ids for this Ressource. Like with Search you can use Filter, Expand etc.
         ///<para/>
         /// On Success the RequestResult contains a DataObject Container of the requested Type
         ///</summary>
-        public Task<RequestResult<DataArray<string>>> SearchIdsAsync(object search)
-            => RunAsync<DataArray<string>>($"search-ids/{_url}", HttpMethod.Post, JsonContent.Create(search));
+        public Task<RequestResult<DataArray<string>>> SearchIdsAsync(IFilter search)
+            => RunAsync<DataArray<string>>($"search-ids/{_url}", HttpMethod.Post, JsonContent.Create(search.AsSearchInstance()));
     }
 }

@@ -1,4 +1,5 @@
-namespace ShopwareIntegration.Models
+namespace heitech.ShopwareIntegration.Models
+
 {
     public sealed class SalesChannels : BaseEntity
     {

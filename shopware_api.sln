@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "client", "client\client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopwareIntegration", "shopwareintegration\ShopwareIntegration.csproj", "{73FC3E06-2A06-4205-B5A5-8E0681DDA9B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "tests\tests.csproj", "{11E9F27E-D2FC-4B94-B2FE-41B16A3B6488}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,5 +34,9 @@ Global
 		{73FC3E06-2A06-4205-B5A5-8E0681DDA9B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73FC3E06-2A06-4205-B5A5-8E0681DDA9B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73FC3E06-2A06-4205-B5A5-8E0681DDA9B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11E9F27E-D2FC-4B94-B2FE-41B16A3B6488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11E9F27E-D2FC-4B94-B2FE-41B16A3B6488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11E9F27E-D2FC-4B94-B2FE-41B16A3B6488}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11E9F27E-D2FC-4B94-B2FE-41B16A3B6488}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using ShopwareIntegration.Configuration;
 
-namespace ShopwareIntegration.Models
+namespace heitech.ShopwareIntegration.Models
 {
     [ModelUri("customer-group")]
     public sealed class CustomerGroup : BaseEntity

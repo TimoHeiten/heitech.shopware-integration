@@ -13,10 +13,10 @@ namespace client
         {
             // test store creds
             var configuration = new ShopwareIntegration.Configuration.HttpClientConfiguration(
-                baseUrl: "your shopware api",
-                clientId: "your client id",
+                baseUrl: "http://sw6.wbv24.com/api/",
+                clientId: "SWIATKTYADFGUWC2CM53VFKWBG",
                 userName: string.Empty,
-                clientSecret: "your client secret"
+                clientSecret: "Nk9XQWQzSkRwVnQ2T01LTzJydnM5M3RQTFVJNW1SY3NJM3NTckY"
             );
             var client = await ShopwareClient.CreateAsync(configuration).ConfigureAwait(false);
 

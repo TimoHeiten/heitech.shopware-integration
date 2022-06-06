@@ -2,7 +2,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using heitech.ShopwareIntegration.Requests;
 using ShopwareIntegration.Configuration;
-using ShopwareIntegration.Models;
+using heitech.ShopwareIntegration.Models;
 
 namespace ShopwareIntegration.Requests
 {
