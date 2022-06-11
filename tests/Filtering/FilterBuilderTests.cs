@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using FluentAssertions;
 using heitech.ShopwareIntegration.Filtering;
+using heitech.ShopwareIntegration.Filtering.Parameters;
 using heitech.ShopwareIntegration.Models;
 using Xunit;
 
@@ -21,9 +23,10 @@ namespace heitech.Shopware.tests
             var result = filter.AsSearchInstance();
 
             // Then
-            result.Should().BeEquivalentTo(expected);
+            Serialize(result).Should().BeEquivalentTo(Serialize(expected));
         }
 
+        private static string Serialize(object o) => JsonSerializer.Serialize(o);
 
         public static IEnumerable<object[]> FilterExamples
         {
@@ -128,6 +131,14 @@ namespace heitech.Shopware.tests
 
 
                 // associations are always first
+                yield return new object[] {
+                    () => FilterFactory.CreateBuilder<TestEntity>()
+                                       .Association(x => x.NestedEntity)
+                                       .Build(),
+                    new {
+                        association = "nestedEntity"
+                    }
+                };
                 // post filters with aggregations
                 // 
             }

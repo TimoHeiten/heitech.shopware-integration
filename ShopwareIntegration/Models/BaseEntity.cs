@@ -39,6 +39,6 @@ namespace heitech.ShopwareIntegration.Models
             return new string(chars);
         }
 
-        internal string CreateId => Guid.NewGuid().ToString("N");
+        internal static string CreateId => Guid.NewGuid().ToString("N");
     }
 }

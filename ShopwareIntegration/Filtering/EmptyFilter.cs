@@ -4,6 +4,6 @@ namespace heitech.ShopwareIntegration.Filtering
     {
         private EmptyFilter() { }
         public static IFilter Instance { get; } = new EmptyFilter();
-        public object AsSearchInstance() => new object();
+        public object AsSearchInstance() => null!; // for serialization as empty object
     }
 }

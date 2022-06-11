@@ -2,9 +2,10 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using heitech.ShopwareIntegration.Filtering;
-using ShopwareIntegration.Configuration;
 using heitech.ShopwareIntegration.Models;
 using ShopwareIntegration.Models.Data;
+using heitech.ShopwareIntegration;
+using heitech.ShopwareIntegration.Configuration;
 
 namespace ShopwareIntegration.Requests
 {
@@ -21,7 +22,7 @@ namespace ShopwareIntegration.Requests
         /// Specify a Requestobject that associates the generice Type as the Model. The Url is Taken from the ModelUri Attribute.
         /// Supply the ShopwareClient to get Access to the shopware6 authorized web Requests
         ///</summary>
-        public ReadRequest(ShopwareClient client)
+        internal ReadRequest(ShopwareClient client)
         {
             this._url = ModelUri.GetUrlFromType<T>();
             this._client = client;
@@ -33,10 +34,10 @@ namespace ShopwareIntegration.Requests
             var rqResult = await _client.SendAsync<TData>(httpRq);
             // todo remove
             // just for checks
-            // dynamic d = rqResult.Model;
+            // dynamic d = rqResult.Model!;
             // if (rqResult.IsSuccess)
             // {
-            //     System.Console.WriteLine(d!.Data.ToString());
+            //     System.Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(d.Data));
             // }
             return rqResult;
         }
@@ -46,16 +47,22 @@ namespace ShopwareIntegration.Requests
         ///<para/>
         /// On Success the RequestResult contains a DataObject Container of the requested Type
         ///</summary>
-        public Task<RequestResult<DataObject<T>>> ExecuteGetAsync(string id)
-            => RunAsync<DataObject<T>>($"{_url}/{id}");
+        public Task<RequestResult<DataObject<T>>> ExecuteGetAsync(string id, string? query = null)
+        {
+            string url = query is null ? $"{_url}/{id}" : $"{_url}/{id}?{query}";
+            return RunAsync<DataObject<T>>($"{_url}/{id}");
+        }
 
         ///<summary>
         /// Get All Instance of the specified Entity as a Collection
         ///<para/>
         /// On Success the RequestResult contains a DataArray Container of the requested Type
         ///</summary>
-        public Task<RequestResult<DataArray<T>>> ExecuteListAsync()
-            => RunAsync<DataArray<T>>(_url);
+        public Task<RequestResult<DataArray<T>>> ExecuteListAsync(string? query = null)
+        {
+            string url = query is null ? $"{_url}" : $"{_url}?{query}";
+            return RunAsync<DataArray<T>>(_url);
+        }
 
         ///<summary>
         /// Use the search object to filter, expand, page the specified entity etc.

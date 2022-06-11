@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace ShopwareIntegration.Configuration
+namespace heitech.ShopwareIntegration.Configuration
 {
     ///<summary>
     /// Configuration Object for the underlying Shopware HttpClient

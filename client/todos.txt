@@ -1,31 +1,47 @@
 
-Reading Entities
-	4 Endpoints 4 Read
-		list
-		get by
-		post search 
-		post search ids
-
-
-Writing Entities
-	
-
-
-Read
-2 Wege
-	iterieren für eine Property
-	Models anlegen
-
-
-how to handle Aggregations / 
-
-All Entities anlegen?
-
-
-
 todos
---> namespace (admin api and store api)
---> Writing Request
---> all Models
 --> Filter Builder
---> 
+--> namespace (admin api and store api)
+--> all Models
+------------------------------
+
+1.Usecase
+CUD
+Products 
+	Updated (Lagerbestand [Supply], Price)
+	Insert
+
+--> Models 
+--> Endpoints (done)
+
+2. Usecase
+Master-Detail Ansicht Produkte
+
+Liste der Products
+	GetList
+	Search Endpunkt 
+		Aggregate Felder Name und Id
+		Hersteller
+
+
+3. Usecase
+Product Bilder (update)
+
+
+
+4. Mapping Layer
+
+
+---------------------------------------------------------------------------
+Steps:
+1.) Product Entities as Models (BaseEntitiy)
+2.) library mit den UseCases
+        ProductsUseCases
+            - List --> test either id and stream via loop
+                      or all with only the fields (includes)
+            - details by Id
+            - UpdatePrice
+            - UpdateSupply
+            - Insert new one 
+3.) Produktbilder hochladen (updateV2?)
+4.) Mapping Layer alte Welt / neue Welt und vice versa

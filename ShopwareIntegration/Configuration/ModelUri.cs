@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace ShopwareIntegration.Configuration
+namespace heitech.ShopwareIntegration.Configuration
 {
     [AttributeUsage(validOn: AttributeTargets.Class, Inherited = false)]
     public class ModelUri : Attribute

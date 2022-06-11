@@ -1,6 +1,6 @@
 using System;
 using System.Text.Json.Serialization;
-using ShopwareIntegration.Configuration;
+using heitech.ShopwareIntegration.Configuration;
 
 namespace ShopwareIntegration.Models
 {

@@ -1,6 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using heitech.ShopwareIntegration.Models;
+using heitech.ShopwareIntegration.Filtering.Parameters;
 
 namespace heitech.ShopwareIntegration.Filtering
 {
@@ -11,7 +12,7 @@ namespace heitech.ShopwareIntegration.Filtering
         IFilterBuilder<T> Limit(int limit);
         IFilterBuilder<T> Grouping(Expression<Func<T, object>> propExpression, params Expression<Func<T, object>>[] other);
         IFilterBuilder<T> Sort(SortParameter<T> parameter, params SortParameter<T>[] other);
-        IFilterBuilder<T> Association<TOut>(Expression<Func<T, TOut>> propertyExpression);
+        IFilterBuilder<T> Association<TOut>(Expression<Func<T, TOut>> propertyExpression, IFilter nestedFilter = null!);
         IFilterBuilder<T> Aggregate(AggregateParameter parameter, params AggregateParameter[] other);
         
         ///<summary>

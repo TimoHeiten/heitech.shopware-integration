@@ -1,18 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using heitech.ShopwareIntegration.Configuration;
+using heitech.ShopwareIntegration.Models;
 using heitech.ShopwareIntegration.Requests;
-using ShopwareIntegration.Configuration;
 using ShopwareIntegration.Models;
 using ShopwareIntegration.Models.Exceptions;
 using ShopwareIntegration.Requests;
 
-namespace ShopwareIntegration
+namespace heitech.ShopwareIntegration
 {
     ///<summary>
     /// HttpClient Abstraction for the Shopware REST API Integration
@@ -145,8 +144,12 @@ namespace ShopwareIntegration
             // post is also used for the search endpoint
             bool isCreate = msg.Method == HttpMethod.Post && !msg.RequestUri!.AbsoluteUri.Contains("search");
             bool isDelete = msg.Method == HttpMethod.Delete;
-            return isPatch || isCreate || isDelete;
+            return isPatch || isCreate || isDelete;
         }
+
+        public ReadRequest<T> CreateReader<T>() where T : BaseEntity => new ReadRequest<T>(this);
+
+        public WritingRequest<T> CreateWriter<T>() where T : BaseEntity => new WritingRequest<T>(this);
 
 
         protected virtual void Dispose(bool disposing)

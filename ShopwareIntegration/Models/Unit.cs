@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using ShopwareIntegration.Configuration;
+using heitech.ShopwareIntegration.Configuration;
 
 namespace heitech.ShopwareIntegration.Models
 {

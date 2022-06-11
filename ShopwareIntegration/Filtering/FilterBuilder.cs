@@ -1,8 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Linq.Expressions;
+using System.Collections.Generic;
 using heitech.ShopwareIntegration.Models;
+using heitech.ShopwareIntegration.Filtering.Parameters;
 
 namespace heitech.ShopwareIntegration.Filtering
 {
@@ -15,27 +17,38 @@ namespace heitech.ShopwareIntegration.Filtering
     {
         private List<SortParameter<T>> sortparameters = default!;
         private List<string> groupings = default!;
+        private List<FilterParameter<T>> filters = default!;
         private int? page = default!;
         private int? limit = default!;
+        private AssociationObject? associationObject;
 
-        public FilterBuilder()
-        { }
+        public FilterBuilder() { }
 
         public IFilterBuilder<T> Aggregate(AggregateParameter parameter, params AggregateParameter[] other)
         {
             throw new NotImplementedException();
         }
 
-        public IFilterBuilder<T> Association<TOut>(Expression<Func<T, TOut>> propertyExpression)
+        public IFilterBuilder<T> Association<TOut>(Expression<Func<T, TOut>> propertyExpression, IFilter nestedFilter = null!)
         {
-            throw new NotImplementedException();
+            string getName() => FilterConstants.GetName<T, TOut>(propertyExpression);
+            associationObject ??= new(getName(), nestedFilter ?? EmptyFilter.Instance);
+
+            return this;
         }
 
         public IFilterBuilder<T> Grouping(Expression<Func<T, object>> propExpression, params Expression<Func<T, object>>[] other)
         {
             this.groupings ??= new();
-            this.groupings.AddRange(other.Concat(new [] { propExpression }).Select(x => FilterConstants.GetName<T>(x)));
+            this.groupings.AddRange(other.Concat(new[] { propExpression }).Select(x => FilterConstants.GetName<T>(x)));
 
+            return this;
+        }
+
+        public IFilterBuilder<T> Filter(FilterParameter<T> filter, params FilterParameter<T>[] other)
+        {
+            this.filters ??= new();
+            this.filters.AddRange(other.Concat(new[] { filter }));
             return this;
         }
 
@@ -67,15 +80,62 @@ namespace heitech.ShopwareIntegration.Filtering
 
         public object AsSearchInstance()
         {
-            var sortArray = sortparameters?.Select(x => new { field = x.Field, order = x.Order, naturalSorting = x.NaturalSorting });
-            return new {
-                filter = new {
-                    sort = sortArray?.ToArray(),
-                    page = this.page,
-                    limit = this.limit,
-                    grouping = this.groupings?.ToArray()
-                }
+            var searchObject = new
+            {
+                page = this.page,
+                limit = this.limit,
+                grouping = this.groupings?.ToArray(),
+                filter = filters?.Select(x => x.ToInstance()).ToArray(),
+                sort = sortparameters?.Select(x => x.ToInstance()).ToArray()
             };
+
+            if (associationObject is not null)
+                return associationObject.AsSearchInstance(searchObject);
+
+            return searchObject;
+        }
+
+        private class AssociationObject
+        {
+            // todo must support multiple associations... so IParameterObject and multiple objects as key/values of the associations object
+            // todo 2 also test if this is even working :D
+            private readonly string name;
+            private readonly IFilter nested;
+
+            public AssociationObject(string name, IFilter nested)
+            {
+                this.name = name;
+                this.nested = nested;
+            }
+
+            public object AsSearchInstance(object otherFilter)
+            {
+                string serialize(object obj) => JsonSerializer.Serialize(obj);
+                // kinda hacky, but we cannot have anonymous objects with dynamic keys, so we turn it into a string
+                // then a json and back to an object.
+                /*
+                    result looks like this:
+                    {
+                        "associations" : {
+                            "($name)" : {
+                                nestedFilter
+                            }
+                        },
+                        otherfilters 
+                    }
+                */
+                bool hasAssociationFilter = this.nested.AsSearchInstance() is not null;
+                string associationsFilter = hasAssociationFilter
+                                            ? "{ \"associatons\" : { \"{0}\" : {1} }, {2} }"
+                                            : "{ \"associatons\" : { \"{0}\" : {  } }, {1} }";
+
+                string serializedOtherFilters = serialize(otherFilter);
+                string completeJsonString = hasAssociationFilter
+                                            ? string.Format(associationsFilter, name, serialize(nested.AsSearchInstance()), serializedOtherFilters)
+                                            : string.Format(associationsFilter, name, serializedOtherFilters);
+
+                return JsonSerializer.Deserialize<object>(completeJsonString)!;
+            }
         }
     }
 }

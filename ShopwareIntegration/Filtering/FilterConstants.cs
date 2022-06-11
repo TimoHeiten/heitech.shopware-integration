@@ -11,10 +11,14 @@ namespace heitech.ShopwareIntegration.Filtering
         public const string ASC = "asc";
         public const string DESC = "desc";
 
-        public static string GetName<T>(this Expression<Func<T, object>> propertyExpression)
-            where T : BaseEntity
+        public static string GetName<T>(this Expression<Func<T, object>> propertyExpression) where T : BaseEntity
+            => getName((propertyExpression.Body as MemberExpression)!);
+
+        public static string GetName<T, TOut>(this Expression<Func<T, TOut>> propertyExpression) where T : BaseEntity
+            => getName((propertyExpression.Body as MemberExpression)!);
+
+        private static string getName(this MemberExpression member)
         {
-            var member = propertyExpression.Body as MemberExpression;
             var propInfo = member?.Member as PropertyInfo;
             if (propInfo is null)
                 return "";
