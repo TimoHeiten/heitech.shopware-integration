@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using heitech.ShopwareIntegration.Configuration;
 
 namespace heitech.ShopwareIntegration.Models
 {
@@ -18,5 +17,8 @@ namespace heitech.ShopwareIntegration.Models
 
         [JsonPropertyName("currencyId")]
         public string? CurrencyId { get; set; } = default!;
+
+        [JsonPropertyName("linked")]
+        public bool? Linked { get; set; } = false;
     }
 }

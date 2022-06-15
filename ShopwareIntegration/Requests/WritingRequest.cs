@@ -1,15 +1,9 @@
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Text.Json.Serialization;
 using heitech.ShopwareIntegration.Requests;
 using heitech.ShopwareIntegration.Models;
 using heitech.ShopwareIntegration;
 using heitech.ShopwareIntegration.Configuration;
-using System.Linq.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
 
 namespace ShopwareIntegration.Requests
 {
@@ -45,7 +39,7 @@ namespace ShopwareIntegration.Requests
         ///<para/>
         /// The Result is an empty Data Container since this returns a 204 StatusCode (No Content ) 
         ///</summary>
-        public Task<RequestResult<DataEmpty>> Create(T payload)
+        public Task<RequestResult<DataEmpty>> Create(object payload)
             => RunAsync($"{_url}", payload, HttpMethod.Post);
 
         ///<summary>

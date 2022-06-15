@@ -42,7 +42,17 @@ namespace client
                 new string[] { single.Manufacturer?.Name, single.Id, single.Ean, $"{single.Stock}", $"{single.Active}", $"{single.AvailableStock}" }
             ));
 
+            // ids where taken from the demo shop
             var writeUseCase = new WriteUseCase(client);
+            var p = new ProductPrice {
+                Net = 200,
+                Gross = 220,
+                CurrencyId = "b7d2554b0ce847cd82f3ac9bd1c0dfca"
+            };
+            var n = Product.NewProduct("my-product", p, "574742", 10, "b2b3685ce1594221af60a0bdad7988c3");
+            _ = await writeUseCase.InsertAsync(n);
+
+            return;
             bool wasUpdated = await writeUseCase.Update(single.Id, 4, 42.12M);
             System.Console.WriteLine($"was updated '{wasUpdated}'");
 

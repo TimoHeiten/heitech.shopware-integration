@@ -50,6 +50,8 @@ namespace heitech.ShopwareIntegration
 
         public HttpRequestMessage CreateHttpRequest<TModel>(string uri, TModel model, HttpMethod? method = null)
         {
+            System.Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(model));
+            System.Console.ReadLine();
             HttpRequestMessage message = new()
             {
                 Content = JsonContent.Create(model),
