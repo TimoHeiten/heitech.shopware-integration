@@ -57,7 +57,8 @@ namespace heitech.ShopwareIntegration.Models
                         linked = price.Linked,
                         currencyId = price.CurrencyId,
                     }
-                 }
+                 },
+                 ean = "deine ean"
             };
         }
         [JsonPropertyName("createdAt")]

@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using heitech.ShopwareIntegration.Models;
 using ShopwareIntegration.Requests;
@@ -52,7 +50,7 @@ namespace heitech.ShopwareIntegration.ProductUseCases
                         }
                     }
                 );
-                return result.IsSuccess;
+                return result.IsSuccess ? true : throw result.Exception;
             }
             catch (System.Exception ex)
             {

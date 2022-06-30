@@ -6,10 +6,6 @@ using heitech.ShopwareIntegration;
 using heitech.ShopwareIntegration.Configuration;
 using heitech.ShopwareIntegration.Models;
 using heitech.ShopwareIntegration.ProductUseCases;
-using heitech.ShopwareIntegration.Requests;
-using ShopwareIntegration;
-using ShopwareIntegration.Models;
-using ShopwareIntegration.Requests;
 
 namespace client
 {
@@ -29,6 +25,7 @@ namespace client
             );
             var client = await ShopwareClient.CreateAsync(configuration).ConfigureAwait(false);
 
+            // all read usecases: pagedResult for master view, getById with expanded manufacturer for details view.
             var readCase = new ReadUseCases(client);
             var watch = new Stopwatch();
             watch.Start();
@@ -42,6 +39,7 @@ namespace client
                 new string[] { single.Manufacturer?.Name, single.Id, single.Ean, $"{single.Stock}", $"{single.Active}", $"{single.AvailableStock}" }
             ));
 
+            // create and update (return a 500 on the demo shop due to a not properly configured user...)
             // ids where taken from the demo shop
             var writeUseCase = new WriteUseCase(client);
             var p = new ProductPrice {
@@ -49,10 +47,9 @@ namespace client
                 Gross = 220,
                 CurrencyId = "b7d2554b0ce847cd82f3ac9bd1c0dfca"
             };
-            var n = Product.NewProduct("my-product", p, "574742", 10, "b2b3685ce1594221af60a0bdad7988c3");
+            object n = Product.NewProduct("my-product", p, "574742", 10, "b2b3685ce1594221af60a0bdad7988c3");
             _ = await writeUseCase.InsertAsync(n);
 
-            return;
             bool wasUpdated = await writeUseCase.Update(single.Id, 4, 42.12M);
             System.Console.WriteLine($"was updated '{wasUpdated}'");
 
