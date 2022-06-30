@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopwareIntegration", "shop
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "tests\tests.csproj", "{11E9F27E-D2FC-4B94-B2FE-41B16A3B6488}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopwareIntegration.State", "ShopwareIntegration.State\ShopwareIntegration.State.csproj", "{D6DF8909-B8A0-495B-9916-292FEF864972}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopwareIntegration.State.Tests", "ShopwareIntegration.State.Tests\ShopwareIntegration.State.Tests.csproj", "{2A82B48C-D171-4F44-AADA-F1DD9C775697}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,5 +42,13 @@ Global
 		{11E9F27E-D2FC-4B94-B2FE-41B16A3B6488}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11E9F27E-D2FC-4B94-B2FE-41B16A3B6488}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11E9F27E-D2FC-4B94-B2FE-41B16A3B6488}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6DF8909-B8A0-495B-9916-292FEF864972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6DF8909-B8A0-495B-9916-292FEF864972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6DF8909-B8A0-495B-9916-292FEF864972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6DF8909-B8A0-495B-9916-292FEF864972}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A82B48C-D171-4F44-AADA-F1DD9C775697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A82B48C-D171-4F44-AADA-F1DD9C775697}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A82B48C-D171-4F44-AADA-F1DD9C775697}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A82B48C-D171-4F44-AADA-F1DD9C775697}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
