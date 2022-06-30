@@ -23,4 +23,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ShopwareIntegration.State\ShopwareIntegration.State.csproj" />
+    <ProjectReference Include="..\ShopwareIntegration.State\ShopwareIntegration.csproj" />
+  </ItemGroup>
+
 </Project>

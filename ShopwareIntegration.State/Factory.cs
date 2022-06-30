@@ -9,18 +9,17 @@ namespace heitech.ShopwareIntegration.State
 {
     public static class Factory
     {
+
         public static async Task<IStateManager> CreateAsync(HttpClientConfiguration config,
-                                                             ICache cache = null!,
-                                                             IStateManager client = null!,
-                                                             IStateManager logger = null!)
+                                                            ICache cache = null!,
+                                                            IStateManager client = null!,
+                                                            IStateManager logger = null!)
         {
             var shopwareClient = await ShopwareClient.CreateAsync(config);
-            client ??= new Client(shopwareClient);
-
-
             return new StateManager(
                     logger ?? new Logger(s => System.Console.WriteLine(s)), 
-                    client ?? new CacheStorage(new Client(shopwareClient)));
+                    client ?? new CacheStorage(new Client(shopwareClient))
+            );
         }
     }
 }

@@ -8,7 +8,7 @@ namespace heitech.ShopwareIntegration.State.Cache
     public sealed class CacheItem
     {
         private const int DUE_TIME_MS = 600000; // 10 min
-        internal DataContext Context { get; }
+        public DataContext Context { get; }
         private readonly Action<CacheItem> _unlist;
         private CacheItem(DataContext context, Action<CacheItem> unlist)
         {
@@ -19,8 +19,8 @@ namespace heitech.ShopwareIntegration.State.Cache
             var timer = new System.Threading.Timer((_) => _unlist(this), state: this, DUE_TIME_MS, disabledSignaling);
         }
 
-        internal static CacheItem Create(DataContext ctxt, Action<CacheItem> unlist) => new(ctxt, unlist);
+        public static CacheItem Create(DataContext ctxt, Action<CacheItem> unlist) => new(ctxt, unlist);
 
-        internal RessourceId Key => Context.Id;
+        public RessourceId Key => Context.Id;
     }
 }

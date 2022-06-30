@@ -12,8 +12,8 @@ namespace heitech.ShopwareIntegration.State.Cache
             _client = client;
         }
 
-        private readonly Dictionary<string, CacheItem> _cache = new();
-        private readonly Dictionary<string, CacheItem> _pages = new();
+        protected readonly Dictionary<string, CacheItem> _cache = new();
+        protected readonly Dictionary<string, CacheItem> _pages = new();
         private void Unlist(CacheItem item) => _cache.Remove(item.Key);
 
         public async Task<T> RetrieveDetails<T>(DataContext context) where T : DetailsEntity
@@ -54,9 +54,12 @@ namespace heitech.ShopwareIntegration.State.Cache
 
             if (_cache.TryGetValue(item.Key, out CacheItem? cached))
             { _ = (T)cached!.Context.Entity; }
-            
+
             // remove
-           InvalidateCacheForDelete<T>(context);
+            InvalidateCacheForDelete<T>(context);
+            if (_cache.ContainsKey(item.Key))
+                _cache.Remove(item.Key);
+
             result = await _client.DeleteAsync<T>(context);
 
             return result;
@@ -68,11 +71,11 @@ namespace heitech.ShopwareIntegration.State.Cache
             DataContext found = null!;
             foreach (var page in _pages.Values)
             {
-                var exists = page.Context.FirstOrDefault(x => x.Id == context.Id);
+                var exists = page.Context?.FirstOrDefault(x => x.Id == context.Id);
                 if (exists != null)
                 {
-                    var filtered = page.Context.Where(x => x.Id != context.Id).ToArray();
-                    found = DataContext.FromRetrievePage<T>(filtered, page.Context);
+                    var filtered = page.Context!.Where(x => x.Id != context.Id).ToArray();
+                    found = DataContext.FromRetrievePage<T>(filtered, page.Context!);
                     break;
                 }
             }
@@ -80,9 +83,8 @@ namespace heitech.ShopwareIntegration.State.Cache
             if (found is not null)
             {
                 var item = CacheItem.Create(found, Unlist);
-                _pages[item.Key] = item;
+                _pages.Remove(item.Key);
             }
-
         }
 
         public async Task<T> CreateAsync<T>(DataContext context) where T : DetailsEntity

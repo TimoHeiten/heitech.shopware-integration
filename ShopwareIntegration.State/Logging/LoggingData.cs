@@ -12,7 +12,12 @@ namespace heitech.ShopwareIntegration.State.Logging
             if (context.AdditionalData is null)
                 context.AdditionalData = new Dictionary<string, object> { [IS_ENTRY] = isEntry };
             else
-                context.AdditionalData.Add(IS_ENTRY, isEntry);
+            {
+                if (!context.AdditionalData.ContainsKey(IS_ENTRY))   
+                    context.AdditionalData.Add(IS_ENTRY, isEntry);
+                else
+                    context.AdditionalData[IS_ENTRY] = isEntry;
+            }
 
             return context;
         }

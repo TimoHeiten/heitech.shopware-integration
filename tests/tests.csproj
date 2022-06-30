@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ShopwareIntegration\ShopwareIntegration.csproj" />
+    <ProjectReference Include="..\ShopwareIntegration.State\ShopwareIntegration.State.csproj" />
   </ItemGroup>
 
 </Project>
