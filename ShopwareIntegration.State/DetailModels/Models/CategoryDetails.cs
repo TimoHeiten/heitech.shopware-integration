@@ -15,7 +15,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         { }
 
         [JsonPropertyName("active")]
-        public bool Active { get; set; }
+        public bool? Active { get; set; }
 
         [JsonPropertyName("afterCategoryId")]
         public string AfterCategoryId { get; set; } = default!;
@@ -24,13 +24,13 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string AfterCategoryVersionId { get; set; } = default!;
 
         [JsonPropertyName("autoIncrement")]
-        public long AutoIncrement { get; set; }
+        public long? AutoIncrement { get; set; }
 
         [JsonPropertyName("breadCrumb")]
         public string[] BreadCrumb { get; set; } = default!;
 
         [JsonPropertyName("childCount")]
-        public long ChildCount { get; set; } = default!;
+        public long? ChildCount { get; set; } = default!;
 
         [JsonPropertyName("children")]
         public object Children { get; set; } = default!;
@@ -45,7 +45,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string CmsPageVersionId { get; set; } = default!;
 
         [JsonPropertyName("createdAt")]
-        public DateTime CreatedAt { get; set; } = default!;
+        public DateTime? CreatedAt { get; set; } = default!;
 
         [JsonPropertyName("customFields")]
         public object CustomFields { get; set; } = default!;
@@ -54,7 +54,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string Description { get; set; } = default!;
 
         [JsonPropertyName("displayNestedProducts")]
-        public bool DisplayNestedProducts { get; set; }
+        public bool? DisplayNestedProducts { get; set; }
 
         [JsonPropertyName("externalLink")]
         public string ExternalLink { get; set; } = default!;
@@ -69,10 +69,10 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string Keywords { get; set; } = default!;
 
         [JsonPropertyName("level")]
-        public long Level { get; set; } = default!;
+        public long? Level { get; set; } = default!;
 
         [JsonPropertyName("linkNewTab")]
-        public bool LinkNewTab { get; set; } = default!;
+        public bool? LinkNewTab { get; set; } = default!;
 
         [JsonPropertyName("linkType")]
         public string LinkType { get; set; } = default!;
@@ -144,12 +144,12 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string Type { get; set; } = default!;
 
         [JsonPropertyName("updatedAt")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         [JsonPropertyName("versionId")]
         public string VersionId { get; set; } = default!;
 
         [JsonPropertyName("visible")]
-        public bool Visible { get; set; }
+        public bool? Visible { get; set; }
     }
 }

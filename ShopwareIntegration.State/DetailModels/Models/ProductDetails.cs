@@ -29,13 +29,13 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string? Description { get; set; } = default!;
 
         [JsonPropertyName("active")]
-        public bool Active { get; set; }
+        public bool? Active { get; set; } = default!;
 
         [JsonPropertyName("autoIncrement")]
-        public long AutoIncrement { get; set; }
+        public long? AutoIncrement { get; set; } = default!;
 
         [JsonPropertyName("available")]
-        public bool Available { get; set; }
+        public bool? Available { get; set; } = default!;
 
         [JsonPropertyName("canonicalProduct")]
         public object CanonicalProduct { get; set; } = default!;
@@ -56,7 +56,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public object CheapestPrice { get; set; } = default!;
 
         [JsonPropertyName("childCount")]
-        public long ChildCount { get; set; } = default!;
+        public long? ChildCount { get; set; } = default!;
 
         [JsonPropertyName("children")]
         public object Children { get; set; } = default!;
@@ -83,7 +83,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string CoverId { get; set; } = default!;
 
         [JsonPropertyName("createdAt")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; } = default!;
 
         [JsonPropertyName("crossSellingAssignedProducts")]
         public object CrossSellingAssignedProducts { get; set; } = default!;
@@ -92,7 +92,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public object CrossSellings { get; set; } = default!;
 
         [JsonPropertyName("customFIeldSetSelectionActive")]
-        public bool customFIeldSetSelectionActive { get; set; }
+        public bool? customFIeldSetSelectionActive { get; set; } = default!;
 
         [JsonPropertyName("customFieldSets")]
         public object CustomFieldSets { get; set; } = default!;
@@ -122,16 +122,16 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string FeautureSetId { get; set; } = default!;
 
         [JsonPropertyName("height")]
-        public float Height { get; set; }
+        public float? Height { get; set; } = default!;
 
         [JsonPropertyName("isCloseOut")]
-        public bool IsCloseOut { get; set; }
+        public bool? IsCloseOut { get; set; } = default!;
 
         [JsonPropertyName("keywords")]
         public string Keywords { get; set; } = default!;
 
         [JsonPropertyName("length")]
-        public float Length { get; set; }
+        public float? Length { get; set; } = default!;
 
         [JsonPropertyName("mainCategories")]
         public object MainCategories { get; set; } = default!;
@@ -146,10 +146,10 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string ManufacturerId { get; set; } = default!;
 
         [JsonPropertyName("markAsTopSeller")]
-        public bool MarkAsTopSeller { get; set; }
+        public bool? MarkAsTopSeller { get; set; } = default!;
 
         [JsonPropertyName("maxPurchase")]
-        public long MaxPurchase { get; set; }
+        public long? MaxPurchase { get; set; } = default!;
 
         [JsonPropertyName("media")]
         public object Media { get; set; } = default!;
@@ -161,7 +161,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string MetaTitle { get; set; } = default!;
 
         [JsonPropertyName("minPurchase")]
-        public long MinPurchase { get; set; }
+        public long? MinPurchase { get; set; } = default!;
 
         [JsonPropertyName("optionIds")]
         public string[] OptionIds { get; set; } = default!;
@@ -212,25 +212,25 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public object PurchasePrices { get; set; } = default!;
 
         [JsonPropertyName("purchaseSteps")]
-        public long PurchaseSteps { get; set; } = default!;
+        public long? PurchaseSteps { get; set; } = default!;
 
         [JsonPropertyName("purchaseUnit")]
-        public float PurchaseUnit { get; set; }
+        public float? PurchaseUnit { get; set; } = default!;
 
         [JsonPropertyName("ratingAverage")]
-        public float RatingAverage { get; set; }
+        public float? RatingAverage { get; set; } = default!;
 
         [JsonPropertyName("referenceUnit")]
-        public float ReferenceUnit { get; set; }
+        public float? ReferenceUnit { get; set; } = default!;
 
         [JsonPropertyName("releaseDate")]
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; } = default!;
 
         [JsonPropertyName("restockTime")]
-        public long RestockTime { get; set; }
+        public long? RestockTime { get; set; } = default!;
 
         [JsonPropertyName("sales")]
-        public long Sales { get; set; }
+        public long? Sales { get; set; } = default!;
 
         [JsonPropertyName("searchKeywords")]
         public object SearchKeywords { get; set; } = default!;
@@ -239,7 +239,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public object SeoUrls { get; set; } = default!;
 
         [JsonPropertyName("shippingFree")]
-        public bool ShippingFree { get; set; }
+        public bool? ShippingFree { get; set; } = default!;
 
         [JsonPropertyName("slotConfig")]
         public object SlotConfig { get; set; } = default!;
@@ -269,7 +269,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string unitId { get; set; } = default!;
 
         [JsonPropertyName("updatedAt")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; } = default!;
 
         [JsonPropertyName("variantRestrictions")]
         public object VariantRestrictions { get; set; } = default!;
@@ -284,10 +284,10 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public object Visibilities { get; set; } = default!;
 
         [JsonPropertyName("weight")]
-        public float Weight { get; set; }
+        public float? Weight { get; set; } = default!;
 
         [JsonPropertyName("width")]
-        public float Width { get; set; }
+        public float? Width { get; set; } = default!;
 
         [JsonPropertyName("wishlists")]
         public object Wishlists { get; set; } = default!;

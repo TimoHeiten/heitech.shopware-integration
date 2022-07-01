@@ -25,10 +25,14 @@ namespace heitech.ShopwareIntegration.State.Logging
         public static bool ReadIsEntry<T>(this DataContext ctxt)
             where T : DetailsEntity
         {
-            if (ctxt.AdditionalData is null) return false;
-
             bool exists = ctxt.AdditionalData.TryGetValue(IS_ENTRY, out object? isEntry);
             return exists && (bool)isEntry!;
+        }
+
+        public static Exception GetError(this DataContext ctxt)
+        {
+            bool exists = ctxt.AdditionalData.TryGetValue(IS_ERROR, out var error);
+            return exists && error is not null && error as Exception is not null ? (Exception)error! : null!;
         }
     }
 }

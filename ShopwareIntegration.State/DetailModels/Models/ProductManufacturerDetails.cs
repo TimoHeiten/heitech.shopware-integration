@@ -15,7 +15,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         { }
 
         [JsonPropertyName("createdAt")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; } = default!;
 
         [JsonPropertyName("customFields")]
         public object CustomFields { get; set; } = default!;
@@ -42,7 +42,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public object Translated { get; set; } = default!;
 
         [JsonPropertyName("updatedAt")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; } = default!;
 
         [JsonPropertyName("versionId")]
         public string VersionId { get; set; } = default!;

@@ -22,7 +22,7 @@ namespace heitech.ShopwareIntegration.State.Api
         public async Task<T> DeleteAsync<T>(DataContext context) where T : DetailsEntity
         {
             var writer = _client.CreateWriter<T>();
-            var rqResult = await writer.Delete(context.Entity.Id);
+            var rqResult = await writer.Delete(context.Id);
             return rqResult.IsSuccess ? (T)context.Entity : throw rqResult.Exception;
         }
 
@@ -37,7 +37,7 @@ namespace heitech.ShopwareIntegration.State.Api
             }
 
             var (queryExists, query) = context.QueryExists<T>();
-            var getResult = await reader.ExecuteGetAsync(context.Entity.Id, queryExists ? query! : null);
+            var getResult = await reader.ExecuteGetAsync(context.Id, queryExists ? query! : null);
 
             return getResult.IsSuccess ? getResult.Model.Data : throw getResult.Exception;
         }
@@ -45,8 +45,7 @@ namespace heitech.ShopwareIntegration.State.Api
         public async Task<IEnumerable<T>> RetrievePage<T>(DataContext pageRequest) where T : DetailsEntity
         {
             var reader = _client.CreateReader<T>();
-            var (queryExists, query) = pageRequest.QueryExists<T>();
-            var result = await reader.ExecuteListAsync(queryExists ? query! : null);
+            var result = await reader.SearchAsync(pageRequest.GetFilter());
 
             return result.IsSuccess ? result.Model.Data : throw result.Exception;
         }

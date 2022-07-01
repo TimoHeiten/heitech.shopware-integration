@@ -5,6 +5,7 @@ namespace heitech.ShopwareIntegration.State.Cache
 {
     public class CacheStorage : IStateManager
     {
+        // todo instead of searching the page cache to update on delete, update or create... just use the supplied pageNo
         private readonly IStateManager _client;
 
         public CacheStorage(IStateManager client)

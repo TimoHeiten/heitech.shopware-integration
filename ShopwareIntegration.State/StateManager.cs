@@ -31,7 +31,7 @@ namespace heitech.ShopwareIntegration.State
             }
             catch (System.Exception ex)
             {
-                ctxt.AdditionalData["error"] = ex;
+                ctxt.AdditionalData[LoggingData.IS_ERROR] = ex;
                 await loggingCallback(_logger, ctxt);
                 throw;
             }

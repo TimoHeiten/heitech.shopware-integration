@@ -32,7 +32,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public object UpdatedBy { get; set; } = default!;
 
         [JsonPropertyName("updatedAt")]
-        public DateTime updatedAt { get; set; }
+        public DateTime? updatedAt { get; set; } = default!;
 
         [JsonPropertyName("transactions")]
         public object Transactions { get; set; } = default!;
@@ -53,7 +53,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string stateId { get; set; } = default!;
 
         [JsonPropertyName("shippingTotal")]
-        public float ShippingTotal { get; set; }
+        public float ShippingTotal { get; set; } = default!;
 
         [JsonPropertyName("shippingCosts")]
         public object ShippingCosts { get; set; } = default!;
@@ -71,13 +71,13 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public object Price { get; set; } = default!;
 
         [JsonPropertyName("positionPrice")]
-        public float positionPrice { get; set; }
+        public float positionPrice { get; set; } = default!;
 
         [JsonPropertyName("orderNumber")]
         public string orderNumber { get; set; } = default!;
 
-        [JsonPropertyName("orderDateTime")]
-        public DateTime OrderDateTime { get; set; } 
+        [JsonPropertyName("orderDateTime?")]
+        public DateTime? OrderDateTime { get; set; } = default!;
 
         [JsonPropertyName("oderDate")]
         public string OderDate { get; set; } = default!;
@@ -125,7 +125,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public object CreatedBy { get; set; } = default!;
 
         [JsonPropertyName("createdAt")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         [JsonPropertyName("campaignCode")]
         public string CampaignCode { get; set; } = default!;
@@ -140,13 +140,13 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public object BillingAddress { get; set; } = default!;
 
         [JsonPropertyName("autoIncrement")]
-        public int AutoIncrement { get; set; }
+        public int AutoIncrement { get; set; } = default!;
 
         [JsonPropertyName("amountTotal")]
-        public float AmountTotal { get; set; }
+        public float AmountTotal { get; set; } = default!;
 
         [JsonPropertyName("amountNet")]
-        public float AmountNet { get; set; }
+        public float AmountNet { get; set; } = default!;
 
         [JsonPropertyName("affiliateCode")]
         public string AffiliateCode { get; set; } = default!;
