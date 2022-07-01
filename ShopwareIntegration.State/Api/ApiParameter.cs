@@ -3,6 +3,9 @@ using heitech.ShopwareIntegration.State.DetailModels;
 
 namespace heitech.ShopwareIntegration.State.Api
 {
+    ///<summary>
+    /// Extension methods to add parameters for the Shopware ApiRequests (add to additionalData Map)
+    ///</summary>
     public static class ApiParameter
     {
         public const string QUERY = "query";

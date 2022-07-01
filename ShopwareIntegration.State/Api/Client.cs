@@ -4,10 +4,10 @@ using heitech.ShopwareIntegration.State.Interfaces;
 
 namespace heitech.ShopwareIntegration.State.Api
 {
-    public class Client : IStateManager
+    internal class Client : IStateManager
     {
         private readonly ShopwareClient _client;
-        public Client(ShopwareClient client)
+        internal Client(ShopwareClient client)
         {
             _client = client;
         }

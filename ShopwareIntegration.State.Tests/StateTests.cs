@@ -146,7 +146,8 @@ namespace heitech.Shopware.tests
             result.Should().NotBeNull();
             result.Should().Be(expected);
             _cache.Details.Should().NotContainKey(CacheItem.Create(context, _unlistDummy).Key);
-            _cache.Pages.Should().HaveCount(0);
+            _cache.Pages.Should().HaveCount(1);
+            _cache.Pages.Single().Value.Context.Should().HaveCount(2);
         }
 
 

@@ -6,9 +6,8 @@ namespace heitech.ShopwareIntegration.State.Cache
     ///<summary>
     /// Cache Decorator for the StateManager. Updates and holds cached Context for up to 10 minutes.
     ///</summary>
-    public class CacheStorage : IStateManager
+    internal class CacheStorage : IStateManager
     {
-        // todo instead of searching the page cache to update on delete, update or create... just use the supplied pageNo
         private readonly IStateManager _client;
 
         public CacheStorage(IStateManager client)
@@ -21,30 +20,38 @@ namespace heitech.ShopwareIntegration.State.Cache
         public async Task<T> RetrieveDetails<T>(DataContext context) where T : DetailsEntity
         {
             T result = null!;
-            var detailsItem = CacheItem.Create(context, Unlist);
+            var detailsItem = CacheItem.CreateTemp(context);
 
             if (_cache.TryGetValue(detailsItem.Key, out CacheItem? cached))
+            {
                 result = (T)cached!.Context.Entity;
+                // cache refresh
+                SubstituteCacheItem(cached, _cache);
+            }
             else
+            {
                 result = await _client.RetrieveDetails<T>(context);
+                var cachedResult = CacheItem.Create(DataContext.FromRetrieveDetails(result, context), Unlist);
+                _cache.Add(cachedResult.Key, cachedResult);
+            }
 
-            // cache refresh
-            _cache[detailsItem.Key] = cached!;
             return result!;
         }
 
         public async Task<IEnumerable<T>> RetrievePage<T>(DataContext pageRequest) where T : DetailsEntity
         {
-            var pageItem = CacheItem.Create(pageRequest, Unlist);
+            var pageItem = CacheItem.CreateTemp(pageRequest);
             if (_pages.TryGetValue(pageItem.Key, out CacheItem? cached))
             {
                 // cache refresh
-                _pages[pageItem.Key] = pageItem;
+                SubstituteCacheItem(pageItem, _pages);
                 return cached.Context.Cast<T>().ToArray();
             }
 
             var result = await _client.RetrievePage<T>(pageRequest);
-            _pages.Add(pageItem.Key, pageItem);
+            var newPageContext = DataContext.FromRetrievePage<T>(result, pageRequest);
+            var cacheItem = CacheItem.Create(newPageContext, Unlist);
+            _pages.Add(cacheItem.Key, cacheItem);
 
             return result;
         }
@@ -52,48 +59,26 @@ namespace heitech.ShopwareIntegration.State.Cache
         public async Task<T> DeleteAsync<T>(DataContext context) where T : DetailsEntity
         {
             T result = null!;
-            var detailsItem = CacheItem.Create(context, Unlist);
+            var detailsItem = CacheItem.CreateTemp(context);
 
-            if (_cache.TryGetValue(detailsItem.Key, out CacheItem? cached))
-            { _ = (T)cached!.Context.Entity; }
-
-            // remove
-            CacheItem? pageItem = FromPagesCache<T>(context);
-            if (pageItem is not null)
-                _pages.Remove(detailsItem.Key);
+            // remove from pages
+            var cachedPage = FromPagesCache<T>(context);
+            if (cachedPage is not null)
+            {
+                var filteredPages = cachedPage.Context.Where(x => x.Id != context.Id).ToArray();
+                var cacheRefresh = DataContext.FromRetrievePage<T>(filteredPages, cachedPage.Context);
+                SubstituteCacheItem(CacheItem.Create(cacheRefresh, Unlist), _pages);
+            }
 
             if (_cache.ContainsKey(detailsItem.Key))
+            {
+                _cache[detailsItem.Key].Dispose();
                 _cache.Remove(detailsItem.Key);
+            }
 
             result = await _client.DeleteAsync<T>(context);
 
             return result;
-        }
-
-        private void InvalidateCacheForDelete<T>(DataContext context)
-            where T : DetailsEntity
-        {
-            CacheItem? detailsItem = FromPagesCache<T>(context);
-            if (detailsItem is not null)
-                _pages.Remove(detailsItem.Key);
-        }
-
-        private CacheItem? FromPagesCache<T>(DataContext current)
-            where T : DetailsEntity
-        {
-            DataContext found = null!;
-            foreach (var page in _pages.Values)
-            {
-                var exists = page.Context?.FirstOrDefault(x => x.Id == current.Id);
-                if (exists != null)
-                {
-                    var filtered = page.Context!.Where(x => x.Id != current.Id).ToArray();
-                    found = DataContext.FromRetrievePage<T>(filtered, page.Context!);
-                    break;
-                }
-            }
-
-            return found is null ? null : CacheItem.Create(found, Unlist);
         }
 
         public async Task<T> CreateAsync<T>(DataContext context) where T : DetailsEntity
@@ -106,22 +91,12 @@ namespace heitech.ShopwareIntegration.State.Cache
             _cache.Add(detailsItem.Key, detailsItem);
 
             #region cache refresh for pages
-            DataContext? pageContext = null!;
-            foreach (var page in _pages.Values)
+            CacheItem? pageCache = FromPagesCache<T>(context);
+            if (pageCache is not null)
             {
-                var exists = page.Context?.Any(x => x.Id == context.Id);
-                if (exists is not null)
-                {
-                    var pageIncludesAddedEntity = page!.Context!.ToArray().Append(result);
-                    pageContext = DataContext.FromRetrievePage<T>(pageIncludesAddedEntity, page.Context!);
-                    break;
-                }
-            }
-
-            if (pageContext is not null)
-            {
-                var pageItem = CacheItem.Create(pageContext, Unlist);
-                _pages[pageItem.Key] = pageItem;
+                var updatedPage = pageCache.Context.Append(result).ToArray();
+                var updatedContext = DataContext.FromRetrievePage<T>(updatedPage, context);
+                SubstituteCacheItem(CacheItem.Create(updatedContext, Unlist), _pages);
             }
             #endregion
 
@@ -132,20 +107,38 @@ namespace heitech.ShopwareIntegration.State.Cache
         {
             T result = null!;
 
-            var detailsItem = CacheItem.Create(context, Unlist);
+            var detailsItem = CacheItem.CreateTemp(context);
             result = await _client.UpdateAsync<T>(context);
-
-            if (_cache.ContainsKey(detailsItem.Key))
-                _cache.Add(detailsItem.Key, detailsItem);
-            else // cache refresh
-                _cache[detailsItem.Key] = detailsItem;
+            SubstituteCacheItem(detailsItem, _cache);
 
             // cache refresh for pages
             CacheItem? pageItem = FromPagesCache<T>(context);
             if (pageItem is not null)
-                _pages[pageItem.Key] = pageItem;
+            {
+                var updatedPage = pageItem.Context.Where(x => x.Id != context.Id).Append(result).ToArray();
+                var updatedContext = DataContext.FromRetrievePage<T>(updatedPage, context);
+                SubstituteCacheItem(CacheItem.Create(updatedContext, Unlist), _pages);
+            }
 
             return result;
+        }
+
+        private CacheItem? FromPagesCache<T>(DataContext current)
+           where T : DetailsEntity
+        {
+            var pageContext = CacheItem.CreateTemp(DataContext.GetPage<T>(current.PageNo));
+            var exists = _pages.TryGetValue(pageContext.Key, out CacheItem? cachedPage);
+
+            return cachedPage;
+        }
+
+        private void SubstituteCacheItem(CacheItem? newCacheItem, Dictionary<string, CacheItem> cache)
+        {
+            if (newCacheItem is not null)
+            {
+                cache[newCacheItem.Key].Dispose();
+                cache[newCacheItem.Key] = newCacheItem;
+            }
         }
     }
 }

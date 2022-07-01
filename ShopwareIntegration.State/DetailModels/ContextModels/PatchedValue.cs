@@ -10,7 +10,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
     {
         public object Values { get; }
         public object Result { get; set; } = null!;
-        private PatchedValue(string id, object patchedValues) => (Id, Values) = (id, patchedValues);
+        public PatchedValue(string id, object patchedValues) => (Id, Values) = (id, patchedValues);
 
         public static PatchedValue ProductUpdate(ProductDetails product, int increaseStockBy = 0, decimal? newPrice = null)
         {
@@ -26,7 +26,6 @@ namespace heitech.ShopwareIntegration.State.DetailModels
 
             return new(product.Id, patch);
         }
-
         // todo make for other 3 models
     }
 }

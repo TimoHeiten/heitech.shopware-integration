@@ -4,12 +4,12 @@ using heitech.ShopwareIntegration.State.Logging;
 
 namespace heitech.ShopwareIntegration.State
 {
-    public class StateManager : IStateManager
+    internal class StateManager : IStateManager
     {
         private readonly IStateManager _client;
         private readonly IStateManager _logger;
 
-        public StateManager(IStateManager logger, IStateManager client)
+        internal StateManager(IStateManager logger, IStateManager client)
         {
             _client = client;
             _logger = logger;

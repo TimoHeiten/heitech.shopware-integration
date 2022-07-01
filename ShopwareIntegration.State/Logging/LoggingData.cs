@@ -2,7 +2,7 @@ using heitech.ShopwareIntegration.State.DetailModels;
 
 namespace heitech.ShopwareIntegration.State.Logging
 {
-    public static class LoggingData
+    internal static class LoggingData
     {
         public const string IS_ENTRY = "isEntry";
         public const string IS_ERROR = "hasError";

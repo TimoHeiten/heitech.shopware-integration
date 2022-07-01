@@ -21,7 +21,7 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
             => new DetailsContext<T>(RessourceId.From(id), pageNo, additionalData);
 
-        public static DataContext FromRetrieveDetails<T>(T entity, DataContext context)
+        internal static DataContext FromRetrieveDetails<T>(T entity, DataContext context)
             where T : DetailsEntity
             => new DetailsContext<T>(entity, context.Id, context.PageNo, context.AdditionalData);
 
@@ -29,7 +29,7 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
             => new PatchedValueContext(patched, RessourceId.From(patched.Id), pageNo, additionalData);
 
-        public static DataContext FromPatchResult<T>(T entity, DataContext patched)
+        internal static DataContext FromPatchResult<T>(T entity, DataContext patched)
             where T : DetailsEntity
             => new PatchedValueContext(entity, patched.PageNo, patched.AdditionalData);
 
@@ -41,7 +41,7 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
             => new DeleteContext(RessourceId.From(id), pageNo, additionalData);
 
-        public static DataContext FromDelete<T>(DetailsEntity entity, DataContext deleteContext)
+        internal static DataContext FromDelete<T>(DetailsEntity entity, DataContext deleteContext)
             where T : DetailsEntity
             => new DeleteContext(entity, deleteContext.Id, deleteContext.PageNo, deleteContext.AdditionalData);
 
@@ -49,7 +49,7 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
             => new PageContext(typeof(T), pageNo, additionalData);
 
-        public static DataContext FromRetrievePage<T>(IEnumerable<DetailsEntity> page, DataContext context)
+        internal static DataContext FromRetrievePage<T>(IEnumerable<DetailsEntity> page, DataContext context)
             where T : DetailsEntity
             => new PageContext(typeof(T), page, context.PageNo, context.AdditionalData);
 

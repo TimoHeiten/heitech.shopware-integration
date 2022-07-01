@@ -3,10 +3,10 @@ using heitech.ShopwareIntegration.State.Interfaces;
 
 namespace heitech.ShopwareIntegration.State.Logging
 {
-    public class Logger : IStateManager
+    internal class Logger : IStateManager
     {
         private readonly Action<string> _logAction;
-        public Logger(Action<string> logAction)
+        internal Logger(Action<string> logAction)
             => _logAction = (s) => logAction($"[{DateTime.Now}] -- {s}");
 
         private void Log<T>(DataContext context, string methName, string id, int PageNo)

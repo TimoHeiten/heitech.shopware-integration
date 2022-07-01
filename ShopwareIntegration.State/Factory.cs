@@ -3,15 +3,16 @@ using heitech.ShopwareIntegration.State.Api;
 using heitech.ShopwareIntegration.State.Cache;
 using heitech.ShopwareIntegration.State.Interfaces;
 using heitech.ShopwareIntegration.State.Logging;
-using ShopwareIntegration.State.Interfaces;
 
 namespace heitech.ShopwareIntegration.State
 {
     public static class Factory
     {
-
+        ///<summary>
+        /// Supply a HttpClientConfiguration to create the ShopwareClient and Retrieve an IStateManager.
+        /// Default values for the decorators lead to using the standard logger(Console) and default in Memory cached Client
+        ///</summary>
         public static async Task<IStateManager> CreateAsync(HttpClientConfiguration config,
-                                                            ICache cache = null!,
                                                             IStateManager client = null!,
                                                             IStateManager logger = null!)
         {
