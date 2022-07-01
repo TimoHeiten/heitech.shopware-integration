@@ -9,7 +9,7 @@ using heitech.ShopwareIntegration.ProductUseCases;
 
 namespace client
 {
-    class Program
+    public static class Program
     {
         ///<summary>
         /// Just different scenarios for testing the apis behavior
