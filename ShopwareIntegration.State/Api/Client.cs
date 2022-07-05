@@ -33,7 +33,7 @@ namespace heitech.ShopwareIntegration.State.Api
             if (exists)
             {
                 var searchResult = await reader.SearchAsync(searchObj!.FromAnonymous());
-                return searchResult.IsSuccess ? searchResult.Model.Data.First() : throw searchResult.Exception;
+                return searchResult.IsSuccess ? searchResult.Model.Data[0] : throw searchResult.Exception;
             }
 
             var (queryExists, query) = context.QueryExists<T>();
@@ -42,10 +42,10 @@ namespace heitech.ShopwareIntegration.State.Api
             return getResult.IsSuccess ? getResult.Model.Data : throw getResult.Exception;
         }
 
-        public async Task<IEnumerable<T>> RetrievePage<T>(DataContext pageRequest) where T : DetailsEntity
+        public async Task<IEnumerable<T>> RetrievePage<T>(DataContext dataContext) where T : DetailsEntity
         {
             var reader = _client.CreateReader<T>();
-            var result = await reader.SearchAsync(pageRequest.GetFilter());
+            var result = await reader.SearchAsync(dataContext.GetFilter());
 
             return result.IsSuccess ? result.Model.Data : throw result.Exception;
         }

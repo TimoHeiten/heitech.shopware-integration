@@ -10,16 +10,16 @@ namespace heitech.ShopwareIntegration.State.DetailModels
     /// https://shopware.stoplight.io/docs/admin-api/c2NoOjE0MzUxMjcy-order
     ///</summary>
     [ModelUri("order")]
-    public class Order : DetailsEntity
+    public class OrderDetails : DetailsEntity
     {
 
         // all object types need to be looked up seperately and
         // to access those properties either extend this class OR
         // use the (slow and expensive) dynamic keyword e.g.:
-        // var order = Deserialize<Order>(jsonString);
+        // var order = Deserialize<OrderDetails>(jsonString);
         // dynamic price = order.Price;
         // Console.WriteLine(price.Gross);
-        public Order()
+        public OrderDetails()
         { }
 
         [JsonPropertyName("versionId")]
@@ -73,8 +73,8 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         [JsonPropertyName("positionPrice")]
         public float positionPrice { get; set; } = default!;
 
-        [JsonPropertyName("orderNumber")]
-        public string orderNumber { get; set; } = default!;
+        [JsonPropertyName("OrderNumber")]
+        public string OrderNumber { get; set; } = default!;
 
         [JsonPropertyName("orderDateTime?")]
         public DateTime? OrderDateTime { get; set; } = default!;

@@ -1,0 +1,46 @@
+﻿<Window x:Class="ShopwareIntegration.Ui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShopwareIntegration.Ui"
+        xmlns:components="clr-namespace:ShopwareIntegration.Ui.Components"
+        mc:Ignorable="d"
+        Title="Shopware Integration" Height="800" Width="1200">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                    <ComboBox Height="40" MinWidth="50" Grid.Column="1" Grid.Row="1" SelectionChanged="Selector_OnSelectionChanged">
+                        <ComboBoxItem>Produkte</ComboBoxItem>
+                        <ComboBoxItem>Kategorien</ComboBoxItem>
+                        <ComboBoxItem>Hersteller</ComboBoxItem>
+                        <ComboBoxItem>Bestellungen</ComboBoxItem>
+                    </ComboBox>
+
+                    <TextBox x:Name="txtNum" x:FieldModifier="private" IsReadOnly="True" Text="1" MinWidth="40" Height="40"/>
+                    <StackPanel Orientation="Vertical">
+                        <Button x:Name="cmdUp" x:FieldModifier="private" FontSize="10" Padding="0,-4,0,0" Content="▲"
+                                Width="25" Height="20" Click="CmdDown_OnClick"  />
+                        <Button x:Name="cmdDown" x:FieldModifier="private" FontSize="10" Padding="0,-4,0,0" Content="▼"
+                                Height="20" Width="25" Click="CmdUp_OnClick" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            <ContentControl x:Name="ContentArea" />
+        </StackPanel>
+    </ScrollViewer>
+</Window>

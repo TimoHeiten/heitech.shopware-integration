@@ -32,7 +32,7 @@ namespace heitech.ShopwareIntegration.ProductUseCases
             {
                 limit = currentPage.Amount,
                 page = currentPage.Page,
-                includes = includes ?? new IncludesFields("name", "price", "id", "active", "availableStock", "description", "ean", "stock", "manufacturerId"),
+                includes = includes ?? new IncludesFields.Product("name", "price", "id", "active", "availableStock", "description", "ean", "stock", "manufacturerId"),
             };
 
             var productsResult = await _reader.SearchAsync(filter.FromAnonymous());

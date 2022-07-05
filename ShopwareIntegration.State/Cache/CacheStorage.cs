@@ -38,9 +38,9 @@ namespace heitech.ShopwareIntegration.State.Cache
             return result!;
         }
 
-        public async Task<IEnumerable<T>> RetrievePage<T>(DataContext pageRequest) where T : DetailsEntity
+        public async Task<IEnumerable<T>> RetrievePage<T>(DataContext dataContext) where T : DetailsEntity
         {
-            var pageItem = CacheItem.CreateTemp(pageRequest);
+            var pageItem = CacheItem.CreateTemp(dataContext);
             if (_pages.TryGetValue(pageItem.Key, out CacheItem? cached))
             {
                 // cache refresh
@@ -48,8 +48,8 @@ namespace heitech.ShopwareIntegration.State.Cache
                 return cached.Context.Cast<T>().ToArray();
             }
 
-            var result = await _client.RetrievePage<T>(pageRequest);
-            var newPageContext = DataContext.FromRetrievePage<T>(result, pageRequest);
+            var result = await _client.RetrievePage<T>(dataContext);
+            var newPageContext = DataContext.FromRetrievePage<T>(result, dataContext);
             var cacheItem = CacheItem.Create(newPageContext, Unlist);
             _pages.Add(cacheItem.Key, cacheItem);
 

@@ -10,7 +10,7 @@ using heitech.ShopwareIntegration.Configuration;
 namespace ShopwareIntegration.Requests
 {
     ///<summary>
-    /// Specify a Requestobject that associates the generice Type as the Model. The Url is Taken from the ModelUri Attribute.
+    /// Specify a RequestObject that associates the generic Type as the Model. The Url is Taken from the ModelUri Attribute.
     ///</summary>
     public class ReadRequest<T>
         where T : BaseEntity
@@ -19,37 +19,31 @@ namespace ShopwareIntegration.Requests
         private readonly ShopwareClient _client;
 
         ///<summary>
-        /// Specify a Requestobject that associates the generice Type as the Model. The Url is Taken from the ModelUri Attribute.
+        /// Specify a RequestObject that associates the generic Type as the Model. The Url is Taken from the ModelUri Attribute.
         /// Supply the ShopwareClient to get Access to the shopware6 authorized web Requests
         ///</summary>
         internal ReadRequest(ShopwareClient client)
         {
-            this._url = ModelUri.GetUrlFromType<T>();
-            this._client = client;
+            _url = ModelUri.GetUrlFromType<T>();
+            _client = client;
         }
 
         private async Task<RequestResult<TData>> RunAsync<TData>(string url, HttpMethod? method = null, HttpContent? body = null)
         {
             var httpRq = _client.CreateHttpRequest(url, method, body);
             var rqResult = await _client.SendAsync<TData>(httpRq);
-            // todo remove
-            // just for checks
-            // dynamic d = rqResult.Model!;
-            // if (rqResult.IsSuccess)
-            // {
-            //     System.Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(d.Data));
-            // }
+
             return rqResult;
         }
 
         ///<summary>
-        /// Find the specified Enity for this Request by Id
+        /// Find the specified Entity for this Request by Id
         ///<para/>
         /// On Success the RequestResult contains a DataObject Container of the requested Type
         ///</summary>
         public Task<RequestResult<DataObject<T>>> ExecuteGetAsync(string id, string? query = null)
         {
-            string url = query is null ? $"{_url}/{id}" : $"{_url}/{id}?{query}";
+            var url = query is null ? $"{_url}/{id}" : $"{_url}/{id}?{query}";
             return RunAsync<DataObject<T>>($"{_url}/{id}");
         }
 
@@ -73,7 +67,7 @@ namespace ShopwareIntegration.Requests
             => RunAsync<DataArray<T>>($"search/{_url}", HttpMethod.Post, JsonContent.Create(search.AsSearchInstance()));
 
         ///<summary>
-        /// Get a List of all Ids for this Ressource. Like with Search you can use Filter, Expand etc.
+        /// Get a List of all Ids for this Resource. Like with Search you can use Filter, Expand etc.
         ///<para/>
         /// On Success the RequestResult contains a DataObject Container of the requested Type
         ///</summary>

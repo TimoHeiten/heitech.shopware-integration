@@ -15,7 +15,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         // all object types need to be looked up seperately and
         // to access those properties either extend this class OR
         // use the (slow and expensive) dynamic keyword e.g.:
-        // var order = Deserialize<Order>(jsonString);
+        // var order = Deserialize<OrderDetails>(jsonString);
         // dynamic price = order.Price;
         // Console.WriteLine(price.Gross);
         public ProductDetails()

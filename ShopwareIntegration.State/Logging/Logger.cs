@@ -45,11 +45,11 @@ namespace heitech.ShopwareIntegration.State.Logging
             return Task.FromResult((T)context.Entity);
         }
 
-        public Task<IEnumerable<T>> RetrievePage<T>(DataContext context) where T : DetailsEntity
+        public Task<IEnumerable<T>> RetrievePage<T>(DataContext dataContext) where T : DetailsEntity
         {
-            var contextForId = DataContext.GetPage<T>(context.PageNo, context.AdditionalData);
-            Log<T>(context, nameof(RetrievePage), contextForId.Id, context.PageNo);
-            return Task.FromResult<IEnumerable<T>>(context.Cast<T>().ToArray());
+            var contextForId = DataContext.GetPage<T>(dataContext.PageNo, dataContext.AdditionalData);
+            Log<T>(dataContext, nameof(RetrievePage), contextForId.Id, dataContext.PageNo);
+            return Task.FromResult<IEnumerable<T>>(dataContext.Cast<T>().ToArray());
         }
 
         public Task<T> UpdateAsync<T>(DataContext context) where T : DetailsEntity

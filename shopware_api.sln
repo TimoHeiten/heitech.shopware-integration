@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopwareIntegration.State",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopwareIntegration.State.Tests", "ShopwareIntegration.State.Tests\ShopwareIntegration.State.Tests.csproj", "{2A82B48C-D171-4F44-AADA-F1DD9C775697}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopwareIntegration.Ui", "ShopwareIntegration.Ui\ShopwareIntegration.Ui.csproj", "{95179A9C-100E-4A90-84EF-3041DD78E201}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductUseCases", "ProductUseCases\ProductUseCases.csproj", "{5C1DA48E-5D68-4FDE-BB63-C403C8D942CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,5 +54,13 @@ Global
 		{2A82B48C-D171-4F44-AADA-F1DD9C775697}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A82B48C-D171-4F44-AADA-F1DD9C775697}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A82B48C-D171-4F44-AADA-F1DD9C775697}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95179A9C-100E-4A90-84EF-3041DD78E201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95179A9C-100E-4A90-84EF-3041DD78E201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95179A9C-100E-4A90-84EF-3041DD78E201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95179A9C-100E-4A90-84EF-3041DD78E201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C1DA48E-5D68-4FDE-BB63-C403C8D942CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C1DA48E-5D68-4FDE-BB63-C403C8D942CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C1DA48E-5D68-4FDE-BB63-C403C8D942CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C1DA48E-5D68-4FDE-BB63-C403C8D942CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

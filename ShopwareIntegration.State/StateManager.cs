@@ -22,7 +22,7 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
         {
             T result = default!;
-            var ctxt = LoggingData.PrepareLogging<T>(context);
+            var ctxt = context.PrepareLogging<T>();
             _ = await loggingCallback(_logger, ctxt);
             try
             {
@@ -35,7 +35,7 @@ namespace heitech.ShopwareIntegration.State
                 await loggingCallback(_logger, ctxt);
                 throw;
             }
-            await loggingCallback(_logger, LoggingData.PrepareLogging<T>(ctxt, false));
+            await loggingCallback(_logger, ctxt.PrepareLogging<T>(false));
 
             return result;
         }
@@ -69,23 +69,23 @@ namespace heitech.ShopwareIntegration.State
                 onSuccessFactory: (dt, result) => DataContext.FromRetrieveDetails(result, dt)
             );
 
-        public async Task<IEnumerable<T>> RetrievePage<T>(DataContext context) where T : DetailsEntity
+        public async Task<IEnumerable<T>> RetrievePage<T>(DataContext dataContext) where T : DetailsEntity
         {
             IEnumerable<T> result = default!;
-            var ctxt = LoggingData.PrepareLogging<T>(context);
-            _ = await _logger.RetrievePage<T>(ctxt);
+            var context = dataContext.PrepareLogging<T>();
+            _ = await _logger.RetrievePage<T>(context);
             try
             {
-                result = await _client.RetrievePage<T>(ctxt);
-                ctxt = DataContext.FromRetrievePage<T>(result, ctxt);
+                result = (await _client.RetrievePage<T>(context)).ToArray();
+                context = DataContext.FromRetrievePage<T>(result, context);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                ctxt.AdditionalData["error"] = ex;
-                _ = await _logger.RetrievePage<T>(ctxt);
+                context.AdditionalData["error"] = ex;
+                _ = await _logger.RetrievePage<T>(context);
                 throw;
             }
-            _ = await _logger.RetrievePage<T>(LoggingData.PrepareLogging<T>(ctxt, false));
+            _ = await _logger.RetrievePage<T>(context.PrepareLogging<T>(false));
 
             return result;
         }

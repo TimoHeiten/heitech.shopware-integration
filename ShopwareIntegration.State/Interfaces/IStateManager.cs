@@ -14,7 +14,7 @@ namespace heitech.ShopwareIntegration.State.Interfaces
         ///<summary>
         /// Retrieve a MasterView/Page of the given Ressource of T. Requires a PageContext
         ///</summary>
-        Task<IEnumerable<T>> RetrievePage<T>(DataContext context) where T : DetailsEntity;
+        Task<IEnumerable<T>> RetrievePage<T>(DataContext dataContext) where T : DetailsEntity;
 
         ///<summary>
         /// Delete a Ressource of T. Requires a DeleteContext
