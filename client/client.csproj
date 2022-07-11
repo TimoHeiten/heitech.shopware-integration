@@ -1,8 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\ShopwareIntegration\ShopwareIntegration.csproj" />
-    <ProjectReference Include="..\ProductUseCases\ProductUseCases.csproj" />
-    <ProjectReference Include="..\ShopwareIntegration.State\ShopwareIntegration.State.csproj" />
+    <ProjectReference Include="..\heitech.ShopwareIntegration\heitech.ShopwareIntegration.csproj" />
+    <ProjectReference Include="..\heitech.ShopwareIntegration.State\heitech.ShopwareIntegration.State.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

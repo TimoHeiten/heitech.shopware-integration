@@ -1,8 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\ShopwareIntegration\ShopwareIntegration.csproj" />
-    <ProjectReference Include="..\ProductUseCases\ProductUseCases.csproj" />
+    <ProjectReference Include="..\heitech.ShopwareIntegration\heitech.ShopwareIntegration.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using heitech.ShopwareIntegration.Models;
-using heitech.ShopwareIntegration.ProductUseCases;
+using heitech.ShopwareIntegration.Filtering;
 using heitech.ShopwareIntegration.State;
 using heitech.ShopwareIntegration.State.Api;
 using heitech.ShopwareIntegration.State.DetailModels;
@@ -24,7 +24,7 @@ public sealed class Commands
     {
         context.SetFilter(new
         {
-            includes = new IncludesFields.Product(new[] { "id", "stock", "availableStock", "price" })
+            includes = new heitech.ShopwareIntegration.Filtering.IncludesFields.Product(new[] { "id", "stock", "availableStock", "price" })
         });
         return _stateManager.RetrieveDetails<ProductDetails>(context);
     }

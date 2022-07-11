@@ -21,7 +21,7 @@ Here you can find the [Filtering reference from the API](https://shopware.stopli
 
 ## Example:
 A simple generic call to get a Page of the Entity of Type T (BaseEntity)
-```
+```csharp
 public async Task<IEnumerable<T>> GetAsync<T>(int pageNo, object? includes = null)
         where T : BaseEntity
 {
@@ -64,7 +64,7 @@ You don´t need to specify all Properties, only the ones you want to access, sin
 
 
 example of Unit Ressource from the [Shopware Api](https://shopware.stoplight.io/docs/admin-api/c2NoOjE0MzUxMzUz-unit).
-```
+```csharp
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;

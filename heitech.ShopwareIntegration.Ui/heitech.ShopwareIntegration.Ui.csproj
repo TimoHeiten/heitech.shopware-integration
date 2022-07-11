@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ShopwareIntegration.State\ShopwareIntegration.State.csproj" />
+      <ProjectReference Include="..\heitech.ShopwareIntegration.State\heitech.ShopwareIntegration.State.csproj" />
     </ItemGroup>
 
     <ItemGroup>

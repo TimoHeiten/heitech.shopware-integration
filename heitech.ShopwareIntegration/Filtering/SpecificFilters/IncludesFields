@@ -1,7 +1,10 @@
 using System.Text.Json.Serialization;
 
-namespace heitech.ShopwareIntegration.ProductUseCases
+namespace heitech.ShopwareIntegration.Filtering
 {
+    /// <summary>
+    /// specific filter to include the desired fields 
+    /// </summary>
     public class IncludesFields
     {
         public sealed class Product : IncludesFields

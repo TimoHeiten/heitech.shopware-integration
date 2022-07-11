@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using heitech.ShopwareIntegration.Configuration;
 using heitech.ShopwareIntegration.Filtering;
-using heitech.ShopwareIntegration.ProductUseCases;
 using heitech.ShopwareIntegration.State;
 using heitech.ShopwareIntegration.State.Api;
 using heitech.ShopwareIntegration.State.DetailModels;
@@ -21,7 +20,7 @@ public sealed class StateService
 {
     private IStateManager? _state = null!;
     private Commands? _commands = null!;
-    public Commands Commands => _commands ?? (_commands = new Commands(_state));
+    public Commands Commands => _commands ?? (_commands = new Commands(_state!));
 
     private readonly SemaphoreSlim _mutex = new(1);
     private static HttpClientConfiguration? _configuration = default!;
