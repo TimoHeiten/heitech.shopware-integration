@@ -9,5 +9,6 @@ public partial class ErrorPage : UserControl
     {
         InitializeComponent();
     }
-    public Exception Exception { get; set; }
+
+    public Exception Exception { get; set; } = default!;
 }

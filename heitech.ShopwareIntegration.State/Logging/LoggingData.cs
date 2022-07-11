@@ -5,7 +5,7 @@ namespace heitech.ShopwareIntegration.State.Logging
     internal static class LoggingData
     {
         private const string IS_ENTRY = "isEntry";
-        private const string IS_ERROR = "hasError";
+        private const string IS_ERROR = "error";
         public static DataContext PrepareLogging(this DataContext context, bool isEntry = true)
         {
             if (context.AdditionalData is null)

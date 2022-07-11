@@ -89,7 +89,7 @@ namespace ShopwareIntegration.Ui
                     _spinner.Visibility = Visibility.Collapsed;
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 ContentArea.Content = _error;
                 service.ForceNewInstance();

@@ -6,7 +6,7 @@ namespace ShopwareIntegration.Ui.ViewModels;
 public abstract class DetailViewModelBase
 {
     public string Id { get; init; } = default!;
-    public DataContext Context { get; init; }
+    public DataContext Context { get; protected init; } = default!;
     public abstract string Type { get; }
 
     // kind of an anti pattern, but was a fast and cheap solution

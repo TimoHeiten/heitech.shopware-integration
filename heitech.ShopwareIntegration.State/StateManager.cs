@@ -81,7 +81,7 @@ namespace heitech.ShopwareIntegration.State
             }
             catch (Exception ex)
             {
-                context.AdditionalData["error"] = ex;
+                context.PrepareError(ex);
                 _ = await _logger.RetrievePage<T>(context);
                 throw;
             }

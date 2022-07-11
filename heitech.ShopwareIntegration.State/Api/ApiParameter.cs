@@ -15,17 +15,19 @@ namespace heitech.ShopwareIntegration.State.Api
 
         public static (bool, object?) SearchExists<T>(this DataContext context) where T : DetailsEntity
         {
-            bool exists = context.AdditionalData.TryGetValue(SEARCH, out object? search);
+            object? search = default!;
+            bool? exists = context.AdditionalData?.TryGetValue(SEARCH, out search);
 
-            return (exists, search);
+            return (exists.HasValue && exists.Value, search);
         }
 
 
         public static (bool, string?) QueryExists<T>(this DataContext context) where T : DetailsEntity
         {
-            bool exists = context.AdditionalData.TryGetValue(QUERY, out var query);
+            object? query = default!;
+            var exists = context.AdditionalData?.TryGetValue(QUERY, out query);
 
-            return (exists, $"{query}");
+            return (exists.HasValue && exists.Value, $"{query}");
         }
 
         public static void SetFilter(this DataContext context, object filter)
@@ -36,8 +38,10 @@ namespace heitech.ShopwareIntegration.State.Api
 
         public static IFilter GetFilter(this DataContext context)
         {
-            bool exists = context.AdditionalData.TryGetValue(FILTER, out var page);
-            return exists ? (IFilter)page! : new object().FromAnonymous();
+            object? page = default!;
+            bool? exists = context.AdditionalData?.TryGetValue(FILTER, out page);
+            
+            return exists.HasValue && exists.Value ? (IFilter)page! : new object().FromAnonymous();
         }
     }
 }

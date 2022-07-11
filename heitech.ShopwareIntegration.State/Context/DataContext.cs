@@ -90,10 +90,6 @@ namespace heitech.ShopwareIntegration.State
         private class PatchedValueContext : DataContext
         {
             public override DetailsEntity Entity { get; }
-            public PatchedValueContext(PatchedValue entity, RessourceId id, int pageNo, Dictionary<string, object>? additionalData = default!)
-               : base(id, pageNo, additionalData)
-            { Entity = entity; }
-
             public PatchedValueContext(DetailsEntity entity, int pageNo, Dictionary<string, object>? additionalData = default!)
               : base(RessourceId.From(entity.Id), pageNo, additionalData)
             { Entity = entity; }
@@ -127,7 +123,7 @@ namespace heitech.ShopwareIntegration.State
         {
             private static RessourceId Generate(MemberInfo type, int pageNo) => RessourceId.From($"{pageNo}-{type.Name}");
             private readonly IEnumerable<DetailsEntity> _page = Array.Empty<DetailsEntity>();
-            public PageContext(MemberInfo type, int pageNo, Dictionary<string, object> additionalData)
+            public PageContext(MemberInfo type, int pageNo, Dictionary<string, object>? additionalData)
                 : base(Generate(type, pageNo), pageNo, additionalData)
             { }
 
