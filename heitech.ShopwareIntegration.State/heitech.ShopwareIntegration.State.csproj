@@ -8,10 +8,24 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Abstract Layer on top of the Shopware6 REST API</Description>
+    <PackageProjectUrl>https://github.com/TimoHeiten/heitech.shopware-integration</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/TimoHeiten/heitech.shopware-integration/blob/main/LICENSE</PackageLicenseUrl>
+    <PackageIcon>rfid-signal.png</PackageIcon>
+    <RepositoryUrl>https://github.com/TimoHeiten/heitech.shopware-integration</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="$(AssemblyName).Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="rfid-signal.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
