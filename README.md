@@ -1,6 +1,13 @@
 # heitech.shopware-integration
 A Library to integrate the shopware6 Rest Api into your .NET C# Code.
 
+To install the package of the StateManager (see below, recommended way to interact).
+simply use:
+```bash
+dotnet add package heitech.ShopwareIntegration.State
+```
+[or see for yourself on Nuget Repository](https://www.nuget.org/packages/heitech.ShopwareIntegration.State)
+
 ## References
 Check the [API reference here](https://developer.shopware.com/docs/resources/references/api-reference). 
 
