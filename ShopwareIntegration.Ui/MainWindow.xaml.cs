@@ -22,8 +22,8 @@ namespace ShopwareIntegration.Ui
 
         private readonly HttpClientConfiguration _configuration;
 
-        private readonly ErrorPage _error = new ErrorPage();
-        private readonly LoadingSpinner _spinner = new LoadingSpinner();
+        private readonly ErrorPage _error = new();
+        private readonly LoadingSpinner _spinner = new();
 
         public MainWindow()
         {
