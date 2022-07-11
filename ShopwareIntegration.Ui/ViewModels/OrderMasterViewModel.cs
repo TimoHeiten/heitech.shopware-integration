@@ -1,16 +1,18 @@
-﻿using heitech.ShopwareIntegration.State;
+﻿using System;
+using heitech.ShopwareIntegration.State;
 using heitech.ShopwareIntegration.State.DetailModels;
 
 namespace ShopwareIntegration.Ui.ViewModels;
 
-public sealed class OrderMasterViewModel
+public sealed class OrderMasterViewModel : DetailViewModelBase
 {
-    public string Id { get; }
-    public float AmountTotal { get; set; }
+    public float AmountTotal { get; }
+    public DateTime? OrderDate { get; }
     public string OrderNumber { get; }
-    public DataContext DataContext { get; }
-    
+
     public OrderMasterViewModel(OrderDetails detailsEntity, DataContext dataContext)
-        => (Id, AmountTotal, OrderNumber, DataContext)
-            = (detailsEntity.Id, detailsEntity.AmountTotal, detailsEntity!.OrderNumber!, dataContext);
+        => (Id, AmountTotal, OrderDate, OrderNumber, Context)
+            = (detailsEntity.Id, detailsEntity.AmountTotal, detailsEntity!.OrderDateTime!, detailsEntity.OrderNumber, dataContext);
+
+    public override string Type => DetailTypes.ORDERS;
 }

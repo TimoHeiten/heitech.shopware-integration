@@ -53,7 +53,10 @@ namespace heitech.ShopwareIntegration.State.Api
         public async Task<T> UpdateAsync<T>(DataContext dataContext) where T : DetailsEntity
         {
             var writer = _client.CreateWriter<T>();
-            var rqResult = await writer.Update(dataContext.Entity.Id, dataContext.Entity);
+            
+            if (!dataContext.HasUpdate(out var update)) return default!;
+            
+            var rqResult = await writer.Update(dataContext.Id, update!);
             return rqResult.IsSuccess ? (T)dataContext.Entity : throw rqResult.Exception;
         }
     }

@@ -22,20 +22,20 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
         {
             T result = default!;
-            var ctxt = context.PrepareLogging<T>();
-            _ = await loggingCallback(_logger, ctxt);
+            var localContext = context.PrepareLogging();
+            _ = await loggingCallback(_logger, localContext);
             try
             {
-                result = await callback(_client, ctxt);
-                ctxt = onSuccessFactory(ctxt, result);
+                result = await callback(_client, localContext);
+                localContext = onSuccessFactory(localContext, result);
             }
             catch (System.Exception ex)
             {
-                ctxt.AdditionalData[LoggingData.IS_ERROR] = ex;
-                await loggingCallback(_logger, ctxt);
+                localContext.PrepareError(ex);
+                await loggingCallback(_logger, localContext);
                 throw;
             }
-            await loggingCallback(_logger, ctxt.PrepareLogging<T>(false));
+            await loggingCallback(_logger, localContext.PrepareLogging(false));
 
             return result;
         }
@@ -72,7 +72,7 @@ namespace heitech.ShopwareIntegration.State
         public async Task<IEnumerable<T>> RetrievePage<T>(DataContext dataContext) where T : DetailsEntity
         {
             IEnumerable<T> result = default!;
-            var context = dataContext.PrepareLogging<T>();
+            var context = dataContext.PrepareLogging();
             _ = await _logger.RetrievePage<T>(context);
             try
             {
@@ -85,7 +85,7 @@ namespace heitech.ShopwareIntegration.State
                 _ = await _logger.RetrievePage<T>(context);
                 throw;
             }
-            _ = await _logger.RetrievePage<T>(context.PrepareLogging<T>(false));
+            _ = await _logger.RetrievePage<T>(context.PrepareLogging(false));
 
             return result;
         }
@@ -95,7 +95,7 @@ namespace heitech.ShopwareIntegration.State
                     context,
                     (s, c) => s.UpdateAsync<T>(c),
                     (l, c) => l.UpdateAsync<T>(c),
-                    onSuccessFactory: (dt, result) => DataContext.FromPatchResult(result, dt)
+                    onSuccessFactory: (dt, result) => DataContext.FromUpdateResult(result, dt)
                 );
     }
 }

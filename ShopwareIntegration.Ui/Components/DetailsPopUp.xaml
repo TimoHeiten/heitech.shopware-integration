@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="ShopwareIntegration.Ui.DetailsPopUp"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ShopwareIntegration.Ui"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel>
+        <ContentControl x:Name="ContentArea" x:FieldModifier="public"/>
+        <StackPanel Orientation="Vertical">
+            <TextBlock Background="Chartreuse" x:Name="bannerSuccess" x:FieldModifier="private">Speichern war erfolgreich</TextBlock>
+            <TextBlock Background="DarkRed" x:Name="bannerFailed" x:FieldModifier="private">Speichern war NICHT erfolgreich!</TextBlock>
+            <Button Click="Save_OnClick">Speichern</Button>
+            <Button Click="Abbrechen_OnClick">Abrrechen</Button>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using heitech.ShopwareIntegration.Configuration;
+using MahApps.Metro.Controls;
 using ShopwareIntegration.Ui.Components;
 using ShopwareIntegration.Ui.Services;
 using ShopwareIntegration.Ui.ViewModels;
@@ -14,12 +15,11 @@ namespace ShopwareIntegration.Ui
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         private int _currentPage = 1;
         private string _currentType = DetailTypes.PRODUCTS ;
 
-        // todo build somewhere else with configuration file || load from sql server or similar
         private readonly HttpClientConfiguration _configuration;
 
         private readonly ErrorPage _error = new ErrorPage();
@@ -29,6 +29,7 @@ namespace ShopwareIntegration.Ui
         {
             InitializeComponent();
             _spinner.Visibility = Visibility.Collapsed;
+            // todo build somewhere else with configuration file || load from sql server or similar
             _configuration = new HttpClientConfiguration(
                 baseUrl: "http://sw6.wbv24.com/api/",
                 clientId: "SWIATKTYADFGUWC2CM53VFKWBG",
@@ -41,29 +42,30 @@ namespace ShopwareIntegration.Ui
         {
             var item = e.AddedItems[0]! as ComboBoxItem;
             _currentType = $"{item!.Content}";
-            await ChangeToAsync().ConfigureAwait(false);
+            await ChangeMasterViewToAsync().ConfigureAwait(false);
         }
         
         private async void CmdDown_OnClick(object sender, RoutedEventArgs e)
         {
             _currentPage += 1;
             txtNum.Text = $"{_currentPage}";
-            await ChangeToAsync().ConfigureAwait(false);
+            await ChangeMasterViewToAsync().ConfigureAwait(false);
         }
 
         private async void CmdUp_OnClick(object sender, RoutedEventArgs e)
         {
-            if (_currentPage - 1 > 0)
-            {
-                _currentPage--;
-                txtNum.Text = $"{_currentPage}";
-                await ChangeToAsync().ConfigureAwait(false);
-            }
+            if (_currentPage - 1 <= 0) 
+                return;
+
+            _currentPage--;
+            txtNum.Text = $"{_currentPage}";
+
+            await ChangeMasterViewToAsync().ConfigureAwait(false);
         }
         
-        private async Task ChangeToAsync()
+        private async Task ChangeMasterViewToAsync()
         {
-            var service = StateService.Instance(_configuration);
+            var service = StateService.CreateInstance(_configuration);
             Func<Task<IEnumerable>> getTableData = (_currentType switch
             {
                 DetailTypes.PRODUCTS => async () => await service.GetProductsAsync(_currentPage).ConfigureAwait(false),
@@ -73,19 +75,15 @@ namespace ShopwareIntegration.Ui
                 _ => throw new InvalidCastException($"cannot use {_currentType} here")
             });
 
-                ContentArea.Content = _spinner;
-                _spinner.Visibility = Visibility.Visible;
+            ContentArea.Content = _spinner;
+            _spinner.Visibility = Visibility.Visible;
             try
             {
                 var details = await getTableData().ConfigureAwait(false);
-                this.Dispatcher.Invoke(() =>
+                Dispatcher.Invoke(() =>
                 {
-                    ContentArea.Content = new MasterView
+                    ContentArea.Content = new MasterView(details)
                     {
-                        Grid =
-                        {
-                            ItemsSource = details
-                        },
                         StateManager = service
                     };
                     _spinner.Visibility = Visibility.Collapsed;

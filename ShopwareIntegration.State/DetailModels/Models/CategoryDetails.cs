@@ -11,7 +11,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
     [ModelUri("category")]
     public class CategoryDetails : DetailsEntity
     {
-        // all object types need to be looked up seperately and
+        // all object types need to be looked up separately and
         // to access those properties either extend this class OR
         // use the (slow and expensive) dynamic keyword e.g.:
         // var order = Deserialize<OrderDetails>(jsonString);

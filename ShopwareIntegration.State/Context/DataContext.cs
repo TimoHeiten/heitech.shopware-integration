@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection;
 using heitech.ShopwareIntegration.State.DetailModels;
 
 namespace heitech.ShopwareIntegration.State
@@ -7,8 +8,8 @@ namespace heitech.ShopwareIntegration.State
     {
         public int PageNo { get; }
         public RessourceId Id { get; }
-        public Dictionary<string, object> AdditionalData { get; internal set; }
-        protected DataContext(RessourceId id, int pageNo, Dictionary<string, object> additionalData)
+        internal Dictionary<string, object>? AdditionalData { get; set; }
+        protected DataContext(RessourceId id, int pageNo, Dictionary<string, object>? additionalData)
         {
             Id = id;
             PageNo = pageNo;
@@ -23,15 +24,11 @@ namespace heitech.ShopwareIntegration.State
 
         internal static DataContext FromRetrieveDetails<T>(T entity, DataContext context)
             where T : DetailsEntity
-            => new DetailsContext<T>(entity, context.Id, context.PageNo, context.AdditionalData);
+            => new DetailsContext<T>(entity, context.Id, context.PageNo, context.AdditionalData!);
 
-        public static DataContext Patch<T>(PatchedValue patched, int pageNo, Dictionary<string, object> additionalData = default!)
+        internal static DataContext FromUpdateResult<T>(T entity, DataContext patched)
             where T : DetailsEntity
-            => new PatchedValueContext(patched, RessourceId.From(patched.Id), pageNo, additionalData);
-
-        internal static DataContext FromPatchResult<T>(T entity, DataContext patched)
-            where T : DetailsEntity
-            => new PatchedValueContext(entity, patched.PageNo, patched.AdditionalData);
+            => new PatchedValueContext(entity, patched.PageNo, patched!.AdditionalData);
 
         public static DataContext Create<T>(T entity, int pageNo, Dictionary<string, object> additionalData = default!)
             where T : DetailsEntity
@@ -45,7 +42,7 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
             => new DeleteContext(entity, deleteContext.Id, deleteContext.PageNo, deleteContext.AdditionalData);
 
-        public static DataContext GetPage<T>(int pageNo, Dictionary<string, object> additionalData = default!)
+        public static DataContext GetPage<T>(int pageNo, Dictionary<string, object>? additionalData = default!)
             where T : DetailsEntity
             => new PageContext(typeof(T), pageNo, additionalData);
 
@@ -93,11 +90,11 @@ namespace heitech.ShopwareIntegration.State
         private class PatchedValueContext : DataContext
         {
             public override DetailsEntity Entity { get; }
-            public PatchedValueContext(PatchedValue entity, RessourceId id, int pageNo, Dictionary<string, object> additionalData = default!)
+            public PatchedValueContext(PatchedValue entity, RessourceId id, int pageNo, Dictionary<string, object>? additionalData = default!)
                : base(id, pageNo, additionalData)
             { Entity = entity; }
 
-            public PatchedValueContext(DetailsEntity entity, int pageNo, Dictionary<string, object> additionalData = default!)
+            public PatchedValueContext(DetailsEntity entity, int pageNo, Dictionary<string, object>? additionalData = default!)
               : base(RessourceId.From(entity.Id), pageNo, additionalData)
             { Entity = entity; }
         }
@@ -108,13 +105,13 @@ namespace heitech.ShopwareIntegration.State
         private class DeleteContext : DataContext
         {
             // request version w Entity
-            public DeleteContext(DetailsEntity entity, RessourceId Id, int pageNo, Dictionary<string, object> additionalData)
-                : base(Id, pageNo, additionalData)
+            public DeleteContext(DetailsEntity entity, RessourceId id, int pageNo, Dictionary<string, object>? additionalData)
+                : base(id, pageNo, additionalData)
             { Entity = entity; }
 
             // use for the result entity value --> override the request version
-            public DeleteContext(RessourceId Id, int pageNo, Dictionary<string, object> additionalData)
-                : base(Id, pageNo, additionalData)
+            public DeleteContext(RessourceId id, int pageNo, Dictionary<string, object>? additionalData)
+                : base(id, pageNo, additionalData)
             {
                 Entity = null!;
                 this.AddIsDelete();
@@ -128,13 +125,13 @@ namespace heitech.ShopwareIntegration.State
         ///</summary>
         private class PageContext : DataContext
         {
-            private static RessourceId Generate(Type type, int pageNo) => RessourceId.From($"{pageNo}-{type.Name}");
+            private static RessourceId Generate(MemberInfo type, int pageNo) => RessourceId.From($"{pageNo}-{type.Name}");
             private readonly IEnumerable<DetailsEntity> _page = Array.Empty<DetailsEntity>();
-            public PageContext(Type type, int pageNo, Dictionary<string, object> additionalData)
+            public PageContext(MemberInfo type, int pageNo, Dictionary<string, object> additionalData)
                 : base(Generate(type, pageNo), pageNo, additionalData)
             { }
 
-            public PageContext(Type type, IEnumerable<DetailsEntity> page, int pageNo, Dictionary<string, object> additionalData)
+            public PageContext(Type type, IEnumerable<DetailsEntity> page, int pageNo, Dictionary<string, object>? additionalData)
                 : base(Generate(type, pageNo), pageNo, additionalData)
             { _page = page; }
 

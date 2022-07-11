@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using heitech.ShopwareIntegration.Configuration;
+using heitech.ShopwareIntegration.Filtering;
 using heitech.ShopwareIntegration.ProductUseCases;
 using heitech.ShopwareIntegration.State;
 using heitech.ShopwareIntegration.State.Api;
@@ -14,34 +15,27 @@ using ShopwareIntegration.Ui.ViewModels;
 namespace ShopwareIntegration.Ui.Services;
 
 /// <summary>
-/// StateService Singleton. If more services are required when the application grows, try to use a factory and per Instance method instance or be careful
+/// StateService Singleton. If more services are required when the application grows, try to use a factory and per CreateInstance method instance or be careful
 /// </summary>
 public sealed class StateService
 {
+    private IStateManager? _state = null!;
+    private Commands? _commands = null!;
+    public Commands Commands => _commands ?? (_commands = new Commands(_state));
+
+    private readonly SemaphoreSlim _mutex = new(1);
     private static HttpClientConfiguration? _configuration = default!;
 
-    public static StateService Instance()
-    {
-        if (_configuration is null)
-            throw new InvalidOperationException(
-                "if the service is not yet initialized you must provide a httpClientConfiguration!!");
-
-        return new StateService();
-    }
-
-    public static StateService Instance(HttpClientConfiguration configuration)
+    public static StateService CreateInstance(HttpClientConfiguration configuration)
     {
         _configuration = configuration;
         return new StateService();
     }
 
     public void ForceNewInstance() => _state = null;
-    
+
     private StateService()
     { }
-
-    private IStateManager? _state = null!;
-    private readonly SemaphoreSlim _mutex = new(1);
 
     private async Task<IStateManager> InitializeAsync()
     {
@@ -106,7 +100,7 @@ public sealed class StateService
         return GetAsync<OrderDetails, OrderMasterViewModel>(
             page,
             (detail, context) => new OrderMasterViewModel(detail, context),
-            includes: new IncludesFields.Order("name", "orderNumber", "amountTotal")
+            includes: new IncludesFields.Order("orderDate", "orderNumber", "amountTotal")
         );
     }
 
@@ -116,6 +110,28 @@ public sealed class StateService
             page,
             (detail, context) => new ProductManufacturerMasterViewModel(detail, context),
             includes: new IncludesFields.ProductManufacturer("name", "description")
+        );
+    }
+
+    public async Task<ProductDetailViewModel> GetProductByIdAsync(RessourceId id, DataContext fromPage)
+    {
+        var context = DataContext.GetDetail<ProductDetails>(id, fromPage.PageNo);
+        context.SetFilter(
+            new
+            {
+                includes = new IncludesFields.Product("id", "name", "description", "ean", "manufacturerId")
+            }.FromAnonymous()
+        );
+
+        var productDetails = await _state!.RetrieveDetails<ProductDetails>(context).ConfigureAwait(false);
+        var manufacturerDetails = await _state!.RetrieveDetails<ProductManufacturerDetails>(
+            DataContext.GetDetail<ProductManufacturerDetails>(productDetails.ManufacturerId, fromPage.PageNo)
+        ).ConfigureAwait(false);
+
+        return new ProductDetailViewModel(
+            new ProductMasterViewModel(productDetails, context),
+            new ProductManufacturerMasterViewModel(manufacturerDetails, context), 
+            context
         );
     }
 }

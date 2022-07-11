@@ -3,16 +3,15 @@ using heitech.ShopwareIntegration.State.DetailModels;
 
 namespace ShopwareIntegration.Ui.ViewModels;
 
-public sealed class ProductMasterViewModel
+public sealed class ProductMasterViewModel : DetailViewModelBase
 {
-    public string Id { get; }
     public string  Ean { get; }
-    public string Description { get; }
+    private string _description;
+    public string Description => _description?[..150] ?? "";
     public string ManufacturerId { get; }
-    public DataContext DataContext { get; }
     
     public ProductMasterViewModel(ProductDetails detailsEntity, DataContext dataContext)
-        => (Id, Description, Ean, ManufacturerId, DataContext)
+        => (Id, _description, Ean, ManufacturerId, Context)
             = (detailsEntity.Id, detailsEntity!.Description!, detailsEntity.Ean, detailsEntity.ManufacturerId, dataContext);
-
+    public override string Type => DetailTypes.PRODUCTS;
 }

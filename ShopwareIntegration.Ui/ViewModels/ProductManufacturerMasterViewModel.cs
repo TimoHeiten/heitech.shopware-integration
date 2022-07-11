@@ -3,13 +3,13 @@ using heitech.ShopwareIntegration.State.DetailModels;
 
 namespace ShopwareIntegration.Ui.ViewModels;
 
-public sealed class ProductManufacturerMasterViewModel
+public sealed class ProductManufacturerMasterViewModel : DetailViewModelBase
 {
-    public string Id { get; }
     public string Description { get; }
-    public DataContext DataContext { get; }
     
     public ProductManufacturerMasterViewModel(ProductManufacturerDetails detailsEntity, DataContext dataContext)
-        => (Id, Description, DataContext)
+        => (Id, Description, Context)
             = (detailsEntity.Id, detailsEntity!.Description!, dataContext);
+    
+    public override string Type => DetailTypes.MANUFACTURERS;
 }

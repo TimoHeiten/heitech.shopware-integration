@@ -13,5 +13,13 @@ namespace ShopwareIntegration.Ui
     /// </summary>
     public partial class App : Application
     {
+        public App() 
+            => AppDomain.CurrentDomain.UnhandledException += Handler;
+
+        private static void Handler(object sender, UnhandledExceptionEventArgs args)
+            => MessageBox.Show($"{args.ExceptionObject}");
+
+        ~App() 
+            => AppDomain.CurrentDomain.UnhandledException -= Handler;
     }
 }

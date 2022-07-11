@@ -4,10 +4,9 @@ namespace heitech.ShopwareIntegration.State.Logging
 {
     internal static class LoggingData
     {
-        public const string IS_ENTRY = "isEntry";
-        public const string IS_ERROR = "hasError";
-        public static DataContext PrepareLogging<T>(this DataContext context, bool isEntry = true)
-           where T : DetailsEntity
+        private const string IS_ENTRY = "isEntry";
+        private const string IS_ERROR = "hasError";
+        public static DataContext PrepareLogging(this DataContext context, bool isEntry = true)
         {
             if (context.AdditionalData is null)
                 context.AdditionalData = new Dictionary<string, object> { [IS_ENTRY] = isEntry };
@@ -22,17 +21,24 @@ namespace heitech.ShopwareIntegration.State.Logging
             return context;
         }
 
+        public static DataContext PrepareError(this DataContext context, Exception ex)
+        {
+            context.AdditionalData??= new Dictionary<string, object>();
+            context.AdditionalData.Add(IS_ERROR, ex);
+            return context;
+        }
+
         public static bool ReadIsEntry<T>(this DataContext ctxt)
             where T : DetailsEntity
         {
-            bool exists = ctxt.AdditionalData.TryGetValue(IS_ENTRY, out object? isEntry);
+            bool exists = ctxt.AdditionalData!.TryGetValue(IS_ENTRY, out object? isEntry);
             return exists && (bool)isEntry!;
         }
 
-        public static Exception GetError(this DataContext ctxt)
+        public static Exception GetError(this DataContext context)
         {
-            bool exists = ctxt.AdditionalData.TryGetValue(IS_ERROR, out var error);
-            return exists && error is not null && error as Exception is not null ? (Exception)error! : null!;
+            bool exists = context.AdditionalData!.TryGetValue(IS_ERROR, out var error);
+            return exists && error is Exception ? (Exception)error! : null!;
         }
     }
 }

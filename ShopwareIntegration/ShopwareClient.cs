@@ -16,7 +16,7 @@ namespace heitech.ShopwareIntegration
     ///<summary>
     /// HttpClient Abstraction for the Shopware REST API Integration
     ///</summary>
-    public class ShopwareClient : IDisposable
+    public sealed class ShopwareClient : IDisposable
     {
         private bool _disposedValue;
         private readonly HttpClient _client;
@@ -25,7 +25,13 @@ namespace heitech.ShopwareIntegration
         private ShopwareClient(HttpClient client)
             => _client = client;
 
-        public static async Task<ShopwareClient> CreateAsync(Configuration.HttpClientConfiguration clientConfiguration)
+        /// <summary>
+        /// Create a new authenticated Instance by using the specified HttpClientConfiguration 
+        /// </summary>
+        /// <param name="clientConfiguration"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static async Task<ShopwareClient> CreateAsync(HttpClientConfiguration clientConfiguration)
         {
             var configuration = clientConfiguration;
             if (configuration is null)
@@ -73,6 +79,10 @@ namespace heitech.ShopwareIntegration
             return message;
         }
 
+        /// <summary>
+        /// Try to authenticate against the Shopware API
+        /// </summary>
+        /// <exception cref="ShopIntegrationRequestException"></exception>
         public async Task AuthenticateAsync()
         {
             var authenticateBody = Authenticate.From(_configuration);
@@ -88,6 +98,13 @@ namespace heitech.ShopwareIntegration
                 throw new ShopIntegrationRequestException((int)response.StatusCode, null, content);
         }
 
+        /// <summary>
+        /// For fine grained control of the Inputs/Outputs use this method. In all other Cases use the SendMessage or higher level abstractions.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public async Task<string> GetResponseContentAsync<T>(HttpRequestMessage message, CancellationToken cancellationToken = default)
         {
             var response = await _client.SendAsync(message, cancellationToken).ConfigureAwait(false);
@@ -101,7 +118,7 @@ namespace heitech.ShopwareIntegration
             if (response.IsSuccessStatusCode is false)
             {
                 var code = response.StatusCode;
-                if (code == System.Net.HttpStatusCode.Forbidden || code == System.Net.HttpStatusCode.Unauthorized)
+                if (code is System.Net.HttpStatusCode.Forbidden or System.Net.HttpStatusCode.Unauthorized)
                 {
                     try
                     {
@@ -153,7 +170,7 @@ namespace heitech.ShopwareIntegration
         public WritingRequest<T> CreateWriter<T>() where T : BaseEntity => new WritingRequest<T>(this);
 
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!_disposedValue)
             {

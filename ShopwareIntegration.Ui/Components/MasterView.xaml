@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="ShopwareIntegration.Ui.MasterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ShopwareIntegration.Ui"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <!-- todo add Filtering etc. -->
+    
+    <DataGrid 
+        x:Name="DataGrid"
+        AutoGeneratingColumn="OnAutoGeneratingColumn" 
+        EnableRowVirtualization="True"
+        ScrollViewer.CanContentScroll="True">
+        <DataGrid.ItemContainerStyle>
+            <Style TargetType="DataGridRow">
+                <EventSetter Event="MouseDoubleClick" Handler="Show_Details"/>
+            </Style>
+        </DataGrid.ItemContainerStyle>
+        <DataGrid.Columns>
+            <DataGridTemplateColumn Header="Details" >
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Button Click="Show_Details">
+                            <Image MaxWidth="50">
+                                <Image.Source>
+                                    <BitmapImage DecodePixelWidth="200"  
+                                                 UriSource="/Images/Lupe.png" />
+                                </Image.Source>
+                            </Image>
+                        </Button>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>

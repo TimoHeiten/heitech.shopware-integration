@@ -11,4 +11,19 @@
       <ProjectReference Include="..\ShopwareIntegration.State\ShopwareIntegration.State.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Images" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Images\Lupe.png" />
+      <Resource Include="Images\Lupe.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
 </Project>

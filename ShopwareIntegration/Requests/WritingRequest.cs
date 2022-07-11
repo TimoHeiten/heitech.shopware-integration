@@ -15,8 +15,8 @@ namespace ShopwareIntegration.Requests
 
         public WritingRequest(ShopwareClient client)
         {
-            this._url = ModelUri.GetUrlFromType<T>();
-            this._client = client;
+            _url = ModelUri.GetUrlFromType<T>();
+            _client = client;
         }
 
         private Task<RequestResult<DataEmpty>> RunAsync(string url, object body = null!, HttpMethod? method = null)

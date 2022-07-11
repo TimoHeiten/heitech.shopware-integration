@@ -54,7 +54,7 @@ namespace heitech.ShopwareIntegration.State.Logging
 
         public Task<T> UpdateAsync<T>(DataContext context) where T : DetailsEntity
         {
-            Log<T>(context, nameof(UpdateAsync), context.Entity.Id, context.PageNo);
+            Log<T>(context, nameof(UpdateAsync), context.Id, context.PageNo);
             return Task.FromResult((T)context.Entity);
         }
     }

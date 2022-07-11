@@ -19,7 +19,7 @@ namespace heitech.ShopwareIntegration.State.Cache
 
         public async Task<T> RetrieveDetails<T>(DataContext context) where T : DetailsEntity
         {
-            T result = null!;
+            T result;
             var detailsItem = CacheItem.CreateTemp(context);
 
             if (_cache.TryGetValue(detailsItem.Key, out CacheItem? cached))
