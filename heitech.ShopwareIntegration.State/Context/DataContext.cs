@@ -26,17 +26,30 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
             => new DetailsContext<T>(entity, context.Id, context.PageNo, context.AdditionalData!);
 
+        public static DataContext Update(PatchedValue patch, int pageNo,
+            Dictionary<string, object> additionalData = default!)
+        {
+            var context = new PatchedValueContext(patch, pageNo, additionalData);
+            context.AddUpdate(patch.Values);
+            return context;
+        }
+
         internal static DataContext FromUpdateResult<T>(T entity, DataContext patched)
             where T : DetailsEntity
-            => new PatchedValueContext(entity, patched.PageNo, patched!.AdditionalData);
+            => new PatchedValueContext(PatchedValue.From(entity, null!), patched.PageNo, patched!.AdditionalData);
 
         public static DataContext Create<T>(T entity, int pageNo, Dictionary<string, object> additionalData = default!)
             where T : DetailsEntity
             => new CreateContext<T>(entity, pageNo, additionalData);
 
+
         public static DataContext Delete<T>(string id, int pageNo, Dictionary<string, object> additionalData = default!)
             where T : DetailsEntity
-            => new DeleteContext(RessourceId.From(id), pageNo, additionalData);
+        {
+            var deleteContext = new DeleteContext(RessourceId.From(id), pageNo, additionalData);
+            deleteContext.AddIsDelete();
+            return deleteContext;
+        }
 
         internal static DataContext FromDelete<T>(DetailsEntity entity, DataContext deleteContext)
             where T : DetailsEntity
@@ -90,9 +103,12 @@ namespace heitech.ShopwareIntegration.State
         private class PatchedValueContext : DataContext
         {
             public override DetailsEntity Entity { get; }
-            public PatchedValueContext(DetailsEntity entity, int pageNo, Dictionary<string, object>? additionalData = default!)
-              : base(RessourceId.From(entity.Id), pageNo, additionalData)
-            { Entity = entity; }
+            public PatchedValueContext(PatchedValue entity, int pageNo,
+                Dictionary<string, object>? additionalData = default!)
+                : base(RessourceId.From(entity.Id), pageNo, additionalData)
+            {
+                Entity = entity.Source;
+            }
         }
 
         ///<summary>

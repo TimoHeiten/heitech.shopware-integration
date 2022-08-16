@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using heitech.ShopwareIntegration;
 using heitech.ShopwareIntegration.State;
-using heitech.ShopwareIntegration.Models;
 using heitech.ShopwareIntegration.Configuration;
-using heitech.ShopwareIntegration.Filtering;
 using heitech.ShopwareIntegration.State.DetailModels;
 using heitech.ShopwareIntegration.State.Api;
-using System.Text.Json;
+using heitech.ShopwareIntegration.State.Interfaces;
 
 namespace client
 {
@@ -38,17 +34,32 @@ namespace client
             var pageContext = DataContext.GetPage<CategoryDetails>(1);
             pageContext.SetFilter(filter);
             var pageResult = await stateManager.RetrievePage<CategoryDetails>(pageContext);
-            var firstId = pageResult.First().Id;
+            // var firstId = pageResult.First().Id;
 
-            var detailsContext = DataContext.GetDetail<CategoryDetails>(firstId, filter.page);
-            var details = await stateManager.RetrieveDetails<CategoryDetails>(detailsContext);
-            System.Console.WriteLine(JsonSerializer.Serialize(details));
+            // var detailsContext = DataContext.GetDetail<CategoryDetails>(firstId, filter.page);
+            // var details = await stateManager.RetrieveDetails<CategoryDetails>(detailsContext);
+            // System.Console.WriteLine(JsonSerializer.Serialize(details));
+            //
+            // var deleteContext = DataContext.Delete<CategoryDetails>(pageResult.Last().Id, filter.page);
+            // var result = await stateManager.DeleteAsync<CategoryDetails>(deleteContext);
+            // System.Console.WriteLine(result?.Id);
+            //
+            // System.Console.WriteLine(pageResult.Count());
 
-            var deleteContext = DataContext.Delete<CategoryDetails>(pageResult.Last().Id, filter.page);
-            var result = await stateManager.DeleteAsync<CategoryDetails>(deleteContext);
-            System.Console.WriteLine(result?.Id);
+            await DoUpdate(stateManager, pageResult.First());
+        }
 
-            System.Console.WriteLine(pageResult.Count());
+        static async Task DoUpdate(IStateManager stateManager, CategoryDetails currentOne)
+        {
+            var patchedValues = PatchedValue.From(currentOne,
+                new
+                {
+                    active = true,
+                    name = "back to original"
+                });
+            var context = DataContext.Update(patchedValues, 0);
+            var result = await stateManager.UpdateAsync<CategoryDetails>(context);
+            Console.WriteLine(result.Active + " " + result.Name);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using heitech.ShopwareIntegration.Models;
 
 namespace heitech.ShopwareIntegration.State.DetailModels
 {
@@ -9,23 +10,26 @@ namespace heitech.ShopwareIntegration.State.DetailModels
     public sealed class PatchedValue : DetailsEntity
     {
         public object Values { get; }
-        public object Result { get; set; } = null!;
-        public PatchedValue(string id, object patchedValues) => (Id, Values) = (id, patchedValues);
+        public DetailsEntity Source { get; private init; }
+        private PatchedValue(DetailsEntity source, object patchedValues) => (Id, Source, Values) = (source.Id, source, patchedValues);
 
-        public static PatchedValue ProductUpdate(ProductDetails product, int increaseStockBy = 0, decimal? newPrice = null)
-        {
-            var patch = new
-            {
-                stock = product.Stock + increaseStockBy,
-                availableStock = product.AvailableStock + increaseStockBy,
-                price = new
-                {
-                    gross = newPrice ?? product.Price[0].Gross
-                }
-            };
+        // as an example
+        // public static PatchedValue ProductUpdate(ProductDetails product, int increaseStockBy = 0, decimal? newPrice = null)
+        // {
+        //     var patch = new
+        //     {
+        //         stock = product.Stock + increaseStockBy,
+        //         availableStock = product.AvailableStock + increaseStockBy,
+        //         price = new
+        //         {
+        //             gross = newPrice ?? product.Price[0].Gross
+        //         }
+        //     };
+        //
+        //     return new(product.Id, patch);
+        // }
 
-            return new(product.Id, patch);
-        }
-        // todo make for other 3 models
+        public static PatchedValue From<T>(T entity, object patchedValues) where T : DetailsEntity
+            => new(entity, patchedValues);
     }
 }

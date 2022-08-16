@@ -21,6 +21,9 @@ namespace heitech.ShopwareIntegration.State.Api
 
         public async Task<T> DeleteAsync<T>(DataContext context) where T : DetailsEntity
         {
+            if (!context.HasDelete())
+                throw new InvalidOperationException("To Delete an Entity you need to create a DeleteContext first");
+
             var writer = _client.CreateWriter<T>();
             var rqResult = await writer.Delete(context.Id);
             return rqResult.IsSuccess ? (T)context.Entity : throw rqResult.Exception;
@@ -53,8 +56,9 @@ namespace heitech.ShopwareIntegration.State.Api
         public async Task<T> UpdateAsync<T>(DataContext dataContext) where T : DetailsEntity
         {
             var writer = _client.CreateWriter<T>();
-            
-            if (!dataContext.HasUpdate(out var update)) return default!;
+
+            if (!dataContext.HasUpdate(out var update))
+                throw new InvalidOperationException("Use an Update DataContext for an Update situation");
             
             var rqResult = await writer.Update(dataContext.Id, update!);
             return rqResult.IsSuccess ? (T)dataContext.Entity : throw rqResult.Exception;

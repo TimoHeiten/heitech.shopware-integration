@@ -127,18 +127,23 @@ namespace heitech.ShopwareIntegration.State.Cache
            where T : DetailsEntity
         {
             var pageContext = CacheItem.CreateTemp(DataContext.GetPage<T>(current.PageNo));
-            var exists = _pages.TryGetValue(pageContext.Key, out CacheItem? cachedPage);
+            _pages.TryGetValue(pageContext.Key, out CacheItem? cachedPage);
 
             return cachedPage;
         }
 
-        private void SubstituteCacheItem(CacheItem? newCacheItem, Dictionary<string, CacheItem> cache)
+        private static void SubstituteCacheItem(CacheItem? newCacheItem, Dictionary<string, CacheItem> cache)
         {
-            if (newCacheItem is not null)
-            {
-                cache[newCacheItem.Key].Dispose();
-                cache[newCacheItem.Key] = newCacheItem;
-            }
+            if (newCacheItem is null) 
+                return;
+
+            if (!cache.TryGetValue(newCacheItem?.Key ?? "", out var cached))
+                return;
+
+            cached.Dispose();
+#pragma warning disable CS8602
+            cache[newCacheItem.Key ?? ""] = newCacheItem;
+#pragma warning restore CS8602
         }
     }
 }
