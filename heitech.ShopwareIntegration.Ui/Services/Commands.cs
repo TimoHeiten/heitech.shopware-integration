@@ -46,11 +46,10 @@ public sealed class Commands
             price = newPrice ?? ProductPrice.NewPrice(details.Price[single].Net, details.Price[single].Gross,
                 details.Price[single].CurrencyId, details.Price[single].Linked!)
         };
-        detailsContext.AddUpdate(new { active = true });
-
+        var updateContext = DataContext.Update(PatchedValue.From(details, update), pageNo);
         try
         {
-            _ = await _stateManager.UpdateAsync<ProductDetails>(detailsContext);
+            _ = await _stateManager.UpdateAsync<ProductDetails>(updateContext);
             return true;
         }
         catch (Exception e)

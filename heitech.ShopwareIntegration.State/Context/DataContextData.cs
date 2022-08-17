@@ -7,13 +7,13 @@ namespace heitech.ShopwareIntegration.State
         ///<summary>
         /// Marks the DataContext as one that is used for a delete request
         ///</summary>
-        public const string IS_DELETE = "isDelete";
+        private const string IS_DELETE = "isDelete";
+        private const string HAS_UPDATE = "hasUpdate";
 
-        public const string HAS_UPDATE = "hasUpdate";
-        public static bool HasDelete(this DataContext ctxt)
+        internal static bool HasDelete(this DataContext ctxt)
         {
             object? delete = null;
-            bool? exists = ctxt.AdditionalData?.TryGetValue(IS_DELETE, out delete);
+            var exists = ctxt.AdditionalData?.TryGetValue(IS_DELETE, out delete);
 
             return exists.HasValue && exists.Value && (bool)delete!;
         } 
@@ -24,36 +24,34 @@ namespace heitech.ShopwareIntegration.State
         /// <param name="ctxt"></param>
         /// <param name="update"></param>
         /// <returns></returns>
-        public static bool HasUpdate(this DataContext ctxt, out object? update)
+        internal static bool HasUpdate(this DataContext ctxt, out object? update)
         {
             update = default!;
-            bool? exists = ctxt.AdditionalData?.TryGetValue(HAS_UPDATE, out update);
+            var exists = ctxt.AdditionalData?.TryGetValue(HAS_UPDATE, out update);
 
             return exists.HasValue && exists.Value;
         }
 
-        public static void AddIsDelete(this DataContext ctxt)
+        internal static void AddIsDelete(this DataContext ctxt)
         {
             ctxt.AdditionalData ??= new Dictionary<string, object>()
                 {
                     [IS_DELETE] = true
                 };
-            
+
             if (!ctxt.AdditionalData.ContainsKey(IS_DELETE))
                 ctxt.AdditionalData.Add(IS_DELETE, true);
         }
 
-        public static void AddUpdate(this DataContext dataContext, [NotNull] object update)
+        internal static void AddUpdate(this DataContext dataContext, [NotNull] object update)
         {
             dataContext.AdditionalData ??= new Dictionary<string, object>()
             {
                 [HAS_UPDATE] = update
             };
 
-            if (dataContext.AdditionalData is not null)
-            {
+            if (!dataContext.AdditionalData.ContainsKey(HAS_UPDATE))
                 dataContext.AdditionalData.Add(HAS_UPDATE, update);
-            }
         }
     }
 }

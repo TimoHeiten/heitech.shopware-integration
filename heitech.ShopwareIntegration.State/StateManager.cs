@@ -4,7 +4,8 @@ using heitech.ShopwareIntegration.State.Logging;
 
 namespace heitech.ShopwareIntegration.State
 {
-    internal class StateManager : IStateManager
+    internal class 
+        StateManager : IStateManager
     {
         private readonly IStateManager _client;
         private readonly IStateManager _logger;
@@ -29,7 +30,7 @@ namespace heitech.ShopwareIntegration.State
                 result = await callback(_client, localContext);
                 localContext = onSuccessFactory(localContext, result);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 localContext.PrepareError(ex);
                 await loggingCallback(_logger, localContext);
@@ -91,7 +92,7 @@ namespace heitech.ShopwareIntegration.State
         }
 
         public Task<T> UpdateAsync<T>(DataContext context) where T : DetailsEntity
-             => HandleAsync<T>(
+             => HandleAsync(
                     context,
                     (s, c) => s.UpdateAsync<T>(c),
                     (l, c) => l.UpdateAsync<T>(c),

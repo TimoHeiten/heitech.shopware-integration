@@ -56,7 +56,7 @@ namespace heitech.ShopwareIntegration
 
         public HttpRequestMessage CreateHttpRequest<TModel>(string uri, TModel model, HttpMethod? method = null)
         {
-            System.Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(model));
+            //Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(model));
             HttpRequestMessage message = new()
             {
                 Content = JsonContent.Create(model),
@@ -129,7 +129,7 @@ namespace heitech.ShopwareIntegration
 
                         await SendAsync<T>(message, guardRecursion: true, cancellationToken: cancellationToken);
                     }
-                    catch (System.Exception ex)
+                    catch (Exception ex)
                     {
                         return RequestResult<T>.Failed(ex);
                     }
@@ -149,9 +149,9 @@ namespace heitech.ShopwareIntegration
                        ? RequestResult<T>.Success(model!)
                        : RequestResult<T>.Failed(new ShopIntegrationRequestException(typeof(T)));
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                System.Console.WriteLine(ex);
+                Console.WriteLine(ex);
                 return RequestResult<T>.Failed(ex);
             }
         }
@@ -165,27 +165,25 @@ namespace heitech.ShopwareIntegration
             return isPatch || isCreate || isDelete;
         }
 
-        public ReadRequest<T> CreateReader<T>() where T : BaseEntity => new ReadRequest<T>(this);
+        public ReadRequest<T> CreateReader<T>() where T : BaseEntity => new(this);
 
-        public WritingRequest<T> CreateWriter<T>() where T : BaseEntity => new WritingRequest<T>(this);
+        public WritingRequest<T> CreateWriter<T>() where T : BaseEntity => new(this);
 
 
         private void Dispose(bool disposing)
         {
-            if (!_disposedValue)
-            {
-                if (disposing)
-                {
-                    _client.Dispose();
-                }
-                _disposedValue = true;
-            }
+            if (_disposedValue) 
+                return;
+
+            if (disposing)
+                _client.Dispose();
+
+            _disposedValue = true;
         }
 
         public void Dispose()
         {
             Dispose(disposing: true);
-            GC.SuppressFinalize(this);
         }
     }
 }

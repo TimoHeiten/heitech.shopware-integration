@@ -22,5 +22,7 @@ namespace heitech.ShopwareIntegration.State
                     client ?? new CacheStorage(new Client(shopwareClient))
             );
         }
+
+        public static IStateManager SilentLogger() => new Logger((_) => { });
     }
 }
