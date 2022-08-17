@@ -21,8 +21,8 @@ namespace ShopwareIntegration.Requests
             Exception = ex;
         }
 
-        internal static RequestResult<T> Success(T model) => new(model);
-        internal static RequestResult<T> Failed(Exception ex) => new(ex);
+        public static RequestResult<T> Success(T model) => new(model);
+        public static RequestResult<T> Failed(Exception ex) => new(ex);
 
         public bool IsSuccess => Exception is null;
     }
