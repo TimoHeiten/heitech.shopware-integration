@@ -1,8 +1,8 @@
 ﻿using heitech.ShopwareIntegration.State.Api;
 using heitech.ShopwareIntegration.State.DetailModels;
+using heitech.ShopwareIntegration.State.Integration.Requests;
 using heitech.ShopwareIntegration.State.Interfaces;
 using heitech.ShopwareIntegration.State.StateManagerUtilities;
-using ShopwareIntegration.Requests;
 
 namespace heitech.ShopwareIntegration.State;
 

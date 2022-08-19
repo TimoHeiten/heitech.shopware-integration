@@ -5,13 +5,9 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "client", "client\client.csproj", "{1BBE6D67-1DB0-40D2-8B44-5ECF17BE02E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.ShopwareIntegration", "heitech.Shopwareintegration\heitech.ShopwareIntegration.csproj", "{73FC3E06-2A06-4205-B5A5-8E0681DDA9B9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.ShopwareIntegration.State", "heitech.ShopwareIntegration.State\heitech.ShopwareIntegration.State.csproj", "{D6DF8909-B8A0-495B-9916-292FEF864972}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.ShopwareIntegration.State.Tests", "heitech.ShopwareIntegration.State.Tests\heitech.ShopwareIntegration.State.Tests.csproj", "{2A82B48C-D171-4F44-AADA-F1DD9C775697}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.ShopwareIntegration.Ui", "heitech.ShopwareIntegration.Ui\heitech.ShopwareIntegration.Ui.csproj", "{95179A9C-100E-4A90-84EF-3041DD78E201}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +30,6 @@ Global
 		{24822101-A664-4A53-96F5-919216D4E82D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24822101-A664-4A53-96F5-919216D4E82D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24822101-A664-4A53-96F5-919216D4E82D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73FC3E06-2A06-4205-B5A5-8E0681DDA9B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73FC3E06-2A06-4205-B5A5-8E0681DDA9B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73FC3E06-2A06-4205-B5A5-8E0681DDA9B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73FC3E06-2A06-4205-B5A5-8E0681DDA9B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D6DF8909-B8A0-495B-9916-292FEF864972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6DF8909-B8A0-495B-9916-292FEF864972}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6DF8909-B8A0-495B-9916-292FEF864972}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -46,9 +38,5 @@ Global
 		{2A82B48C-D171-4F44-AADA-F1DD9C775697}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A82B48C-D171-4F44-AADA-F1DD9C775697}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A82B48C-D171-4F44-AADA-F1DD9C775697}.Release|Any CPU.Build.0 = Release|Any CPU
-		{95179A9C-100E-4A90-84EF-3041DD78E201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95179A9C-100E-4A90-84EF-3041DD78E201}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95179A9C-100E-4A90-84EF-3041DD78E201}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95179A9C-100E-4A90-84EF-3041DD78E201}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

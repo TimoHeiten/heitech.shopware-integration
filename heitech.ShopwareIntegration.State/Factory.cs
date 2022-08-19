@@ -1,6 +1,7 @@
-using heitech.ShopwareIntegration.Configuration;
 using heitech.ShopwareIntegration.State.Api;
 using heitech.ShopwareIntegration.State.Cache;
+using heitech.ShopwareIntegration.State.Integration;
+using heitech.ShopwareIntegration.State.Integration.Configuration;
 using heitech.ShopwareIntegration.State.Interfaces;
 using heitech.ShopwareIntegration.State.Logging;
 

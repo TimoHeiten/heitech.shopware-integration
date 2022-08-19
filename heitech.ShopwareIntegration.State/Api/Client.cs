@@ -1,5 +1,6 @@
-using heitech.ShopwareIntegration.Filtering;
 using heitech.ShopwareIntegration.State.DetailModels;
+using heitech.ShopwareIntegration.State.Integration;
+using heitech.ShopwareIntegration.State.Integration.Filtering.Parameters;
 using heitech.ShopwareIntegration.State.Interfaces;
 
 namespace heitech.ShopwareIntegration.State.Api
@@ -59,9 +60,14 @@ namespace heitech.ShopwareIntegration.State.Api
 
             if (!dataContext.HasUpdate(out var update))
                 throw new InvalidOperationException("Use an Update DataContext for an Update situation");
-            
+
             var rqResult = await writer.Update(dataContext.Id, update!);
-            return rqResult.IsSuccess ? (T)dataContext.Entity : throw rqResult.Exception;
+
+            // refresh the updated Entity, since the api does not deliver a new value -.-
+            var details = await RetrieveDetails<T>(DataContext.GetDetail<T>(dataContext.Id, dataContext.PageNo,
+                dataContext.AdditionalData!));
+
+            return details is not null && rqResult.IsSuccess ? details : throw rqResult.Exception;
         }
     }
 }

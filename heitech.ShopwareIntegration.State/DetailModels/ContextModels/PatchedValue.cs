@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using heitech.ShopwareIntegration.Models;
-
 namespace heitech.ShopwareIntegration.State.DetailModels
 {
     ///<summary>

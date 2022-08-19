@@ -2,12 +2,12 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using heitech.ShopwareIntegration;
 using heitech.ShopwareIntegration.State;
-using heitech.ShopwareIntegration.Configuration;
-using heitech.ShopwareIntegration.Filtering;
-using heitech.ShopwareIntegration.State.DetailModels;
 using heitech.ShopwareIntegration.State.Api;
+using heitech.ShopwareIntegration.State.DetailModels;
+using heitech.ShopwareIntegration.State.Integration;
+using heitech.ShopwareIntegration.State.Integration.Configuration;
+using heitech.ShopwareIntegration.State.Integration.Filtering.Parameters;
 using heitech.ShopwareIntegration.State.Interfaces;
 using heitech.ShopwareIntegration.State.StateManagerUtilities;
 
@@ -20,8 +20,8 @@ namespace client
         ///</summary>
         static async Task Main(string[] args)
         {
-            BenchmarkDotNet.Running.BenchmarkRunner.Run<Benchmarked>();
-            return;
+            // BenchmarkDotNet.Running.BenchmarkRunner.Run<Benchmarked>();
+            // return;
             // test store creds
             var configuration = new HttpClientConfiguration(
                 baseUrl: "http://sw6.wbv24.com/api/",
@@ -30,9 +30,9 @@ namespace client
                 clientSecret: "Nk9XQWQzSkRwVnQ2T01LTzJydnM5M3RQTFVJNW1SY3NJM3NTckY"
             );
             var stateManager = await WithOutCache(configuration);
-            await MultiplePagesSequentially(stateManager);
-            await MultiplePagesConcurrently(stateManager);
-            return;
+            // await MultiplePagesSequentially(stateManager);
+            // await MultiplePagesConcurrently(stateManager);
+            // return;
             
             var filter = new {
                 limit = 100,
@@ -54,6 +54,7 @@ namespace client
             //
             // System.Console.WriteLine(pageResult.Count());
 
+            Console.WriteLine(pageResult.First().Name);
             await DoUpdate(stateManager, pageResult.First());
         }
 
@@ -73,7 +74,7 @@ namespace client
                 new
                 {
                     active = true,
-                    name = "back to original"
+                    name = "this time the update is already incorporated"
                 });
             var context = DataContext.Update(patchedValues, 0);
             var result = await stateManager.UpdateAsync<CategoryDetails>(context);
@@ -96,7 +97,7 @@ namespace client
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < 3; i++)
             {
                 var context = DataContext.GetPage<ProductDetails>(i+1);
                 context.SetFilter(ProductFilter(i+1));
@@ -116,8 +117,6 @@ namespace client
                 new(1, ProductFilter(1)),
                 new(2, ProductFilter(2)),
                 new(3, ProductFilter(3)),
-                new(5, ProductFilter(4)),
-                new(4, ProductFilter(5)),
             };
             await manager.GetMultiplePagesConcurrently<ProductDetails>(descr);
             stopWatch.Stop();

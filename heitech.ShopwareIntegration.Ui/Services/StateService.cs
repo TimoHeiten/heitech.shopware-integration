@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using heitech.ShopwareIntegration.Configuration;
-using heitech.ShopwareIntegration.Filtering;
 using heitech.ShopwareIntegration.State;
 using heitech.ShopwareIntegration.State.Api;
 using heitech.ShopwareIntegration.State.DetailModels;
+using heitech.ShopwareIntegration.State.Integration.Configuration;
+using heitech.ShopwareIntegration.State.Integration.Filtering.Parameters;
 using heitech.ShopwareIntegration.State.Interfaces;
 using ShopwareIntegration.Ui.ViewModels;
 

@@ -1,5 +1,5 @@
-using heitech.ShopwareIntegration.Filtering;
 using heitech.ShopwareIntegration.State.DetailModels;
+using heitech.ShopwareIntegration.State.Integration.Filtering.Parameters;
 
 namespace heitech.ShopwareIntegration.State.Api
 {

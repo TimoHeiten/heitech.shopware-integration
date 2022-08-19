@@ -3,7 +3,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using heitech.ShopwareIntegration.Configuration;
+using heitech.ShopwareIntegration.State.Integration.Configuration;
 using MahApps.Metro.Controls;
 using ShopwareIntegration.Ui.Components;
 using ShopwareIntegration.Ui.Services;

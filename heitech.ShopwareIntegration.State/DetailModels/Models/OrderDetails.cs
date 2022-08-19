@@ -1,7 +1,5 @@
-using System;
-using System.Linq;
 using System.Text.Json.Serialization;
-using heitech.ShopwareIntegration.Configuration;
+using heitech.ShopwareIntegration.State.Integration.Configuration;
 
 namespace heitech.ShopwareIntegration.State.DetailModels
 {

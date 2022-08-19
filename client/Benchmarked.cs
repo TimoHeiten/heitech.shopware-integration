@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
-using heitech.ShopwareIntegration.Configuration;
 using heitech.ShopwareIntegration.State;
 using heitech.ShopwareIntegration.State.Api;
 using heitech.ShopwareIntegration.State.DetailModels;
+using heitech.ShopwareIntegration.State.Integration.Configuration;
 using heitech.ShopwareIntegration.State.Interfaces;
 using heitech.ShopwareIntegration.State.StateManagerUtilities;
 
