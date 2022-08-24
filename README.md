@@ -1,6 +1,8 @@
 # heitech.shopware-integration
 A Library to integrate the shopware6 Rest Api into your .NET C# Code.
 
+For experimenting with the API first, I suggest you to download the prepared Shopware-Api-Postman Collection in this repository. If you do not know how to do that,  [check out the readme for that one](https://github.com/TimoHeiten/heitech.shopware-integration/blob/main/usePostmanCollection.md)
+
 To install the package of the StateManager (see below, recommended way to interact).
 simply use:
 ```bash
