@@ -13,7 +13,7 @@ namespace heitech.ShopwareIntegration.State.Api
         private const string FILTER = "filter";
         private const string SEARCH = "search";
 
-        public static (bool, object?) SearchExists<T>(this DataContext context) where T : DetailsEntity
+        internal static (bool, object?) SearchExists<T>(this DataContext context) where T : DetailsEntity
         {
             object? search = default!;
             bool? exists = context.AdditionalData?.TryGetValue(SEARCH, out search);
@@ -22,7 +22,7 @@ namespace heitech.ShopwareIntegration.State.Api
         }
 
 
-        public static (bool, string?) QueryExists<T>(this DataContext context) where T : DetailsEntity
+        internal static (bool, string?) QueryExists<T>(this DataContext context) where T : DetailsEntity
         {
             object? query = default!;
             var exists = context.AdditionalData?.TryGetValue(QUERY, out query);
@@ -36,7 +36,7 @@ namespace heitech.ShopwareIntegration.State.Api
             context.AdditionalData.Add(FILTER, filter.FromAnonymous());
         }
 
-        public static IFilter GetFilter(this DataContext context)
+        internal static IFilter GetFilter(this DataContext context)
         {
             object? page = default!;
             bool? exists = context.AdditionalData?.TryGetValue(FILTER, out page);

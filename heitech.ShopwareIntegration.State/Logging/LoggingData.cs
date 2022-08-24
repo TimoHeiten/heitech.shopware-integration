@@ -35,10 +35,10 @@ namespace heitech.ShopwareIntegration.State.Logging
             return exists && (bool)isEntry!;
         }
 
-        public static Exception GetError(this DataContext context)
+        public static Exception? GetError(this DataContext context)
         {
             bool exists = context.AdditionalData!.TryGetValue(IS_ERROR, out var error);
-            return exists && error is Exception ? (Exception)error! : null!;
+            return exists && error is Exception e ? e : null;
         }
     }
 }
