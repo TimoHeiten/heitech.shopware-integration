@@ -32,5 +32,6 @@ Copy the access_tokens value and paste it in your desired request in the Authori
 
 3.) Hit Send and see what you will get
 example for product http://sw6.wbv24.com/api/product/33090fdb7a7a4e49acd4c73b86cdddec
+![screen](https://user-images.githubusercontent.com/80585677/186384941-2f4e5cfb-2523-4fb6-9bce-03b9b209f32d.png)
 
 4.) Experiment with filters, EntitySegments (like )
