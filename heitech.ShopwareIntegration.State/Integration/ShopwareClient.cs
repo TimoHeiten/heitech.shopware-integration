@@ -146,7 +146,6 @@ public sealed class ShopwareClient : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
             return RequestResult<T>.Failed(ex);
         }
     }
