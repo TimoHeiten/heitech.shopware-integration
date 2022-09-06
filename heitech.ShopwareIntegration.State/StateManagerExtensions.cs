@@ -11,6 +11,15 @@ namespace heitech.ShopwareIntegration.State;
 // returns an OperationResult instead of throwing exceptions 
 public static class StateManagerExtensions
 {
+    /// <summary>
+    /// Get details of a single entity specified by the id w/o setting up the dataContext yourself. Also wrapped in RequestResult and handling exceptions.
+    /// </summary>
+    /// <param name="stateManager">The StateManager that was set up</param>
+    /// <param name="id">The id of the Entity</param>
+    /// <param name="pageNo">The pageNo that this entity lives on (relevant for the cache)</param>
+    /// <param name="additionalData">Reserved for future use</param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static async Task<RequestResult<T>> GetDetail<T>(this IStateManager stateManager, string id, int pageNo, Dictionary<string, object> additionalData = default!) 
         where T : DetailsEntity
     {

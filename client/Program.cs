@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using heitech.ShopwareIntegration.State;
 using heitech.ShopwareIntegration.State.Api;
 using heitech.ShopwareIntegration.State.DetailModels;
+using heitech.ShopwareIntegration.State.DetailModels.Media;
 using heitech.ShopwareIntegration.State.Integration;
 using heitech.ShopwareIntegration.State.Integration.Configuration;
 using heitech.ShopwareIntegration.State.Integration.Filtering.Parameters;
@@ -32,6 +34,10 @@ namespace client
             var stateManager = await WithOutCache(configuration);
             // await MultiplePagesSequentially(stateManager);
             // await MultiplePagesConcurrently(stateManager);
+            // return;
+
+
+            // await Upload(stateManager);
             // return;
             
             var filter = new {
@@ -121,6 +127,30 @@ namespace client
             await manager.GetMultiplePagesConcurrently<ProductDetails>(descr);
             stopWatch.Stop();
             Console.WriteLine($"parallel took {stopWatch.ElapsedMilliseconds} ms");
+        }
+
+        static async Task Upload(IStateManager stateManager)
+        {
+            var filter = new
+            {
+                limit = 1,
+                page = 1
+            };
+            var dataContext = DataContext.GetPage<ProductDetails>(1);
+            dataContext.SetFilter(filter);
+            var pages = await stateManager.RetrievePage<ProductDetails>(dataContext);
+            var productId = pages.First().Id;
+            try
+            {
+                var fileInfo = new FileInfo("TODO:PUT YOUR PATH HERE FOR MANUAL TEST");
+                var mediaId = await stateManager.InsertProductMediaFileForProductAsync(productId, fileInfo);
+                Console.WriteLine(mediaId.Value);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
         }
     }
 }

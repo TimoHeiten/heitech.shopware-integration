@@ -1,4 +1,5 @@
 using heitech.ShopwareIntegration.State.DetailModels;
+using heitech.ShopwareIntegration.State.Integration;
 using heitech.ShopwareIntegration.State.Interfaces;
 using heitech.ShopwareIntegration.State.Logging;
 
@@ -12,6 +13,11 @@ namespace heitech.ShopwareIntegration.State
         private readonly IStateManager _client;
         private readonly IStateManager _logger;
 
+        /// <summary>
+        /// Use only internally to access the Lower Level functionality directly
+        /// </summary>
+        internal ShopwareClient ShopwareClient { get; init; } = default!;
+        
         internal StateManager(IStateManager logger, IStateManager client)
         {
             _client = client;
