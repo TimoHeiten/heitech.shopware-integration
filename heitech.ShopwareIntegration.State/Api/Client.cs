@@ -5,6 +5,9 @@ using heitech.ShopwareIntegration.State.Interfaces;
 
 namespace heitech.ShopwareIntegration.State.Api
 {
+    /// <summary>
+    /// <inheritdoc cref=" heitech.ShopwareIntegration.State.Interfaces.IStateManager"/>
+    /// </summary>
     public class Client : IStateManager
     {
         private readonly ShopwareClient _client;

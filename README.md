@@ -1,6 +1,8 @@
 # heitech.shopware-integration
 A Library to integrate the shopware6 Rest Api into your .NET C# Code.
 
+For experimenting with the API first, I suggest you to download the prepared Shopware-Api-Postman Collection in this repository. If you do not know how to do that,  [check out the readme for that one](https://github.com/TimoHeiten/heitech.shopware-integration/blob/main/usePostmanCollection.md)
+
 To install the package of the StateManager (see below, recommended way to interact).
 simply use:
 ```bash
@@ -59,15 +61,29 @@ public async Task<IEnumerable<T>> GetAsync<T>(int pageNo, object? includes = nul
 
 ```
 
+In the latest version there is also a shortHand via extension methods for this:
+```csharp
+//...
+var stateManager = Factory.CreateAsync(new HttpClientConfiguration() /* set the configuration to your shop/demo-shop to test it properly*/);
+// extension method that already sets up the correct DataContext etc.
+var details = await stateManager.GetDetail(id: "the-id", pageNo: 1);
+// includes a performance boost if you like to request multiple pages Concurrently:
+var filter = new { page = 1, limit = 100 };
+var descriptions = new PageQueryDescription[] { new(pageNo: 1, filter: filter), new(pageNo: 2, filter: filter), new(pageNo: 3, filter: filter) };
+var pages = await stateManager.GetMultiplePagesConcurrently(descriptions)
+//...
+```
+
 ## Models
 Some Models do exist already, but for the ones you might need, you have to create your own Models
 
 Therefore:
-1. Inherit from BaseEntity. (allows for common json serialization/deserialization methods and properties)
+1. Inherit from *BaseEntity* [or if you are intend on using the DataContext use the *DetailsEntity*]. (allows for common json serialization/deserialization methods and properties)
 2. Add the ModelUriAttribute. (this appendeds the supplied string to the BaseAddress of the wrapped HttpClient: '/api/{modelUri}').
     the modelURI can be found in the [overview](https://shopware.stoplight.io/docs/admin-api/ZG9jOjE0MzUyOTMz-entity-reference)
 
-You don´t need to specify all Properties, only the ones you want to access, since the BaseEntity has a Property called AdditionalProperties. Also you can specify via the Includes filter (see heitech.ShopwareIntegration.ProductUseCases.IncludesFields class) so only the needed fields are fetched and deserialized. (to save on bandwidth)
+You don´t need to specify all Properties, only the ones you want to access, since the BaseEntity has a Property called AdditionalProperties. 
+Also you can specify via the [Includes filter](https://github.com/TimoHeiten/heitech.shopware-integration/blob/main/heitech.ShopwareIntegration.State/Integration/Filtering/SpecificFilters/IncludesFields.cs)so only the needed fields are fetched and deserialized. (to save on bandwidth)
 
 
 example of Unit Ressource from the [Shopware Api](https://shopware.stoplight.io/docs/admin-api/c2NoOjE0MzUxMzUz-unit).
@@ -109,3 +125,6 @@ namespace heitech.ShopwareIntegration.Models
 }
 
 ```
+### known caveats / issues
+- *Make sure to use the System.Text.Json Attributes on your Model properties (not the Newtonsoft.Json ones) or else the result will only have the AdditionalProperties filled up and not your Custom Properties*
+- *If you want to extend the already implemented models you need to apply the ModelUri Attribute on the class level again, since it is not Inherited*
