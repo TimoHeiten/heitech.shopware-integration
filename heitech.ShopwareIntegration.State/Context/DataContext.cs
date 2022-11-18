@@ -42,7 +42,6 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
             => new CreateContext<T>(entity, pageNo, additionalData);
 
-
         public static DataContext Delete<T>(string id, int pageNo, Dictionary<string, object> additionalData = default!)
             where T : DetailsEntity
         {

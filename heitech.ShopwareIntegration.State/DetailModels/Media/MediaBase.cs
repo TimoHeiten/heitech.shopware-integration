@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using heitech.ShopwareIntegration.State.Integration;
 using heitech.ShopwareIntegration.State.Integration.Models;
 using heitech.ShopwareIntegration.State.Integration.Models.Data;
 using heitech.ShopwareIntegration.State.Interfaces;

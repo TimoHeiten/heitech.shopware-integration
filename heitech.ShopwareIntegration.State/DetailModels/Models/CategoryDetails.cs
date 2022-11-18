@@ -129,7 +129,7 @@ namespace heitech.ShopwareIntegration.State.DetailModels
         public string ProductStreamId { get; set; } = default!;
 
         [JsonPropertyName("products")]
-        public object Products { get; set; } = default!;
+        public ProductDetails[] Products { get; set; } = default!;
 
         [JsonPropertyName("seoUrls")]
         public object SeoUrls { get; set; } = default!;

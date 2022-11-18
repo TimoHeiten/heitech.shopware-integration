@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using heitech.ShopwareIntegration.State;
 using heitech.ShopwareIntegration.State.Api;
@@ -26,16 +28,34 @@ namespace client
             // return;
             // test store creds
             var configuration = new HttpClientConfiguration(
-                baseUrl: "http://sw6.wbv24.com/api/",
-                clientId: "SWIATKTYADFGUWC2CM53VFKWBG",
+                baseUrl: "",
+                clientId: "",
                 userName: string.Empty,
-                clientSecret: "Nk9XQWQzSkRwVnQ2T01LTzJydnM5M3RQTFVJNW1SY3NJM3NTckY"
+                clientSecret: ""
             );
             var stateManager = await WithOutCache(configuration);
             // await MultiplePagesSequentially(stateManager);
             // await MultiplePagesConcurrently(stateManager);
             // return;
 
+            var filter2 = new {
+                limit = 5,
+                page = 1
+            };
+
+            await FindByEan(stateManager);
+
+            await SetCategoryOnProduct(stateManager);
+            return;
+
+            var pageContext2 = DataContext.GetPage<ProductDetails>(1);
+            pageContext2.SetFilter(filter2);
+            var pageResult2 = await stateManager.RetrievePage<ProductDetails>(pageContext2);
+            
+            var exists = await DoesProductExist(stateManager, pageResult2.First().Id);
+            Debug.Assert(exists);
+            return;
+            await CreateProduct(stateManager);
 
             // await Upload(stateManager);
             // return;
@@ -64,6 +84,31 @@ namespace client
             await DoUpdate(stateManager, pageResult.First());
         }
 
+        static async Task FindByEan(IStateManager stateManager)
+        {
+            var searchByEanFilter = new
+            {
+                filter = new[]
+                {
+                    new
+                    {
+                        type = "equals",
+                        field = "product.ean",
+                        value = "4014549148099"
+
+                    }
+                }
+            };
+
+            var additionalData = new Dictionary<string, object>();
+            additionalData.Add("search", searchByEanFilter);
+            var context = DataContext.GetDetail<ProductDetails>("id does not matter here", 1, additionalData);
+
+            var product = await stateManager.RetrieveDetails<ProductDetails>(context);
+            
+            Debug.Assert(product.Ean == searchByEanFilter.filter[0].value);
+        }
+
         static Task<IStateManager> WithCache(HttpClientConfiguration httpClientConfiguration) =>
             Factory.CreateAsync(httpClientConfiguration);
 
@@ -71,6 +116,23 @@ namespace client
         {
             var shopwareClient = await ShopwareClient.CreateAsync(httpClientConfiguration);
             return await Factory.CreateAsync(httpClientConfiguration, client: new Client(shopwareClient), logger: Factory.SilentLogger()); 
+        }
+        
+        private static async Task<bool> DoesProductExist(IStateManager stateManager, string productId) // if so it is an update
+        {
+            var details = DataContext.GetDetail<ProductDetails>(productId, 1);
+            // details.SetFilter(new {  includes = new IncludesFields.Product("id") });
+            var result = await stateManager.RetrieveDetails<ProductDetails>(details);
+            
+
+            var update = PatchedValue.From(result, new {unitId = "46d1e688b6b843dcb4dcbbcc6f80cede" });
+            var updateContext = DataContext.Update(update, 1);
+            var updated = await stateManager.UpdateAsync<ProductDetails>(updateContext);
+
+            details = DataContext.GetDetail<ProductDetails>(productId, 1);
+            result = await stateManager.RetrieveDetails<ProductDetails>(details);
+
+            return result != null;
         }
 
 
@@ -129,6 +191,59 @@ namespace client
             Console.WriteLine($"parallel took {stopWatch.ElapsedMilliseconds} ms");
         }
 
+        static async Task CreateProduct(IStateManager stateManager)
+        {
+            var product = new PrdDtls()
+            {
+                Name = "test-" + Guid.NewGuid().ToString("N"),
+                ProductNumber = Guid.NewGuid().ToString("N"),
+                Stock = 10,
+                Price = new[]
+                {
+                    new
+                    {
+                        currencyId = "b7d2554b0ce847cd82f3ac9bd1c0dfca",
+                        net = 10,
+                        gross = 15,
+                        linked = false
+                    }
+                },
+                Tax = new
+                {
+                    name = "test",
+                    taxRate = 15
+                }
+            };
+            var context = DataContext.Create(product, 1);
+            var result = await stateManager.CreateAsync<PrdDtls>(context);
+
+            Console.WriteLine(result);
+
+            var getDetails = DataContext.GetDetail<PrdDtls>(result.Id, 1);
+            var fromGet = await stateManager.RetrieveDetails<PrdDtls>(getDetails);
+            Debug.Assert(fromGet.Id == result.Id);
+            Debug.Assert(fromGet.Name == result.Name);
+        }
+
+        [ModelUri("product")]
+        private sealed class PrdDtls : DetailsEntity
+        {
+            [JsonPropertyName("name")]
+            public string Name { get; init; }
+            
+            [JsonPropertyName("productNumber")]
+            public string ProductNumber { get; init; }
+            
+            [JsonPropertyName("stock")]
+            public int Stock { get; init; }
+            
+            [JsonPropertyName("price")]
+            public object[] Price { get; init; }
+            
+            [JsonPropertyName("tax")]
+            public object Tax { get; init; }
+        }
+
         static async Task Upload(IStateManager stateManager)
         {
             var filter = new
@@ -150,7 +265,33 @@ namespace client
             {
                 Console.WriteLine(ex);
             }
-            
+        }
+
+        static async Task SetCategoryOnProduct(IStateManager stateManager)
+        {
+            var productId = "001687e84c0f4b238acd3b8ed31beef5";
+            var details = DataContext.GetDetail<ProductDetails>(productId, 1);
+            var result = await stateManager.RetrieveDetails<ProductDetails>(details);
+
+            var update = PatchedValue.From(result, new
+            {
+                categories = new []
+                {
+                    new
+                    {
+                        id = "5e3ea02f48fb42228fc355856f82d053"
+                    }, 
+                    new
+                    {
+                        id = "0084e93025484a8db0cf41c364dc0be9"
+                    }
+                }
+            });
+            var updateContext = DataContext.Update(update, 1);
+            var updated = await stateManager.UpdateAsync<ProductDetails>(updateContext);
+
+            details = DataContext.GetDetail<ProductDetails>(productId, 1);
+            result = await stateManager.RetrieveDetails<ProductDetails>(details);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace heitech.ShopwareIntegration.State.Integration.Requests;
 ///<summary>
 /// Specify a RequestObject that associates the generic Type as the Model. The Url is Taken from the ModelUri Attribute.
 ///</summary>
-public class ReadRequest<T>
+public sealed class ReadRequest<T>
     where T : BaseEntity
 {
     private readonly string _url;

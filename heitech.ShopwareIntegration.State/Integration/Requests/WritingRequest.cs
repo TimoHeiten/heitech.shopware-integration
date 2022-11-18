@@ -4,13 +4,13 @@ using heitech.ShopwareIntegration.State.Integration.Models;
 
 namespace heitech.ShopwareIntegration.State.Integration.Requests;
 
-public class WritingRequest<T>
+public sealed class WritingRequest<T>
     where T : BaseEntity
 {
     private readonly string _url;
     private readonly ShopwareClient _client;
 
-    public WritingRequest(ShopwareClient client)
+    internal WritingRequest(ShopwareClient client)
     {
         _url = ModelUri.GetUrlFromType<T>();
         _client = client;
