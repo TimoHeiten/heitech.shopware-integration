@@ -11,7 +11,8 @@
     <PackageIcon>rfid-signal.png</PackageIcon>
     <RepositoryUrl>https://github.com/TimoHeiten/heitech.shopware-integration</RepositoryUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageVersion>1.1.1</PackageVersion>
+    <PackageVersion>1.2.0</PackageVersion>
+    <PackageReleaseNotes>Added Media File Handling for Products (Upload Image)</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

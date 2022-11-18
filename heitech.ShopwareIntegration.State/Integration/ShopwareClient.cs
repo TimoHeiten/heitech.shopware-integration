@@ -17,6 +17,8 @@ public sealed class ShopwareClient : IDisposable
     private readonly HttpClient _client;
     private HttpClientConfiguration _configuration = default!;
 
+    internal string BaseUrl => _configuration.BaseUrl;
+
     private ShopwareClient(HttpClient client)
         => _client = client;
 
@@ -28,50 +30,15 @@ public sealed class ShopwareClient : IDisposable
     /// <exception cref="NullReferenceException"></exception>
     public static async Task<ShopwareClient> CreateAsync(HttpClientConfiguration clientConfiguration)
     {
-        var configuration = clientConfiguration;
-        if (configuration is null)
+        if (clientConfiguration is null)
             throw new NullReferenceException($"The HttpConfiguration could not be loaded at: {typeof(ShopwareClient)} {nameof(CreateAsync)}");
 
-        HttpClient client = new() { BaseAddress = new Uri(configuration.BaseUrl) };
+        HttpClient client = new() { BaseAddress = new Uri(clientConfiguration.BaseUrl) };
 
-        ShopwareClient shopwareClient = new(client) { _configuration = configuration };
+        ShopwareClient shopwareClient = new(client) { _configuration = clientConfiguration };
         await shopwareClient.AuthenticateAsync().ConfigureAwait(false);
 
         return shopwareClient;
-    }
-
-    public Task<RequestResult<T>> GetAsync<T>(string uri)
-        => SendAsync<T>(CreateHttpRequest(uri));
-
-    public Task<RequestResult<T>> PostAsync<T>(string uri, T model)
-        => SendAsync<T>(CreateHttpRequest<T>(uri, model));
-
-    public Task<RequestResult<T>> PutAsync<T>(string uri, T model)
-        => SendAsync<T>(CreateHttpRequest<T>(uri, model, HttpMethod.Put));
-
-    public HttpRequestMessage CreateHttpRequest<TModel>(string uri, TModel model, HttpMethod? method = null)
-    {
-        //Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(model));
-        HttpRequestMessage message = new()
-        {
-            Content = JsonContent.Create(model),
-            Method = method ?? HttpMethod.Post,
-            RequestUri = new Uri($"{_configuration.BaseUrl}{uri}")
-        };
-        message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        return message;
-    }
-
-    public HttpRequestMessage CreateHttpRequest(string uri, HttpMethod? method = null, HttpContent? content = null)
-    {
-        HttpRequestMessage message = new()
-        {
-            Content = content,
-            Method = method ?? HttpMethod.Get,
-            RequestUri = new Uri($"{_configuration.BaseUrl}{uri}")
-        };
-        message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        return message;
     }
 
     /// <summary>
@@ -106,10 +73,19 @@ public sealed class ShopwareClient : IDisposable
         return await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Send a HttpRequestMessage. Includes retries and authenticates automatically. Sorts for different HttpMethods and the necessary serializations
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="guardRecursion"></param>
+    /// <param name="cancellationToken"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public async Task<RequestResult<T>> SendAsync<T>(HttpRequestMessage message, bool? guardRecursion = false, CancellationToken cancellationToken = default)
     {
         var response = await _client.SendAsync(message, cancellationToken).ConfigureAwait(false);
         var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        // retry on failed authentication
         if (response.IsSuccessStatusCode is false)
         {
             var code = response.StatusCode;
@@ -150,18 +126,14 @@ public sealed class ShopwareClient : IDisposable
         }
     }
 
-    private bool IsCrud(HttpRequestMessage msg)
+    private static bool IsCrud(HttpRequestMessage msg)
     {
-        bool isPatch = msg.Method == HttpMethod.Patch;
+        var isPatch = msg.Method == HttpMethod.Patch;
         // post is also used for the search endpoint
-        bool isCreate = msg.Method == HttpMethod.Post && !msg.RequestUri!.AbsoluteUri.Contains("search");
-        bool isDelete = msg.Method == HttpMethod.Delete;
+        var isCreate = msg.Method == HttpMethod.Post && !msg.RequestUri!.AbsoluteUri.Contains("search");
+        var isDelete = msg.Method == HttpMethod.Delete;
         return isPatch || isCreate || isDelete;
     }
-
-    public ReadRequest<T> CreateReader<T>() where T : BaseEntity => new(this);
-
-    public WritingRequest<T> CreateWriter<T>() where T : BaseEntity => new(this);
 
 
     private void Dispose(bool disposing)

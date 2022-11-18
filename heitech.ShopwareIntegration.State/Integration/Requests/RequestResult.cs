@@ -3,10 +3,10 @@ namespace heitech.ShopwareIntegration.State.Integration.Requests;
 ///<summary>
 /// Signals if the ShopwareClient Operation returned a successful Result
 ///</summary>
-public class RequestResult<T>
+public sealed class RequestResult<T>
 {
     public T Model { get; }
-    public Exception Exception { get; }
+    public Exception? Exception { get; }
     private RequestResult(T model)
     {
         Model = model;

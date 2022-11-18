@@ -15,7 +15,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"client_id\": \"SWIATKTYADFGUWC2CM53VFKWBG\",\r\n    \"grant_type\": \"client_credentials\",\r\n    \"client_secret\": \"Nk9XQWQzSkRwVnQ2T01LTzJydnM5M3RQTFVJNW1SY3NJM3NTckY\"\r\n}",
+					"raw": "{\r\n    \"client_id\": \"\",\r\n    \"grant_type\": \"client_credentials\",\r\n    \"client_secret\": \"\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -49,19 +49,19 @@
 				"header": [
 					{
 						"key": "sw-access-key",
-						"value": "SWIATKTYADFGUWC2CM53VFKWBG",
+						"value": "",
 						"type": "text",
 						"disabled": true
 					},
 					{
 						"key": "sw-context-token",
-						"value": "Nk9XQWQzSkRwVnQ2T01LTzJydnM5M3RQTFVJNW1SY3NJM3NTckY",
+						"value": "",
 						"type": "text",
 						"disabled": true
 					},
 					{
 						"key": "Authorization",
-						"value": "Basic ZXJwOlNXSUFUS1RZQURGR1VXQzJDTTUzVkZLV0JH",
+						"value": "Basic ",
 						"type": "text",
 						"disabled": true
 					},
