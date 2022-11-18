@@ -3,9 +3,9 @@ using heitech.ShopwareIntegration.State.Interfaces;
 
 namespace heitech.ShopwareIntegration.State.Cache
 {
-    ///<summary>
-    /// Cache Decorator for the StateManager. Updates and holds cached Context for up to 10 minutes.
-    ///</summary>
+    /// <summary>
+    /// <inheritdoc cref=" heitech.ShopwareIntegration.State.Interfaces.IStateManager"/>
+    /// </summary>
     internal class CacheStorage : IStateManager
     {
         private readonly IStateManager _client;

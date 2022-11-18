@@ -5,7 +5,10 @@ using heitech.ShopwareIntegration.State.Logging;
 
 namespace heitech.ShopwareIntegration.State
 {
-    internal class StateManager : IStateManager
+    /// <summary>
+    /// <inheritdoc cref=" heitech.ShopwareIntegration.State.Interfaces.IStateManager"/>
+    /// </summary>
+    internal sealed class StateManager : IStateManager
     {
         private readonly IStateManager _client;
         private readonly IStateManager _logger;

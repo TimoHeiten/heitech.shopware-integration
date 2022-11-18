@@ -2,6 +2,10 @@ using System.Reflection;
 
 namespace heitech.ShopwareIntegration.State.Integration.Configuration;
 
+/// <summary>
+/// Specifies the endpoint Segment for the Shopware Api for any given Entity you want to Request. For Instance Products would have "product" as url Parameter to this attribute
+/// see https://shopware.stoplight.io/docs/admin-api/ZG9jOjE0MzUyOTMz-entity-reference
+/// </summary>
 [AttributeUsage(validOn: AttributeTargets.Class, Inherited = false)]
 public class ModelUri : Attribute
 {

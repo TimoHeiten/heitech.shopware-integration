@@ -31,14 +31,14 @@ namespace heitech.ShopwareIntegration.State.Logging
         public static bool ReadIsEntry<T>(this DataContext ctxt)
             where T : DetailsEntity
         {
-            bool exists = ctxt.AdditionalData!.TryGetValue(IS_ENTRY, out object? isEntry);
+            var exists = ctxt.AdditionalData!.TryGetValue(IS_ENTRY, out object? isEntry);
             return exists && (bool)isEntry!;
         }
 
-        public static Exception GetError(this DataContext context)
+        public static Exception? GetError(this DataContext context)
         {
-            bool exists = context.AdditionalData!.TryGetValue(IS_ERROR, out var error);
-            return exists && error is Exception ? (Exception)error! : null!;
+            var exists = context.AdditionalData!.TryGetValue(IS_ERROR, out var error);
+            return exists && error is Exception e ? e : null;
         }
     }
 }

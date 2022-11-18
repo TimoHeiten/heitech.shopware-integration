@@ -1,0 +1,330 @@
+{
+	"info": {
+		"_postman_id": "e95d8621-70af-42cb-b7d1-366befcc9ba5",
+		"name": "shopware",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "oauth",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"client_id\": \"\",\r\n    \"grant_type\": \"client_credentials\",\r\n    \"client_secret\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://sw6.wbv24.com/api/oauth/token",
+					"protocol": "http",
+					"host": [
+						"sw6",
+						"wbv24",
+						"com"
+					],
+					"path": [
+						"api",
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sw6-tests",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "sw-access-key",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "sw-context-token",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic ",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://sw6.wbv24.com/api/product?limit=10",
+					"protocol": "http",
+					"host": [
+						"sw6",
+						"wbv24",
+						"com"
+					],
+					"path": [
+						"api",
+						"product"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update-Customer-Group",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"active\" : true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://sw6.wbv24.com/api/product/33090fdb7a7a4e49acd4c73b86cdddec",
+					"protocol": "http",
+					"host": [
+						"sw6",
+						"wbv24",
+						"com"
+					],
+					"path": [
+						"api",
+						"product",
+						"33090fdb7a7a4e49acd4c73b86cdddec"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get-by-id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://sw6.wbv24.com/api/product/33090fdb7a7a4e49acd4c73b86cdddec",
+					"protocol": "http",
+					"host": [
+						"sw6",
+						"wbv24",
+						"com"
+					],
+					"path": [
+						"api",
+						"product",
+						"33090fdb7a7a4e49acd4c73b86cdddec"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get-Units",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://sw6.wbv24.com/api/product/33090fdb7a7a4e49acd4c73b86cdddec",
+					"protocol": "http",
+					"host": [
+						"sw6",
+						"wbv24",
+						"com"
+					],
+					"path": [
+						"api",
+						"product",
+						"33090fdb7a7a4e49acd4c73b86cdddec"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create-Unit",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":\"af1bfc368263492cae61627cc6ced9cb\",\"name\":\"unit-1\",\"shortCode\":\"shortCode\",\"translated\":false,\"createdAt\":\"2022-06-04T23:56:05.804128+02:00\",\"updatedAt\":\"2022-06-04T23:56:05.819296+02:00\",\"customFields\":null,\"products\":[]}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://sw6.wbv24.com/api/unit/",
+					"protocol": "http",
+					"host": [
+						"sw6",
+						"wbv24",
+						"com"
+					],
+					"path": [
+						"api",
+						"unit",
+						""
+					]
+				},
+				"description": "Unit was smallest, so easiest to test\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"price\":[{\"net\":12.0,\"gross\":10.0,\"currencyId\":\"f659ee8bc78f4303a8f6a22decd656d9\",\"linked\":false,\"id\":\"659082e01a86405098040d6640a30497\"}],\"stock\":0,\"createdAt\":\"2022-07-27T13:59:28.2914408+02:00\",\"productNumber\":\"unit-1\",\"taxId\":\"876b70d636484c6d84fe3d9d4c289ab6\",\"translated\":false,\"id\":\"af1bfc368263492cae61627cc6ced9cb\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://sw6.wbv24.com/api/product/",
+					"protocol": "http",
+					"host": [
+						"sw6",
+						"wbv24",
+						"com"
+					],
+					"path": [
+						"api",
+						"product",
+						""
+					]
+				},
+				"description": "Create a new Product with the required fields"
+			},
+			"response": []
+		},
+		{
+			"name": "Remove-Unit",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://sw6.wbv24.com/api/unit/af1bfc368263492cae61627cc6ced9cb",
+					"protocol": "http",
+					"host": [
+						"sw6",
+						"wbv24",
+						"com"
+					],
+					"path": [
+						"api",
+						"unit",
+						"af1bfc368263492cae61627cc6ced9cb"
+					]
+				},
+				"description": "Easiest to test again..."
+			},
+			"response": []
+		},
+		{
+			"name": "Search-Products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"limit\":10,\"page\":1,\"includes\":{\"product\":[\"name\",\"id\",\"active\", \"price\",\"availableStock\",\"description\",\"ean\",\"stock\",\"manufacturerId\"]}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://sw6.wbv24.com/api/search-ids/currency",
+					"protocol": "http",
+					"host": [
+						"sw6",
+						"wbv24",
+						"com"
+					],
+					"path": [
+						"api",
+						"search-ids",
+						"currency"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJTV0lBVEtUWUFERkdVV0MyQ001M1ZGS1dCRyIsImp0aSI6IjU3ZWJkMDJkZGI1Y2E0ZTQ1ODEyNTJmYzRlOWUxZDM5YjI0NGUyODJjZGMzZTA4YjBhYWM4NjdjNjllNWRjOTliZTdjNTUwM2Q1M2UwNjFlIiwiaWF0IjoxNjU4OTIyNzU0LjI2OTk4MywibmJmIjoxNjU4OTIyNzU0LjI2OTk4NywiZXhwIjoxNjU4OTIzMzU0LjI2OTI5OCwic3ViIjoiIiwic2NvcGVzIjpbIndyaXRlIl19.clA0opovte0rTWbzzjTit-9pABnXlWDLs06779jd1JgMjIPIfF3xmCuBvaxs2BWwwp_OR2vSLJ1FpynJ3vM68YwGrvI6wV7GzLnfVniDuewyzNKeVkVzW1b1m0eNvvvjkgaoke60ywFyt734TKqZGD98mWGxjMptbsFDdrGtQqS7YecmvkL3hg2ougiZ6sp1j2aS-7jW-WaXy7OeHFCq4HQ2ub8pus2dV7FfFH9nQARV_HeJuk4325Dbrvuyv5-9_TqcNlcJvfGQE7eRFnBw9aXenzBwLAi5-8NdqLxNlIXFMKhTvpUx9C6T8Q73CXClT1-TEDKhzlmMi1VEH5t_pQ",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

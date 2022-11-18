@@ -4,6 +4,9 @@ using heitech.ShopwareIntegration.State.DetailModels;
 
 namespace heitech.ShopwareIntegration.State
 {
+    /// <summary>
+    /// Provides the Data for the specified CRUD operation on the Shopware API
+    /// </summary>
     public abstract class DataContext : IEnumerable<DetailsEntity>
     {
         public int PageNo { get; }
@@ -16,8 +19,19 @@ namespace heitech.ShopwareIntegration.State
             AdditionalData = additionalData;
         }
 
-        public abstract DetailsEntity Entity { get; }
+        /// <summary>
+        /// The Entity this DataContext wraps. Be aware this 
+        /// </summary>
+        public abstract DetailsEntity? Entity { get; }
 
+        /// <summary>
+        /// Create the DataContext used to retrieve a single Entity (aka Detail) via its pageNo. 
+        /// </summary>
+        /// <param name="id">the id of the Entity in question</param>
+        /// <param name="pageNo">the pageNo of the item to update the cache</param>
+        /// <param name="additionalData">Reserved for future use</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static DataContext GetDetail<T>(string id, int pageNo, Dictionary<string, object> additionalData = default!)
             where T : DetailsEntity
             => new DetailsContext<T>(RessourceId.From(id), pageNo, additionalData);
@@ -26,6 +40,13 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
             => new DetailsContext<T>(entity, context.Id, context.PageNo, context.AdditionalData!);
 
+        /// <summary>
+        /// Create the DataContext to update (via HttpPatch) an Entity. Supply the PatchedValue and all the fields and their new values. 
+        /// </summary>
+        /// <param name="patch"></param>
+        /// <param name="pageNo"></param>
+        /// <param name="additionalData"></param>
+        /// <returns></returns>
         public static DataContext Update(PatchedValue patch, int pageNo,
             Dictionary<string, object> additionalData = default!)
         {
@@ -38,10 +59,26 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
             => new PatchedValueContext(PatchedValue.From(entity, null!), patched.PageNo, patched!.AdditionalData);
 
+        /// <summary>
+        /// Create a DataContext to Create a new Entity of Type T with the Shopware API 
+        /// </summary>
+        /// <param name="entity">The actual instance of the entity. Make sure all Required fields are set (as specified in the shopware6 api documentation)</param>
+        /// <param name="pageNo">for caching purposes</param>
+        /// <param name="additionalData">Reserved for future use</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static DataContext Create<T>(T entity, int pageNo, Dictionary<string, object> additionalData = default!)
             where T : DetailsEntity
             => new CreateContext<T>(entity, pageNo, additionalData);
 
+        /// <summary>
+        /// Create a DataContext to Delete an existing Entity of Type T with the Shopware API 
+        /// </summary>
+        /// <param name="id">The id of the entity</param>
+        /// <param name="pageNo">for caching purposes</param>
+        /// <param name="additionalData">Reserved for future use</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static DataContext Delete<T>(string id, int pageNo, Dictionary<string, object> additionalData = default!)
             where T : DetailsEntity
         {
@@ -54,6 +91,13 @@ namespace heitech.ShopwareIntegration.State
             where T : DetailsEntity
             => new DeleteContext(entity, deleteContext.Id, deleteContext.PageNo, deleteContext.AdditionalData);
 
+        /// <summary>
+        /// Create a DataContext for a retrieval of a Page of any given Type. Make sure to provide a Filter via the DataContext.SetFilter method to limit the results, since the api cannot handle an unfiltered Request. Yikes!
+        /// </summary>
+        /// <param name="pageNo">for caching purposes</param>
+        /// <param name="additionalData">Reserved for future use</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static DataContext GetPage<T>(int pageNo, Dictionary<string, object>? additionalData = default!)
             where T : DetailsEntity
             => new PageContext(typeof(T), pageNo, additionalData);
