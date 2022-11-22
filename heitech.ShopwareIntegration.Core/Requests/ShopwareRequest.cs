@@ -32,11 +32,15 @@ namespace heitech.ShopwareIntegration.Core.Requests
 
         private static HttpRequestMessage DeepClone(HttpRequestMessage message)
         {
+            var cloned = new HttpRequestMessage()
+            {
+                Content = message.Content,
+                Method = message.Method,
+                RequestUri = message.RequestUri
+            };
             var headers = message.Headers;
-            var json = JsonConvert.SerializeObject(message);
-            var result = JsonConvert.DeserializeObject<HttpRequestMessage>(json);
-            headers.ToList().ForEach(x => result.Headers.Add(x.Key, x.Value));
-            return result;
+            headers.ToList().ForEach(x => cloned.Headers.Add(x.Key, x.Value));
+            return cloned;
         }
 
         internal async Task<Response> SendAsync()

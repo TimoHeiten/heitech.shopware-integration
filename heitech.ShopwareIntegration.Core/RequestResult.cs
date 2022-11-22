@@ -27,11 +27,11 @@ namespace heitech.ShopwareIntegration.Core
         ///<summary>
         /// Creates a Successful RequestResult
         ///</summary>
-        public static RequestResult<T> Success(T model) => new RequestResult<T>(model);
+        internal static RequestResult<T> Success(T model) => new RequestResult<T>(model);
         ///<summary>
         /// Creates a failed RequestResult
         ///</summary>
-        public static RequestResult<T> Failed(Exception ex) => new RequestResult<T>(ex);
+        internal static RequestResult<T> Failed(Exception ex) => new RequestResult<T>(ex);
         public bool IsSuccess => Exception is null;
     }
 }

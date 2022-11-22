@@ -11,9 +11,21 @@ namespace heitech.ShopwareIntegration.Core.Configuration
     ///</summary>
     public class HttpClientConfiguration
     {
+        /// <summary>
+        /// The shopware Api Base Url e.g. http://shopwareUrl:port/api/
+        /// </summary>
         public string BaseUrl { get; set; }
+        /// <summary>
+        /// ClientId for the Api generated via the Shop Admin
+        /// </summary>
         public string ClientId { get; set; }
+        /// <summary>
+        /// Optional UserName generated via the Shop Admin
+        /// </summary>
         public string UserName { get; set; }
+        /// <summary>
+        /// ClientSecret for the Api  generated via the Shop Admin
+        /// </summary>
         public string ClientSecret { get; set; }
 
         public HttpClientConfiguration()

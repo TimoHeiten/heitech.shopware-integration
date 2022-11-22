@@ -3,13 +3,15 @@ using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
 using heitech.ShopwareIntegration.Core.Configuration;
+using heitech.ShopwareIntegration.Core.Data;
 using Xunit;
 
 namespace heitech.ShopwareIntegration.Core.Tests
 {
     public sealed class ConfigurationTests
     {
-        HttpClientConfiguration Expected => new HttpClientConfiguration("http://localhost:4300/shopware/api/", "clientId", "userName", "clientSecret");
+        HttpClientConfiguration Expected => new HttpClientConfiguration("http://localhost:4300/shopware/api/",
+            "clientId", "userName", "clientSecret");
 
         [Fact]
         public async Task LoadFromFile_Works()
@@ -19,7 +21,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
 
             // Act
             var result = await HttpClientConfiguration.LoadAsync(stream);
-            
+
             // Assert
             result.Should().BeEquivalentTo(Expected);
         }
@@ -32,9 +34,38 @@ namespace heitech.ShopwareIntegration.Core.Tests
 
             // Act
             var result = await HttpClientConfiguration.LoadAsync(fileInfo);
-            
+
             // Assert
             result.Should().BeEquivalentTo(Expected);
+        }
+
+        [Fact]
+        public void Url_From_Type_Can_Be_found()
+        {
+            // Arrange
+            const string expected = Authenticate.Url;
+
+            // Act
+            var url = ModelUri.GetUrlFromType<Authenticate>();
+
+            // Assert
+            url.Should().Be(expected);
+        }
+
+        [Fact]
+        public void NoUrlAttribute_ThrowsArgumentNullException()
+        {
+            // Arrange
+            // Act
+            var act = ModelUri.GetUrlFromType<NoUrlAttribute>;
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        // ReSharper disable once ClassNeverInstantiated.Local
+        private sealed class NoUrlAttribute
+        {
         }
     }
 }

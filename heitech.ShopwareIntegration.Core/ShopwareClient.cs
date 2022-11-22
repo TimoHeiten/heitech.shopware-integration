@@ -54,7 +54,8 @@ namespace heitech.ShopwareIntegration.Core
         public async Task AuthenticateAsync()
         {
             var authenticateBody = Authenticate.From(Configuration);
-            var response = await HttpClient.PostAsync(Authenticate.Url, authenticateBody.AsJsonContent()).ConfigureAwait(false);
+            var url = ModelUri.GetUrlFromType<Authenticate>();
+            var response = await HttpClient.PostAsync(url, authenticateBody.AsJsonContent()).ConfigureAwait(false);
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
