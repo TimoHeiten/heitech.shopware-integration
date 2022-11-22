@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -198,7 +199,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             _httpHandler.Expect(ProductUri)
                         .Respond(HttpStatusCode.OK, new StringContent(JsonConvert.SerializeObject(new { })));
 
-            var rqMessage = new HttpRequestMessage(HttpMethod.Get, ProductUri);
+            var rqMessage = _sut.CreateHttpRequest(ProductUri);
 
             // Act
             var requestResult = await _sut.SendAsync<DataEmpty>(rqMessage);
@@ -211,10 +212,10 @@ namespace heitech.ShopwareIntegration.Core.Tests
         public async Task Get_Works_and_Returns_Expected_DataContainer()
         {
             // Arrange
-            _httpHandler.Expect(ProductUri)
+            _httpHandler.Expect(ProductUri).WithHeaders("Accept", "application/json")
                         .Respond(HttpStatusCode.OK, new StringContent(JsonConvert.SerializeObject(new { data = new ProductStub() })));
 
-            var rqMessage = new HttpRequestMessage(HttpMethod.Get, ProductUri);
+            var rqMessage = _sut.CreateHttpRequest(ProductUri);
 
             // Act
             var requestResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage);
@@ -231,7 +232,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             _httpHandler.Expect(ProductUri)
                         .Respond(HttpStatusCode.OK, new StringContent(JsonConvert.SerializeObject(null)));
 
-            var rqMessage = new HttpRequestMessage(HttpMethod.Get, ProductUri);
+            var rqMessage = _sut.CreateHttpRequest(ProductUri);
 
             // Act
             var requestResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage);
@@ -247,7 +248,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             _httpHandler.Expect(ProductUri)
                         .Throw(new Exception());
 
-            var rqMessage = new HttpRequestMessage(HttpMethod.Get, ProductUri);
+            var rqMessage = _sut.CreateHttpRequest(ProductUri);
 
             // Act
             var rqResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage);
@@ -263,7 +264,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             _httpHandler.Expect(ProductUri)
                         .Respond(HttpStatusCode.OK, new StringContent("this aint no { json {{{{}}'''',,,//"));
 
-            var rqMessage = new HttpRequestMessage(HttpMethod.Get, ProductUri);
+            var rqMessage = _sut.CreateHttpRequest(ProductUri);
 
             // Act
             var rqResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage);

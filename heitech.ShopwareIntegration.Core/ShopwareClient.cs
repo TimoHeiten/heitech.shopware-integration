@@ -1,6 +1,5 @@
 using System;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using heitech.ShopwareIntegration.Core.Configuration;
@@ -61,10 +60,10 @@ namespace heitech.ShopwareIntegration.Core
             if (response.IsSuccessStatusCode)
             {
                 var authenticated = JsonConvert.DeserializeObject<Authenticated>(content);
-                if (authenticated.AccessToken is null)
+                if (authenticated?.AccessToken is null)
                     throw new ShopwareIntegrationRequestException($"Authentication did nor result in a success.{Environment.NewLine}Content: '{content}'");
 
-                HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {authenticated?.AccessToken}");
+                HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {authenticated.AccessToken}");
             }
             else
             {
@@ -88,7 +87,6 @@ namespace heitech.ShopwareIntegration.Core
         /// Send a HttpRequestMessage. Includes retries and authenticates automatically. Handles different HttpMethods and the necessary Serialization
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="guardRecursion"></param>
         /// <param name="cancellationToken"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -115,7 +113,7 @@ namespace heitech.ShopwareIntegration.Core
                                             .ConfigureAwait(false);
 
                     if (response is null || response.IsSuccess is false)
-                        throw new ShopwareIntegrationRequestException($"Request failed: '{response.Content}'");
+                        throw new ShopwareIntegrationRequestException($"Request failed: '{response?.Content}'");
                 }
                 catch (Exception ex)
                 {

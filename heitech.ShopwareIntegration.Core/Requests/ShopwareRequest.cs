@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -13,7 +14,6 @@ namespace heitech.ShopwareIntegration.Core.Requests
     ///</summary>
     internal sealed class ShopwareRequest
     {
-
         private readonly bool _withAuth;
         private readonly ShopwareClient _client;
         private readonly HttpRequestMessage _httpRequestMessage;
@@ -32,8 +32,11 @@ namespace heitech.ShopwareIntegration.Core.Requests
 
         private static HttpRequestMessage DeepClone(HttpRequestMessage message)
         {
+            var headers = message.Headers;
             var json = JsonConvert.SerializeObject(message);
-            return JsonConvert.DeserializeObject<HttpRequestMessage>(json);
+            var result = JsonConvert.DeserializeObject<HttpRequestMessage>(json);
+            headers.ToList().ForEach(x => result.Headers.Add(x.Key, x.Value));
+            return result;
         }
 
         internal async Task<Response> SendAsync()
@@ -54,7 +57,7 @@ namespace heitech.ShopwareIntegration.Core.Requests
                     IsSuccess = response.IsSuccessStatusCode
                 };
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 return null;
             }
@@ -100,9 +103,9 @@ namespace heitech.ShopwareIntegration.Core.Requests
 
         internal sealed class Builder
         {
+            private bool _withAuth;
             private readonly ShopwareClient _client;
-            private bool _withAuth = false;
-            private CancellationToken _withCancellation = default;
+            private CancellationToken _withCancellation;
             private readonly HttpRequestMessage _httpRequestMessage;
 
             public Builder(ShopwareClient client, HttpRequestMessage httpRequestMessage)

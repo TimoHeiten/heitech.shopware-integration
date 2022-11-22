@@ -41,7 +41,7 @@ public sealed class ReadRequest<T>
     public Task<RequestResult<DataObject<T>>> ExecuteGetAsync(string id, string? query = null)
     {
         var url = query is null ? $"{_url}/{id}" : $"{_url}/{id}?{query}";
-        return RunAsync<DataObject<T>>($"{_url}/{id}");
+        return RunAsync<DataObject<T>>(url);
     }
 
     ///<summary>
