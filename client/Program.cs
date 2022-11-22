@@ -24,6 +24,9 @@ namespace client
         ///</summary>
         static async Task Main(string[] args)
         {
+            await TestStandardVersion.WithStandardClient();
+            return;
+
             // BenchmarkDotNet.Running.BenchmarkRunner.Run<Benchmarked>();
             // return;
             // test store creds

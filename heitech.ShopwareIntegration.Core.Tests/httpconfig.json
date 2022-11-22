@@ -1,0 +1,6 @@
+{
+    "BaseUrl": "http://localhost:4300/shopware/api/",
+    "ClientId": "clientId",
+    "UserName": "userName",
+    "ClientSecret": "clientSecret"
+}
