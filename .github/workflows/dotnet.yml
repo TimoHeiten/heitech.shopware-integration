@@ -1,0 +1,36 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./heitech.ShopwareIntegration.Core/heitech.ShopwareIntegration.Core.csproj
+    - name: Build
+      run: dotnet build --no-restore ./heitech.ShopwareIntegration.Core/heitech.ShopwareIntegration.Core.csproj
+      
+  test:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Test
+      run: dotnet test --verbosity normal ./heitech.ShopwareIntegration.Core.Tests/heitech.ShopwareIntegration.Core.Tests.csproj
