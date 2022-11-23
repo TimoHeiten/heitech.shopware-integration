@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using heitech.ShopwareIntegration.Core.Configuration;
@@ -15,8 +16,8 @@ namespace heitech.ShopwareIntegration.Core.Read
         where T : class, IHasShopwareId
     {
         private readonly string _uri;
-        private readonly ShopwareClient _client;
-        private GetByIdRequest(ShopwareClient client, string uri)
+        private readonly IShopwareClient _client;
+        private GetByIdRequest(IShopwareClient client, string uri)
         {
             _uri = uri;
             _client = client;
@@ -28,7 +29,7 @@ namespace heitech.ShopwareIntegration.Core.Read
         /// <param name="client"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        internal static GetByIdRequest<T> Create(ShopwareClient client, string id)
+        internal static GetByIdRequest<T> Create(IShopwareClient client, string id)
             => Create(client, id, null);
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace heitech.ShopwareIntegration.Core.Read
         /// <param name="id"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        internal static GetByIdRequest<T> Create(ShopwareClient client, string id, string query)
+        internal static GetByIdRequest<T> Create(IShopwareClient client, string id, string query)
         {
             var builder = new StringBuilder();
             var uri = ModelUri.GetUrlFromType<T>();
@@ -59,10 +60,10 @@ namespace heitech.ShopwareIntegration.Core.Read
         /// Actually Execute the Get Request
         /// </summary>
         /// <returns></returns>
-        internal Task<RequestResult<DataObject<T>>> ExecuteAsync()
-            => _client.SendAsync<DataObject<T>>(this);
+        internal Task<RequestResult<DataObject<T>>> ExecuteAsync(CancellationToken cancellationToken = default)
+            => _client.SendAsync<DataObject<T>>(this, cancellationToken);
 
         public static implicit operator HttpRequestMessage(GetByIdRequest<T> getByIdRequest) =>
-            getByIdRequest._client.CreateHttpRequest(HttpUtility.UrlEncode(getByIdRequest._uri), HttpMethod.Get);
+            getByIdRequest._client.CreateHttpRequest((getByIdRequest._uri), HttpMethod.Get);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using heitech.ShopwareIntegration.Core.Data;
 using heitech.ShopwareIntegration.Core.Filters;
 using heitech.ShopwareIntegration.Core.Read;
@@ -12,12 +13,13 @@ namespace heitech.ShopwareIntegration.Core
         /// </summary>
         /// <param name="client">The authenticated ShopwareClient</param>
         /// <param name="id">The id of the Entity you are looking for</param>
+        /// <param name="cancellationToken"></param>
         /// <typeparam name="T">The Type of the Entity. Including a ModelUriAttribute specifying the url at the Shopware Api</typeparam>
         /// <returns>RequestResult´T holding the Entity if successful</returns>
-        public static Task<RequestResult<DataObject<T>>> GetByIdAsync<T>(this ShopwareClient client, string id)
+        public static Task<RequestResult<DataObject<T>>> GetByIdAsync<T>(this IShopwareClient client, string id, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
-            return GetByIdAsync<T>(client, id, null);
+            return GetByIdAsync<T>(client, id, null, cancellationToken);
         }
 
         /// <summary>
@@ -26,27 +28,28 @@ namespace heitech.ShopwareIntegration.Core
         /// <param name="client">The authenticated ShopwareClient</param>
         /// <param name="id">The id of the Entity you are looking for</param>
         /// <param name="query">The query string for this entities endpoint</param>
+        /// <param name="cancellationToken"></param>
         /// <typeparam name="T">The Type of the Entity. Including a ModelUriAttribute specifying the url at the Shopware Api</typeparam>
         /// <returns>RequestResult´T holding the Entity if successful</returns>
-        public static Task<RequestResult<DataObject<T>>> GetByIdAsync<T>(this ShopwareClient client, string id, string query)
+        public static Task<RequestResult<DataObject<T>>> GetByIdAsync<T>(this IShopwareClient client, string id, string query, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
-            var request = GetByIdRequest<T>.Create(client, id);
-            return request.ExecuteAsync();
+            var request = GetByIdRequest<T>.Create(client, id, query);
+            return request.ExecuteAsync(cancellationToken);
         }
-
 
         /// <summary>
         /// Get a list of entities for the specified type. Be Aware that this might lead to a Shopware Serialization Error if too many Entities exist.
         /// <para>In that case use the queryString overload or the search Request with an appropriate filtering instead</para>
         /// </summary>
         /// <param name="client">The authenticated ShopwareClient</param>
+        /// <param name="cancellationToken"></param>
         /// <typeparam name="T">The Type of the Entity. Including a ModelUriAttribute specifying the url at the Shopware Api</typeparam>
         /// <returns>/// <returns>RequestResult´T holding the collection of Entities if successful</returns></returns>
-        public static Task<RequestResult<DataArray<T>>> GetListAsync<T>(this ShopwareClient client)
+        public static Task<RequestResult<DataArray<T>>> GetListAsync<T>(this IShopwareClient client, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
-            return client.GetListAsync<T>(null);
+            return client.GetListAsync<T>(null, cancellationToken);
         }
 
         /// <summary>
@@ -54,13 +57,14 @@ namespace heitech.ShopwareIntegration.Core
         /// </summary>
         /// <param name="client">The authenticated ShopwareClient</param>
         /// <param name="query">The query string specifying filters</param>
+        /// <param name="cancellationToken"></param>
         /// <typeparam name="T">The Type of the Entity. Including a ModelUriAttribute specifying the url at the Shopware Api</typeparam>
         /// <returns>RequestResult´T holding the collection of Entities if successful</returns>
-        public static Task<RequestResult<DataArray<T>>> GetListAsync<T>(this ShopwareClient client, string query)
+        public static Task<RequestResult<DataArray<T>>> GetListAsync<T>(this IShopwareClient client, string query, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
             var request = GetListRequest<T>.Create(client, query);
-            return request.ExecuteAsync();
+            return request.ExecuteAsync(cancellationToken);
         }
 
         /// <summary>
@@ -68,15 +72,31 @@ namespace heitech.ShopwareIntegration.Core
         /// </summary>
         /// <param name="client">The authenticated ShopwareClient</param>
         /// <param name="filter">The filter object. see https://shopware.stoplight.io/docs/store-api/cf710bf73d0cd-search-queries for more information</param>
+        /// <param name="cancellationToken"></param>
         /// <typeparam name="T">The Type of the Entity. Including a ModelUriAttribute specifying the url at the Shopware Api</typeparam>
         /// <returns>RequestResult´T holding the collection of Entities if successful</returns>
-        public static Task<RequestResult<DataArray<T>>> SearchAsync<T>(this ShopwareClient client, IFilter filter)
+        public static Task<RequestResult<DataArray<T>>> SearchAsync<T>(this IShopwareClient client, IFilter filter, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
             var search = SearchRequest<T>.Create(client, filter);
-            return search.ExecuteAsync();
+            return search.ExecuteAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Get a list of ids for the specified entity type with the specified filter. This is a POST.
+        /// </summary>
+        /// <param name="client">The authenticated ShopwareClient</param>
+        /// <param name="filter">The filter object. see https://shopware.stoplight.io/docs/store-api/cf710bf73d0cd-search-queries for more information</param>
+        /// <param name="cancellationToken"></param>
+        /// <typeparam name="T">The Type of the Entity. Including a ModelUriAttribute specifying the url at the Shopware Api</typeparam>
+        /// <returns>RequestResult´T holding the collection of Entities if successful</returns>
+        public static Task<RequestResult<DataArray<T>>> SearchIds<T>(this IShopwareClient client, IFilter filter, CancellationToken cancellationToken = default)
+            where T : class, IHasShopwareId
+        {
+            var search = SearchIdsRequest<T>.Create(client, filter);
+            return search.ExecuteAsync(cancellationToken);
+        }
+        
         /// <summary>
         /// Create a Filter from any object. Be careful to comply with the appropriate Filter semantics.
         /// <para>Or use the Filter in namespace heitech.ShopwareIntegration.Core.Filters</para>
@@ -84,7 +104,7 @@ namespace heitech.ShopwareIntegration.Core
         /// <param name="client"></param>
         /// <param name="anonymousObject"></param>
         /// <returns></returns>
-        public static IFilter CreateFilterFromAnonymous(this ShopwareClient client, object anonymousObject)
+        public static IFilter CreateFilterFromAnonymous(this IShopwareClient client, object anonymousObject)
             => FromObject(anonymousObject);
         /// <summary>
         /// Create a Filter from any object, for instance an anonymous one.

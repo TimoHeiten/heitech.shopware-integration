@@ -46,7 +46,7 @@ namespace heitech.ShopwareIntegration.Core.Requests
         internal async Task<Response> SendAsync()
         {
             if (_withAuth)
-                await _client.AuthenticateAsync();
+                await _client.AuthenticateAsync(_cancellationToken);
 
             try
             {

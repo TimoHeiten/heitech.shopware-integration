@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using heitech.ShopwareIntegration.Core.Configuration;
@@ -10,9 +11,9 @@ namespace heitech.ShopwareIntegration.Core.Mutate
         where T : class, IHasShopwareId
     {
         private readonly string _uri;
-        private readonly ShopwareClient _client;
+        private readonly IShopwareClient _client;
         private readonly PatchedValues<T> _patchedValues;
-        private UpdateRequest(ShopwareClient client, string uri, PatchedValues<T> patchedValues)
+        private UpdateRequest(IShopwareClient client, string uri, PatchedValues<T> patchedValues)
         {
             _uri = uri;
             _patchedValues = patchedValues;
@@ -29,7 +30,7 @@ namespace heitech.ShopwareIntegration.Core.Mutate
         /// <param name="id"></param>
         /// <param name="patchedValues"></param>
         /// <returns></returns>
-        internal static UpdateRequest<T> Create(ShopwareClient client, string id, PatchedValues<T> patchedValues)
+        internal static UpdateRequest<T> Create(IShopwareClient client, string id, PatchedValues<T> patchedValues)
         {
             var uri = ModelUri.GetUrlFromType<T>();
             return new UpdateRequest<T>(client, $"{uri}/{id}", patchedValues);
@@ -39,8 +40,8 @@ namespace heitech.ShopwareIntegration.Core.Mutate
         /// Actually Execute the Update Request
         /// </summary>
         /// <returns></returns>
-        internal Task<RequestResult<DataEmpty>> ExecuteAsync()
-            => _client.SendAsync<DataEmpty>(this);
+        internal Task<RequestResult<DataEmpty>> ExecuteAsync(CancellationToken cancellationToken)
+            => _client.SendAsync<DataEmpty>(this, cancellationToken);
 
         public static implicit operator HttpRequestMessage(UpdateRequest<T> updateRequest) =>
             updateRequest._client.CreateHttpRequest(HttpUtility.UrlEncode(updateRequest._uri), new HttpMethod("PATCH"), updateRequest._patchedValues);

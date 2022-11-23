@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using heitech.ShopwareIntegration.Core.Configuration;
@@ -10,8 +11,8 @@ namespace heitech.ShopwareIntegration.Core.Mutate
         where T : class, IHasShopwareId
     {
         private readonly string _uri;
-        private readonly ShopwareClient _client;
-        private DeleteRequest(ShopwareClient client, string uri)
+        private readonly IShopwareClient _client;
+        private DeleteRequest(IShopwareClient client, string uri)
         {
             _uri = uri;
             _client = client;
@@ -23,7 +24,7 @@ namespace heitech.ShopwareIntegration.Core.Mutate
         /// <param name="client"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        internal static DeleteRequest<T> Create(ShopwareClient client, string id)
+        internal static DeleteRequest<T> Create(IShopwareClient client, string id)
         {
             var uri = ModelUri.GetUrlFromType<T>();
             return new DeleteRequest<T>(client, $"{uri}/{id}");
@@ -33,8 +34,8 @@ namespace heitech.ShopwareIntegration.Core.Mutate
         /// Actually Execute the Delete Request
         /// </summary>
         /// <returns></returns>
-        internal Task<RequestResult<DataEmpty>> ExecuteAsync()
-            => _client.SendAsync<DataEmpty>(this);
+        internal Task<RequestResult<DataEmpty>> ExecuteAsync(CancellationToken cancellationToken)
+            => _client.SendAsync<DataEmpty>(this, cancellationToken);
 
         public static implicit operator HttpRequestMessage(DeleteRequest<T> deleteRequest) =>
             deleteRequest._client.CreateHttpRequest(HttpUtility.UrlEncode(deleteRequest._uri), HttpMethod.Delete);

@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using heitech.ShopwareIntegration.Core.Configuration;
@@ -11,8 +12,8 @@ namespace heitech.ShopwareIntegration.Core.Read
         where T : class, IHasShopwareId
     {
         private readonly string _uri;
-        private readonly ShopwareClient _client;
-        private GetListRequest(ShopwareClient client, string uri)
+        private readonly IShopwareClient _client;
+        private GetListRequest(IShopwareClient client, string uri)
         {
             _uri = uri;
             _client = client;
@@ -23,7 +24,7 @@ namespace heitech.ShopwareIntegration.Core.Read
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        internal static GetListRequest<T> Create(ShopwareClient client)
+        internal static GetListRequest<T> Create(IShopwareClient client)
             => Create(client, null);
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace heitech.ShopwareIntegration.Core.Read
         /// <param name="client"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        internal static GetListRequest<T> Create(ShopwareClient client, string query)
+        internal static GetListRequest<T> Create(IShopwareClient client, string query)
         {
             var builder = new StringBuilder();
             var uri = ModelUri.GetUrlFromType<T>();
@@ -51,10 +52,10 @@ namespace heitech.ShopwareIntegration.Core.Read
         /// Actually Execute the Get Request
         /// </summary>
         /// <returns></returns>
-        internal Task<RequestResult<DataArray<T>>> ExecuteAsync()
-            => _client.SendAsync<DataArray<T>>(this);
+        internal Task<RequestResult<DataArray<T>>> ExecuteAsync(CancellationToken cancellationToken)
+            => _client.SendAsync<DataArray<T>>(this, cancellationToken);
 
         public static implicit operator HttpRequestMessage(GetListRequest<T> getByIdRequest) =>
-            getByIdRequest._client.CreateHttpRequest(HttpUtility.UrlEncode(getByIdRequest._uri), HttpMethod.Get);
+            getByIdRequest._client.CreateHttpRequest((getByIdRequest._uri), HttpMethod.Get);
     }
 }

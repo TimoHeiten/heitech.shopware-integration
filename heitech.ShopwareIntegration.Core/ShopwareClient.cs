@@ -13,63 +13,25 @@ namespace heitech.ShopwareIntegration.Core
     /// HttpClient Abstraction for the Shopware REST API Integration.
     /// <para> Be careful with the Dispose, since it uses an httpclient underneath and can lead to Socket exhaustion on lots of create/dispose calls to this client</para>
     ///</summary>
-    public sealed class ShopwareClient : IDisposable
+    internal sealed class ShopwareClient : IShopwareClient
     {
         private bool _disposedValue;
         internal HttpClient HttpClient { get; }
         internal HttpClientConfiguration Configuration { get; set; }
-        internal string BaseUrl => Configuration.BaseUrl;
+        public string BaseUrl => Configuration.BaseUrl;
 
         internal ShopwareClient(HttpClient client)
             => HttpClient = client;
 
         /// <summary>
-        /// /// Create a new authenticated Instance by using the specified parameters for the Shopware Api
-        /// </summary>
-        /// <param name="baseUrl"></param>
-        /// <param name="clientId"></param>
-        /// <param name="userName"></param>
-        /// <param name="clientSecret"></param>
-        /// <returns></returns>
-        public static Task<ShopwareClient> CreateAsync(string baseUrl, string clientId, string userName,
-            string clientSecret)
-        {
-            return CreateAsync(new HttpClientConfiguration(baseUrl, clientId, userName, clientSecret));
-        }
-        
-        /// <summary>
-        /// Create a new authenticated Instance by using the specified HttpClientConfiguration
-        /// </summary>
-        /// <param name="clientConfiguration"></param>
-        /// <returns></returns>
-        /// <exception cref="NullReferenceException"></exception>
-        public static async Task<ShopwareClient> CreateAsync(HttpClientConfiguration clientConfiguration)
-        {
-            if (clientConfiguration is null)
-                throw new NullReferenceException($"The HttpConfiguration could not be loaded at: {typeof(ShopwareClient)} {nameof(CreateAsync)}");
-
-            if (!clientConfiguration.IsValid())
-                throw new ShopwareIntegrationRequestException($"{nameof(HttpClientConfiguration)} is not valid! Check if all Properties are set appropriately (non empty and valid)");
-
-            var httpClient = clientConfiguration.CreateHttpClient();
-            var shopwareClient = new ShopwareClient(httpClient)
-            {
-                Configuration = clientConfiguration
-            };
-            await shopwareClient.AuthenticateAsync().ConfigureAwait(false);
-
-            return shopwareClient;
-        }
-
-        /// <summary>
         /// Try to authenticate against the Shopware API
         /// </summary>
         /// <exception cref="ShopwareIntegrationRequestException"></exception>
-        public async Task AuthenticateAsync()
+        public async Task AuthenticateAsync(CancellationToken cancellationToken)
         {
             var authenticateBody = Authenticate.From(Configuration);
             var url = ModelUri.GetUrlFromType<Authenticate>();
-            var response = await HttpClient.PostAsync(url, authenticateBody.AsJsonContent()).ConfigureAwait(false);
+            var response = await HttpClient.PostAsync(url, authenticateBody.AsJsonContent(), cancellationToken).ConfigureAwait(false);
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
@@ -105,7 +67,7 @@ namespace heitech.ShopwareIntegration.Core
         /// <param name="cancellationToken"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<RequestResult<T>> SendAsync<T>(HttpRequestMessage message, CancellationToken cancellationToken = default)
+        public async Task<RequestResult<T>> SendAsync<T>(HttpRequestMessage message, CancellationToken cancellationToken)
             where T : ShopwareDataContainer
         {
             var builder = new ShopwareRequest.Builder(this, message).WithCancellationToken(cancellationToken);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using heitech.ShopwareIntegration.Core.Configuration;
@@ -62,11 +63,13 @@ namespace heitech.ShopwareIntegration.Core.Tests
             var authenticated = SetupAuth();
 
             // Act
-            var shopwareClient = await ShopwareClient.CreateAsync(clientConfiguration);
+            var shopwareClient = await ShopwareCoreFactory.CreateAsync(clientConfiguration, CancellationToken.None);
 
             // Assert
             shopwareClient.Should().NotBeNull();
-            var authHeader = shopwareClient.HttpClient.DefaultRequestHeaders.FirstOrDefault(x => x.Key == "Authorization");
+            var casted = shopwareClient as ShopwareClient;
+            casted.Should().NotBeNull();
+            var authHeader = casted!.HttpClient.DefaultRequestHeaders.FirstOrDefault(x => x.Key == "Authorization");
             authHeader.Should().NotBeNull();
             authHeader.Value.Single().Should().Contain("Bearer token");
             authHeader.Value.Single().Should().Contain(authenticated.AccessToken);
@@ -85,7 +88,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             var config = new StubbedConfiguration(url, clientId, userName, clientSecret, _httpHandler);
 
             // Act
-            var act = () => ShopwareClient.CreateAsync(config);
+            var act = () => ShopwareCoreFactory.CreateAsync(config, CancellationToken.None);
 
             // Assert
             if (shouldThrow)
@@ -114,7 +117,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
                 .Respond(new StringContent(JsonConvert.SerializeObject(new { SomeProp = "any value", SomeOtherProp = "no value" })));
 
             // Act
-            var act = () => _sut.AuthenticateAsync();
+            var act = () => _sut.AuthenticateAsync(CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<ShopwareIntegrationRequestException>();
@@ -139,7 +142,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
                 .Respond(statusCode);
 
             // Act
-            var act = () => _sut.AuthenticateAsync();
+            var act = () => _sut.AuthenticateAsync(CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<ShopwareIntegrationRequestException>();
@@ -168,7 +171,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             var rqMessage = new HttpRequestMessage(HttpMethod.Get, ProductUri);
 
             // Act
-            var requestResult = await _sut.SendAsync<DataEmpty>(rqMessage);
+            var requestResult = await _sut.SendAsync<DataEmpty>(rqMessage, CancellationToken.None);
 
             // Assert
             requestResult.IsSuccess.Should().BeFalse();
@@ -183,7 +186,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             var rqMessage = new HttpRequestMessage(HttpMethod.Get, ProductUri);
 
             // Act
-            var requestResult = await _sut.SendAsync<DataEmpty>(rqMessage);
+            var requestResult = await _sut.SendAsync<DataEmpty>(rqMessage,CancellationToken.None);
 
             // Assert
             requestResult.IsSuccess.Should().BeFalse();
@@ -202,7 +205,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             var rqMessage = _sut.CreateHttpRequest(ProductUri);
 
             // Act
-            var requestResult = await _sut.SendAsync<DataEmpty>(rqMessage);
+            var requestResult = await _sut.SendAsync<DataEmpty>(rqMessage,CancellationToken.None);
 
             // Assert
             requestResult.IsSuccess.Should().BeTrue();
@@ -218,7 +221,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             var rqMessage = _sut.CreateHttpRequest(ProductUri);
 
             // Act
-            var requestResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage);
+            var requestResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage, CancellationToken.None);
 
             // Assert
             requestResult.IsSuccess.Should().BeTrue();
@@ -235,7 +238,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             var rqMessage = _sut.CreateHttpRequest(ProductUri);
 
             // Act
-            var requestResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage);
+            var requestResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage, CancellationToken.None);
 
             // Assert
             requestResult.IsSuccess.Should().BeFalse();
@@ -251,7 +254,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             var rqMessage = _sut.CreateHttpRequest(ProductUri);
 
             // Act
-            var rqResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage);
+            var rqResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage, CancellationToken.None);
 
             // Assert
             rqResult.IsSuccess.Should().BeFalse();
@@ -267,7 +270,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
             var rqMessage = _sut.CreateHttpRequest(ProductUri);
 
             // Act
-            var rqResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage);
+            var rqResult = await _sut.SendAsync<DataObject<ProductStub>>(rqMessage, CancellationToken.None);
 
             // Assert
             rqResult.IsSuccess.Should().BeFalse();

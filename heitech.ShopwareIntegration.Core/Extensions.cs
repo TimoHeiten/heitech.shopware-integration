@@ -19,7 +19,7 @@ namespace heitech.ShopwareIntegration.Core
         /// <param name="method"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static HttpRequestMessage CreateHttpRequest(this ShopwareClient client, string requestUri, HttpMethod method = null, object content = null)
+        public static HttpRequestMessage CreateHttpRequest(this IShopwareClient client, string requestUri, HttpMethod method = null, object content = null)
         {
             var message = new HttpRequestMessage
             {

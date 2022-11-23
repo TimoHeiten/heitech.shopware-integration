@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using heitech.ShopwareIntegration.Core.Configuration;
@@ -12,9 +13,9 @@ namespace heitech.ShopwareIntegration.Core.Read
     {
         private readonly string _uri;
         private readonly object _filter;
-        private readonly ShopwareClient _client;
+        private readonly IShopwareClient _client;
 
-        private SearchIdsRequest(ShopwareClient client, string uri, object filter)
+        private SearchIdsRequest(IShopwareClient client, string uri, object filter)
         {
             _uri = uri;
             _filter = filter;
@@ -27,10 +28,9 @@ namespace heitech.ShopwareIntegration.Core.Read
         /// <param name="client"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        internal static SearchIdsRequest<T> Create(ShopwareClient client, IFilter filter)
+        internal static SearchIdsRequest<T> Create(IShopwareClient client, IFilter filter)
         {
             var uri = ModelUri.GetUrlFromType<T>();
-            
             return new SearchIdsRequest<T>(client, $"search-ids/{uri}", filter.Value);
         }
 
@@ -38,10 +38,10 @@ namespace heitech.ShopwareIntegration.Core.Read
         /// Actually Execute the Get Request
         /// </summary>
         /// <returns></returns>
-        internal Task<RequestResult<DataArray<T>>> ExecuteAsync()
-            => _client.SendAsync<DataArray<T>>(this);
+        internal Task<RequestResult<DataArray<T>>> ExecuteAsync(CancellationToken cancellationToken)
+            => _client.SendAsync<DataArray<T>>(this, cancellationToken);
 
         public static implicit operator HttpRequestMessage(SearchIdsRequest<T> searchIdsRequest) 
-            => searchIdsRequest._client.CreateHttpRequest(HttpUtility.UrlEncode(searchIdsRequest._uri), HttpMethod.Post, searchIdsRequest._filter);
+            => searchIdsRequest._client.CreateHttpRequest(searchIdsRequest._uri, HttpMethod.Post, searchIdsRequest._filter);
     }
 }

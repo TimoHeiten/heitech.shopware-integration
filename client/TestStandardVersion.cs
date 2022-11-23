@@ -1,10 +1,11 @@
 using System;
-using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+using heitech.ShopwareIntegration.Core;
 using heitech.ShopwareIntegration.Core.Configuration;
 using heitech.ShopwareIntegration.Core.Data;
 using Newtonsoft.Json;
-using heitech.ShopwareIntegration.Core;
+using Extensions = heitech.ShopwareIntegration.Core.Extensions;
 
 namespace client
 {
@@ -13,10 +14,10 @@ namespace client
         public static async Task WithStandardClient()
         {
             var config = new HttpClientConfiguration("api", "client", "", "secret");
-            var client = await ShopwareClient.CreateAsync(config);
+            var client = await ShopwareCoreFactory.CreateAsync(config, CancellationToken.None);
             
-            var requestMessage = client.CreateHttpRequest("product/33090fdb7a7a4e49acd4c73b86cdddec");
-            var result = await client.SendAsync<DataObject<Product>>(requestMessage );
+            var requestMessage = Extensions.CreateHttpRequest(client, "product/33090fdb7a7a4e49acd4c73b86cdddec");
+            var result = await client.SendAsync<DataObject<Product>>(requestMessage, CancellationToken.None);
 
             // var postRequest = client.CreateHttpRequest("unit", HttpMethod.Post, CreateUnit());
             // var result = await client.SendAsync<DataEmpty>(postRequest);
