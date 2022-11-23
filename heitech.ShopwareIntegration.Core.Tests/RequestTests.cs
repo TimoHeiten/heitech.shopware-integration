@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using heitech.ShopwareIntegration.Core.Client;
 using heitech.ShopwareIntegration.Core.Configuration;
 using heitech.ShopwareIntegration.Core.Data;
 using Newtonsoft.Json;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using heitech.ShopwareIntegration.Core.Client;
 using heitech.ShopwareIntegration.Core.Configuration;
 using heitech.ShopwareIntegration.Core.Data;
 
@@ -21,9 +22,7 @@ namespace heitech.ShopwareIntegration.Core
         /// <returns></returns>
         public static Task<IShopwareClient> CreateAsync(string baseUrl, string clientId, string userName,
             string clientSecret)
-        {
-            return CreateAsync(new HttpClientConfiguration(baseUrl, clientId, userName, clientSecret), CancellationToken.None);
-        }
+            => CreateAsync(new HttpClientConfiguration(baseUrl, clientId, userName, clientSecret), CancellationToken.None);
 
         /// <summary>
         /// Create a new authenticated Instance by using the specified HttpClientConfiguration

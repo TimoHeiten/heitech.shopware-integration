@@ -1,4 +1,4 @@
-﻿namespace heitech.ShopwareIntegration.Core
+﻿namespace heitech.ShopwareIntegration.Core.Data
 {
     public interface IHasShopwareId
     {

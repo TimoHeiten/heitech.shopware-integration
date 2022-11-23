@@ -1,8 +1,10 @@
-﻿using System.Threading;
+﻿using System.Net.Http;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using heitech.ShopwareIntegration.Core.Configuration;
 using heitech.ShopwareIntegration.Core.Data;
 using heitech.ShopwareIntegration.Core.Filters;
-using heitech.ShopwareIntegration.Core.Read;
 
 namespace heitech.ShopwareIntegration.Core
 {
@@ -18,9 +20,7 @@ namespace heitech.ShopwareIntegration.Core
         /// <returns>RequestResult´T holding the Entity if successful</returns>
         public static Task<RequestResult<DataObject<T>>> GetByIdAsync<T>(this IShopwareClient client, string id, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
-        {
-            return GetByIdAsync<T>(client, id, null, cancellationToken);
-        }
+            => GetByIdAsync<T>(client, id, null, cancellationToken);
 
         /// <summary>
         /// Get a single Entity by its Id, as specified in the ModelUri Attribute for the Model.
@@ -34,8 +34,25 @@ namespace heitech.ShopwareIntegration.Core
         public static Task<RequestResult<DataObject<T>>> GetByIdAsync<T>(this IShopwareClient client, string id, string query, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
-            var request = GetByIdRequest<T>.Create(client, id, query);
-            return request.ExecuteAsync(cancellationToken);
+            var message = client.CreateHttpRequest(BuildGetIdUrl<T>(id, query));
+            return client.SendAsync<DataObject<T>>(message, cancellationToken);
+        }
+
+        private static string BuildGetIdUrl<T>(string id, string query)
+        {
+            var builder = new StringBuilder();
+            var uri = ModelUri.GetUrlFromType<T>();
+
+            builder.Append(uri);
+            builder.Append($"/{id}");
+
+            if (query == null) 
+                return builder.ToString();
+
+            var q = query.Replace("?", "");
+            builder.Append($"?{q}");
+
+            return builder.ToString();
         }
 
         /// <summary>
@@ -48,9 +65,7 @@ namespace heitech.ShopwareIntegration.Core
         /// <returns>/// <returns>RequestResult´T holding the collection of Entities if successful</returns></returns>
         public static Task<RequestResult<DataArray<T>>> GetListAsync<T>(this IShopwareClient client, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
-        {
-            return client.GetListAsync<T>(null, cancellationToken);
-        }
+            => client.GetListAsync<T>(null, cancellationToken);
 
         /// <summary>
         /// Get a list of entities for the specified type. Be Aware that this might lead to a Shopware Serialization Error if too many Entities exist.
@@ -63,8 +78,24 @@ namespace heitech.ShopwareIntegration.Core
         public static Task<RequestResult<DataArray<T>>> GetListAsync<T>(this IShopwareClient client, string query, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
-            var request = GetListRequest<T>.Create(client, query);
-            return request.ExecuteAsync(cancellationToken);
+            var url = BuildGetListUrl<T>(query);
+            var message = client.CreateHttpRequest(url, HttpMethod.Get);
+
+            return client.SendAsync<DataArray<T>>(message, cancellationToken);
+        }
+
+        private static string BuildGetListUrl<T>(string query)
+        {
+            var builder = new StringBuilder();
+            builder.Append(ModelUri.GetUrlFromType<T>());
+
+            if (query == null)
+                return builder.ToString();
+
+            var q = query.Replace("?", "");
+            builder.Append($"?{q}");
+
+            return builder.ToString();
         }
 
         /// <summary>
@@ -78,8 +109,8 @@ namespace heitech.ShopwareIntegration.Core
         public static Task<RequestResult<DataArray<T>>> SearchAsync<T>(this IShopwareClient client, IFilter filter, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
-            var search = SearchRequest<T>.Create(client, filter);
-            return search.ExecuteAsync(cancellationToken);
+            var message = client.CreateHttpRequest($"search/{ModelUri.GetUrlFromType<T>()}", HttpMethod.Post, filter.Value);
+            return client.SendAsync<DataArray<T>>(message, cancellationToken);
         }
 
         /// <summary>
@@ -93,8 +124,8 @@ namespace heitech.ShopwareIntegration.Core
         public static Task<RequestResult<DataArray<T>>> SearchIds<T>(this IShopwareClient client, IFilter filter, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
-            var search = SearchIdsRequest<T>.Create(client, filter);
-            return search.ExecuteAsync(cancellationToken);
+            var message = client.CreateHttpRequest($"search-ids/{ModelUri.GetUrlFromType<T>()}", HttpMethod.Post, filter.Value);
+            return client.SendAsync<DataArray<T>>(message, cancellationToken);
         }
         
         /// <summary>
@@ -106,6 +137,7 @@ namespace heitech.ShopwareIntegration.Core
         /// <returns></returns>
         public static IFilter CreateFilterFromAnonymous(this IShopwareClient client, object anonymousObject)
             => FromObject(anonymousObject);
+
         /// <summary>
         /// Create a Filter from any object, for instance an anonymous one.
         /// <para>see </para>

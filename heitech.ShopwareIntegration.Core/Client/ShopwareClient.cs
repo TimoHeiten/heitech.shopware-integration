@@ -7,7 +7,7 @@ using heitech.ShopwareIntegration.Core.Data;
 using heitech.ShopwareIntegration.Core.Requests;
 using Newtonsoft.Json;
 
-namespace heitech.ShopwareIntegration.Core
+namespace heitech.ShopwareIntegration.Core.Client
 {
     ///<summary>
     /// HttpClient Abstraction for the Shopware REST API Integration.

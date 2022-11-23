@@ -9,7 +9,13 @@ namespace heitech.ShopwareIntegration.Core
     public sealed class RequestResult<T>
         where T : ShopwareDataContainer
     {
+        /// <summary>
+        /// The Deserialized Model of the Http Response
+        /// </summary>
         public T Model { get; }
+        /// <summary>
+        /// An optional Exception if the Request was not successful
+        /// </summary>
         public Exception Exception { get; }
 
         private RequestResult(T model)
@@ -33,5 +39,7 @@ namespace heitech.ShopwareIntegration.Core
         ///</summary>
         internal static RequestResult<T> Failed(Exception ex) => new RequestResult<T>(ex);
         public bool IsSuccess => Exception is null;
+        
+        // todo add evaluate functions
     }
 }

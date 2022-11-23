@@ -1,11 +1,12 @@
-﻿using System.Threading;
+﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+using heitech.ShopwareIntegration.Core.Configuration;
 using heitech.ShopwareIntegration.Core.Data;
-using heitech.ShopwareIntegration.Core.Mutate;
 
 namespace heitech.ShopwareIntegration.Core
 {
-    public static class WriteExtensions
+    public static class MutateExtensions
     {
         /// <summary>
         /// Create a new Entity, as specified in the ModelUri Attribute for the Model.
@@ -18,8 +19,12 @@ namespace heitech.ShopwareIntegration.Core
         public static Task<RequestResult<DataEmpty>> CreateAsync<T>(this IShopwareClient client, T payload, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
-            var request = CreateRequest<T>.Create(client, payload);
-            return request.ExecuteAsync(cancellationToken);
+            var request = client.CreateHttpRequest(
+                ModelUri.GetUrlFromType<T>(),
+                HttpMethod.Post,
+                payload
+            );
+            return client.SendAsync<DataEmpty>(request, cancellationToken);
         }
 
         /// <summary>
@@ -33,8 +38,11 @@ namespace heitech.ShopwareIntegration.Core
         public static Task<RequestResult<DataEmpty>> DeleteAsync<T>(this IShopwareClient client, string id,  CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
-            var request = DeleteRequest<T>.Create(client, id);
-            return request.ExecuteAsync(cancellationToken);
+            var request = client.CreateHttpRequest(
+                $"{ModelUri.GetUrlFromType<T>()}/id",
+                HttpMethod.Delete
+            );
+            return client.SendAsync<DataEmpty>(request, cancellationToken);
         }
 
         /// <summary>
@@ -49,8 +57,12 @@ namespace heitech.ShopwareIntegration.Core
         public static Task<RequestResult<DataEmpty>> UpdateAsync<T>(this IShopwareClient client, string id, PatchedValues<T> patchedValues,  CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
-            var request = UpdateRequest<T>.Create(client, id, patchedValues);
-            return request.ExecuteAsync(cancellationToken);
+            var request = client.CreateHttpRequest(
+                $"{ModelUri.GetUrlFromType<T>()}/{id}",
+                HttpMethod.Post,
+                patchedValues.Values
+            );
+            return client.SendAsync<DataEmpty>(request, cancellationToken);
         }
     }
 }
