@@ -13,10 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.ShopwareIntegration
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.ShopwareIntegration.Core.Tests", "heitech.ShopwareIntegration.Core.Tests\heitech.ShopwareIntegration.Core.Tests.csproj", "{501E0322-9E58-4B7A-B490-91B3C56F943C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.ShopwareIntegration.Crud", "heitech.ShopwareIntegration.Crud\heitech.ShopwareIntegration.Crud.csproj", "{159282F1-704B-46C3-A83A-0968B7544A38}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.ShopwareIntegration.Crud.Tests", "heitech.ShopwareIntegration.Crud.Tests\heitech.ShopwareIntegration.Crud.Tests.csproj", "{E4C0A1EA-FE9F-4EF7-8410-6E0E3FC4693D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,13 +50,5 @@ Global
 		{501E0322-9E58-4B7A-B490-91B3C56F943C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{501E0322-9E58-4B7A-B490-91B3C56F943C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{501E0322-9E58-4B7A-B490-91B3C56F943C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{159282F1-704B-46C3-A83A-0968B7544A38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{159282F1-704B-46C3-A83A-0968B7544A38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{159282F1-704B-46C3-A83A-0968B7544A38}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{159282F1-704B-46C3-A83A-0968B7544A38}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4C0A1EA-FE9F-4EF7-8410-6E0E3FC4693D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4C0A1EA-FE9F-4EF7-8410-6E0E3FC4693D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4C0A1EA-FE9F-4EF7-8410-6E0E3FC4693D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4C0A1EA-FE9F-4EF7-8410-6E0E3FC4693D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

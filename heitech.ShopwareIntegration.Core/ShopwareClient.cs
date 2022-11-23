@@ -11,7 +11,7 @@ namespace heitech.ShopwareIntegration.Core
 {
     ///<summary>
     /// HttpClient Abstraction for the Shopware REST API Integration.
-    /// <para> Be careful with the Dispose, since it uses an httpclient underneath and can lead to Socketexhaustion on lots of create/dispose calls to this client</para>
+    /// <para> Be careful with the Dispose, since it uses an httpclient underneath and can lead to Socket exhaustion on lots of create/dispose calls to this client</para>
     ///</summary>
     public sealed class ShopwareClient : IDisposable
     {
@@ -23,6 +23,20 @@ namespace heitech.ShopwareIntegration.Core
         internal ShopwareClient(HttpClient client)
             => HttpClient = client;
 
+        /// <summary>
+        /// /// Create a new authenticated Instance by using the specified parameters for the Shopware Api
+        /// </summary>
+        /// <param name="baseUrl"></param>
+        /// <param name="clientId"></param>
+        /// <param name="userName"></param>
+        /// <param name="clientSecret"></param>
+        /// <returns></returns>
+        public static Task<ShopwareClient> CreateAsync(string baseUrl, string clientId, string userName,
+            string clientSecret)
+        {
+            return CreateAsync(new HttpClientConfiguration(baseUrl, clientId, userName, clientSecret));
+        }
+        
         /// <summary>
         /// Create a new authenticated Instance by using the specified HttpClientConfiguration
         /// </summary>

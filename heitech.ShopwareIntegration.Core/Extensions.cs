@@ -21,7 +21,7 @@ namespace heitech.ShopwareIntegration.Core
         /// <returns></returns>
         public static HttpRequestMessage CreateHttpRequest(this ShopwareClient client, string requestUri, HttpMethod method = null, object content = null)
         {
-            var message = new HttpRequestMessage()
+            var message = new HttpRequestMessage
             {
                 Content = content?.AsJsonContent(),
                 Method = method ?? HttpMethod.Get,
@@ -30,7 +30,7 @@ namespace heitech.ShopwareIntegration.Core
             message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             return message;
         }
-
+        
         /// <summary>
         /// Convert object to HttpContent with correct Header for HttpRequestMessage
         /// </summary>

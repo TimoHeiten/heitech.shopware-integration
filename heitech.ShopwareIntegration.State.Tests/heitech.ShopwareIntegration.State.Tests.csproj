@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\heitech.ShopwareIntegration\heitech.ShopwareIntegration.csproj" />
     <ProjectReference Include="..\heitech.ShopwareIntegration.State\heitech.ShopwareIntegration.State.csproj" />
   </ItemGroup>
 

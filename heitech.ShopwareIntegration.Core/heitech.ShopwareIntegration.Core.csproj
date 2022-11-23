@@ -1,9 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Title>Shopware v6 Rest Api Core Functions</Title>
+    <Description>Basic interaction with Shopware6 REST API. Core includes Authentication, a ShopwareClient wrapping the necessary HttpConfiguration and Creation of a simple and valid HttpRequestMessage for interactions. </Description>
+    <PackageProjectUrl>https://github.com/TimoHeiten/heitech.shopware-integration</PackageProjectUrl>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/TimoHeiten/heitech.shopware-integration</RepositoryUrl>
+    <PackageTags>shopware6</PackageTags>
+    <PackageReleaseNotes>initial release of the package</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>

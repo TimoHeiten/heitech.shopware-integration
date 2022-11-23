@@ -10,7 +10,7 @@ namespace heitech.ShopwareIntegration.Core.Tests
 {
     public sealed class ConfigurationTests
     {
-        HttpClientConfiguration Expected => new HttpClientConfiguration("http://localhost:4300/shopware/api/",
+        HttpClientConfiguration Expected => new("http://localhost:4300/shopware/api/",
             "clientId", "userName", "clientSecret");
 
         [Fact]

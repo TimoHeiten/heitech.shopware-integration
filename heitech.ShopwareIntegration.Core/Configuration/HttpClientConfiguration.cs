@@ -28,7 +28,7 @@ namespace heitech.ShopwareIntegration.Core.Configuration
         /// </summary>
         public string ClientSecret { get; set; }
 
-        public HttpClientConfiguration()
+        internal HttpClientConfiguration()
         { }
 
         public HttpClientConfiguration(string baseUrl, string clientId, string userName, string clientSecret)
