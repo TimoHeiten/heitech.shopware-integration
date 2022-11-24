@@ -39,7 +39,7 @@ namespace heitech.ShopwareIntegration.Core
             where T : class, IHasShopwareId
         {
             var request = client.CreateHttpRequest(
-                $"{ModelUri.GetUrlFromType<T>()}/id",
+                $"{ModelUri.GetUrlFromType<T>()}/{id}",
                 HttpMethod.Delete
             );
             return client.SendAsync<DataEmpty>(request, cancellationToken);
@@ -59,7 +59,7 @@ namespace heitech.ShopwareIntegration.Core
         {
             var request = client.CreateHttpRequest(
                 $"{ModelUri.GetUrlFromType<T>()}/{id}",
-                HttpMethod.Post,
+                new HttpMethod("PATCH"),
                 patchedValues.Values
             );
             return client.SendAsync<DataEmpty>(request, cancellationToken);

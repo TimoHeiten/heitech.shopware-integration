@@ -5,7 +5,6 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="heitech.ShopwareIntegration.Core" Version="1.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="Nsubstitute" Version="4.4.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
