@@ -30,7 +30,7 @@ namespace heitech.ShopwareIntegration.Core
             message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             return message;
         }
-        
+
         /// <summary>
         /// Convert object to HttpContent with correct Header for HttpRequestMessage
         /// </summary>

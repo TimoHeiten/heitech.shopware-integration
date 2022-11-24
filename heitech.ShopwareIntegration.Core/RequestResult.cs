@@ -39,7 +39,7 @@ namespace heitech.ShopwareIntegration.Core
         ///</summary>
         internal static RequestResult<T> Failed(Exception ex) => new RequestResult<T>(ex);
         public bool IsSuccess => Exception is null;
-        
+
         // todo add evaluate functions
     }
 }

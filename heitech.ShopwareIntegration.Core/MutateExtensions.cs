@@ -35,7 +35,7 @@ namespace heitech.ShopwareIntegration.Core
         /// <param name="cancellationToken"></param>
         /// <typeparam name="T">The Type of the Entity. Including a ModelUriAttribute specifying the url at the Shopware Api</typeparam>
         /// <returns>/// <returns>RequestResult´T holding the collection of Entities if successful</returns></returns>
-        public static Task<RequestResult<DataEmpty>> DeleteAsync<T>(this IShopwareClient client, string id,  CancellationToken cancellationToken = default)
+        public static Task<RequestResult<DataEmpty>> DeleteAsync<T>(this IShopwareClient client, string id, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
             var request = client.CreateHttpRequest(
@@ -54,7 +54,7 @@ namespace heitech.ShopwareIntegration.Core
         /// <param name="cancellationToken"></param>
         /// <typeparam name="T">The Type of the Entity. Including a ModelUriAttribute specifying the url at the Shopware Api</typeparam>
         /// <returns>RequestResult´T holding the collection of Entities if successful</returns>
-        public static Task<RequestResult<DataEmpty>> UpdateAsync<T>(this IShopwareClient client, string id, PatchedValues<T> patchedValues,  CancellationToken cancellationToken = default)
+        public static Task<RequestResult<DataEmpty>> UpdateAsync<T>(this IShopwareClient client, string id, PatchedValues<T> patchedValues, CancellationToken cancellationToken = default)
             where T : class, IHasShopwareId
         {
             var request = client.CreateHttpRequest(

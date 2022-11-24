@@ -13,7 +13,7 @@ namespace heitech.ShopwareIntegration.Core.Data
         public IReadOnlyList<T> Data { get; set; }
 
         public static DataArray<T> BuildForInsert(T first, params T[] more)
-            => new DataArray<T>() { Data = new [] { first }.Concat(more).ToList() };
+            => new DataArray<T>() { Data = new[] { first }.Concat(more).ToList() };
     }
 
 }

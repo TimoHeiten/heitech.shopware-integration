@@ -53,7 +53,7 @@ namespace heitech.ShopwareIntegration.Core.Configuration
             => LoadAsync(File.OpenRead(fileInfo.FullName));
 
         internal virtual HttpClient CreateHttpClient()
-            => new HttpClient() 
+            => new HttpClient()
             {
                 BaseAddress = new Uri(this.BaseUrl)
             };

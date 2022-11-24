@@ -46,7 +46,7 @@ namespace heitech.ShopwareIntegration.Core
             builder.Append(uri);
             builder.Append($"/{id}");
 
-            if (query == null) 
+            if (query == null)
                 return builder.ToString();
 
             var q = query.Replace("?", "");
@@ -127,7 +127,7 @@ namespace heitech.ShopwareIntegration.Core
             var message = client.CreateHttpRequest($"search-ids/{ModelUri.GetUrlFromType<T>()}", HttpMethod.Post, filter.Value);
             return client.SendAsync<DataArray<T>>(message, cancellationToken);
         }
-        
+
         /// <summary>
         /// Create a Filter from any object. Be careful to comply with the appropriate Filter semantics.
         /// <para>Or use the Filter in namespace heitech.ShopwareIntegration.Core.Filters</para>
@@ -144,7 +144,7 @@ namespace heitech.ShopwareIntegration.Core
         /// </summary>
         /// <param name="o">Object that represents the filter</param>
         /// <returns></returns>
-        private static IFilter FromObject(object o) => new Filter {Value = o};
+        private static IFilter FromObject(object o) => new Filter { Value = o };
 
         private sealed class Filter : IFilter
         {

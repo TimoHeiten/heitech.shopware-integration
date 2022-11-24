@@ -11,7 +11,7 @@ namespace heitech.ShopwareIntegration.Core
         /// <summary>
         /// Shopware API BaseUrl
         /// </summary>
-         string BaseUrl { get; }
+        string BaseUrl { get; }
 
         /// <summary>
         /// Try to authenticate against the Shopware API

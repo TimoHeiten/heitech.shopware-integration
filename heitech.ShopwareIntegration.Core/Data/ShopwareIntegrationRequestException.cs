@@ -13,7 +13,7 @@ namespace heitech.ShopwareIntegration.Core.Data
             : base($"Http Response Content was requested to be deserialized for type '{type}' but it resulted in a NULL reference")
         { }
 
-        internal ShopwareIntegrationRequestException(string msg) 
+        internal ShopwareIntegrationRequestException(string msg)
             : base(msg)
         { }
     }
